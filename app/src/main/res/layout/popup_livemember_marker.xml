@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:orientation="vertical"
+             android:layout_width="@dimen/size300"
+             android:layout_height="match_parent">
+
+    <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/rlNearBy"
+            android:background="@drawable/polygon_livemember"
+            android:paddingBottom="@dimen/size15"
+            android:paddingTop="@dimen/size15"
+            android:paddingLeft="@dimen/size5"
+            android:paddingRight="@dimen/size5"
+            android:layout_width="@dimen/size300"
+            android:layout_height="@dimen/size240">
+        <TextView
+                android:id="@+id/tvYelpPlaceName"
+                android:textSize="@dimen/textSize18"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/tvYelpPlaceRating"
+                android:textSize="@dimen/textSize16"
+                android:layout_below="@id/tvYelpPlaceName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <RatingBar
+                android:layout_alignTop="@id/tvYelpPlaceRating"
+                android:layout_alignBottom="@id/tvYelpPlaceRating"
+                android:layout_below="@id/tvYelpPlaceName"
+                android:layout_marginStart="@dimen/gape10"
+                android:layout_width="wrap_content"
+                android:stepSize="0.1"
+                style="?android:attr/ratingBarStyleSmall"
+                android:progressTint="@color/caldroid_darker_yellow"
+                android:secondaryProgressTint="@color/caldroid_darker_yellow"
+                android:numStars="5"
+                android:layout_toEndOf="@id/tvYelpPlaceRating"
+                android:layout_height="wrap_content"
+                android:id="@+id/rbYelpPlaceRating"/>
+        <TextView
+                android:id="@+id/tvYelpPlaceReview"
+                android:textSize="@dimen/textSize16"
+                android:layout_marginStart="@dimen/gape10"
+                android:layout_toEndOf="@id/rbYelpPlaceRating"
+                android:layout_below="@id/tvYelpPlaceName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/tvPlaceDistance"
+                android:text="@string/str_distance"
+                android:layout_marginTop="@dimen/size5"
+                android:layout_below="@id/tvYelpPlaceReview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/tvYelpPlaceDistance"
+                android:textSize="@dimen/textSize16"
+                android:layout_marginTop="@dimen/size5"
+                android:layout_toEndOf="@id/tvPlaceDistance"
+                android:layout_below="@id/tvYelpPlaceReview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/tvPlacePhone"
+                android:text="@string/str_phone"
+                android:layout_marginTop="@dimen/size5"
+                android:layout_below="@id/tvYelpPlaceDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/tvYelpPlacePhone"
+                android:layout_marginTop="@dimen/size5"
+                android:autoLink="all"
+                android:layout_below="@id/tvYelpPlaceDistance"
+                android:layout_toEndOf="@id/tvPlacePhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/tvPlacePrice"
+                android:text="@string/str_price"
+                android:layout_marginTop="@dimen/size5"
+                android:layout_below="@id/tvYelpPlacePhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/tvYelpPlacePrice"
+                android:layout_marginTop="@dimen/size5"
+                android:layout_below="@id/tvYelpPlacePhone"
+                android:layout_toEndOf="@id/tvPlacePrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/tvPlaceCategory"
+                android:layout_marginTop="@dimen/size5"
+                android:layout_below="@id/tvYelpPlacePrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/tvYelpPlaceCategory"
+                android:layout_marginTop="@dimen/size5"
+                android:layout_below="@id/tvYelpPlacePrice"
+                android:layout_toEndOf="@id/tvPlaceCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/tvPlaceAddress"
+                android:text="@string/str_address"
+                android:layout_marginTop="@dimen/size5"
+                android:layout_below="@id/tvYelpPlaceCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/tvYelpPlaceAddress"
+                android:layout_marginTop="@dimen/size5"
+                android:autoLink="map"
+                android:layout_below="@id/tvYelpPlaceCategory"
+                android:layout_toEndOf="@id/tvPlaceAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+    </RelativeLayout>
+    <LinearLayout
+            android:id="@+id/llLiveMemberPopUp"
+            android:layout_width="@dimen/size300"
+            android:layout_height="@dimen/size220"
+            android:background="@drawable/polygon_livemember"
+            android:paddingBottom="@dimen/size15"
+            android:paddingTop="@dimen/size15"
+            android:paddingLeft="@dimen/size5"
+            android:paddingRight="@dimen/size5"
+            android:orientation="vertical">
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/name_memb_user"
+                    android:textSize="@dimen/textSize16"
+                    android:textStyle="bold"
+                    android:textColor="@color/grayText"/>
+
+
+            <TextView
+                    android:id="@+id/tv_liveMemName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Paras Patel "
+                    android:textSize="@dimen/textSize16"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size5">
+
+            <TextView
+                    android:id="@+id/tvDateKey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/date_memb_start"
+                    android:textSize="@dimen/textSize16"
+                    android:textStyle="bold"
+                    android:textColor="@color/grayText"/>
+
+
+            <TextView
+                    android:id="@+id/tv_liveMemDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/textSize16"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size5">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/address_memb_ping"
+                    android:textSize="@dimen/textSize16"
+                    android:textStyle="bold"
+                    android:textColor="@color/grayText"/>
+
+
+            <TextView
+                    android:id="@+id/tv_liveMemAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="305/Shapath Hexa, Sg highway,Ahmedabad"
+                    android:maxLines="3"
+                    android:textSize="@dimen/textSize16"/>
+
+        </LinearLayout>
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size5">
+
+            <TextView
+                    android:id="@+id/tvLiveMemberNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_phone"
+                    android:textSize="@dimen/textSize16"
+                    android:textStyle="bold"
+                    android:textColor="@color/grayText"/>
+
+            <TextView
+                    android:id="@+id/tvLiveMemberMobileNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+919366546412"
+                    android:autoLink="all"
+                    android:textSize="@dimen/textSize16"/>
+        </LinearLayout>
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size5">
+
+            <TextView
+                    android:id="@+id/tvDeviceDetailKey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/device_detail_live"
+                    android:textSize="@dimen/textSize16"
+                    android:textStyle="bold"
+                    android:textColor="@color/grayText"/>
+
+            <TextView
+                    android:id="@+id/tv_liveMemDeviceDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Samsung | 4.3 | Android"
+                    android:textSize="@dimen/textSize16"/>
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

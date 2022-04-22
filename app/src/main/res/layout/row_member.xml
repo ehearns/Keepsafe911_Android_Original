@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:id="@+id/clShareOption"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/ivMember"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="@dimen/size56"
+        android:layout_height="@dimen/size56"
+        android:layout_margin="@dimen/gape10"
+        app:roundAsCircle="true"
+        android:scaleType="fitCenter"
+        android:layout_centerInParent="true"
+        app:progressBarImage="@drawable/pic1"
+        android:background="@drawable/upload_profile_green"
+        app:roundingBorderColor="@color/colorPrimary"
+        app:roundingBorderWidth="@dimen/size1"/>
+
+    <TextView
+        android:id="@+id/ivMemberName"
+        android:textSize="@dimen/textSize12"
+        android:layout_marginTop="@dimen/size5"
+        app:layout_constraintTop_toBottomOf="@id/ivMember"
+        app:layout_constraintEnd_toEndOf="@id/ivMember"
+        app:layout_constraintStart_toStartOf="@id/ivMember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

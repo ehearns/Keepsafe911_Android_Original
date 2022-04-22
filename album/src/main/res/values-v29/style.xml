@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Album.Theme.Activity" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:windowBackground">@color/albumTransparent</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+
+    <style name="Album.Theme.Toolbar.Dark" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="actionMenuTextColor">@color/albumFontLight</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+
+    <style name="Album.Theme.Toolbar.Light" parent="ThemeOverlay.AppCompat.Light">
+        <item name="actionMenuTextColor">@color/albumFontDark</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+    <style name="Album.Theme.Toolbar.Popup" parent="ThemeOverlay.AppCompat.Light">
+        <item name="actionMenuTextColor">@color/albumFontDark</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+    <style name="Album.Dialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:forceDarkAllowed">false</item>
+    </style>
+</resources>

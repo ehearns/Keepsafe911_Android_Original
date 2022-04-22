@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/clParentRaw"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="@android:color/transparent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/flParent"
+        android:background="@drawable/dashboard_option_back"
+        android:layout_width="@dimen/size250"
+        android:layout_height="@dimen/size150">
+
+        <TextView
+            android:id="@+id/tvTopOptionName"
+            android:textColor="@color/caldroid_white_transparent"
+            android:textStyle="bold"
+            android:layout_toStartOf="@id/ivOptionImage"
+            android:layout_alignParentStart="true"
+            android:textSize="@dimen/textSize24"
+            android:textAllCaps="true"
+            android:layout_marginTop="@dimen/size20"
+            android:layout_marginStart="@dimen/size20"
+            android:layout_marginEnd="@dimen/gape10"
+            android:layout_above="@id/tvBottomOptionName"
+            android:layout_alignParentTop="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+        <TextView
+            android:id="@+id/tvBottomOptionName"
+            android:textColor="@color/caldroid_white"
+            android:textStyle="bold"
+            android:textSize="@dimen/textSize16"
+            android:paddingEnd="@dimen/size5"
+            android:paddingStart="@dimen/size5"
+            android:paddingBottom="@dimen/size5"
+            android:paddingTop="@dimen/size2"
+            android:textAllCaps="true"
+            android:layout_marginEnd="@dimen/size30"
+            android:layout_marginStart="@dimen/size15"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/ivOptionImage"
+            android:layout_marginTop="@dimen/gape10"
+            android:layout_alignParentEnd="true"
+            android:layout_width="@dimen/size70"
+            android:layout_height="@dimen/size80"/>
+
+    </RelativeLayout>
+</RelativeLayout>

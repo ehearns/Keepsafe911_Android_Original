@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@color/caldroid_white"
+        tools:context=".fragments.homefragment.hibp.EmailCompromisedFragment">
+
+    <include android:id="@+id/tool_bar"
+            layout="@layout/toolbar_header"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxStrokeColor="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/tool_bar"
+            android:layout_marginTop="@dimen/size20"
+            android:layout_marginStart="@dimen/size20"
+            android:layout_marginEnd="@dimen/size20"
+            android:id="@+id/tilEmail"
+            style="@style/AppTheme_EditText"
+            android:textColorHint="@color/grayText"
+            android:tooltipText="@string/email_username">
+
+        <EditText
+                android:id="@+id/etPwnedUserName"
+                android:hint="@string/email_username"
+                android:imeOptions="actionDone"
+                android:layout_margin="@dimen/size5"
+                android:textColorHint="@color/grayText"
+                android:drawablePadding="@dimen/size4"
+                android:drawableEnd="@drawable/ic_user"
+                android:inputType="textCapWords|textPersonName"
+                android:background="@drawable/underline_shape"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <Button
+            android:id="@+id/btnSearchEmail"
+            android:textSize="@dimen/textSize16"
+            android:text="@string/str_search_hibp"
+            android:textColor="@color/caldroid_white"
+            android:background="@drawable/button_back"
+            android:layout_marginTop="@dimen/size20"
+            android:layout_marginStart="@dimen/size40"
+            android:layout_marginEnd="@dimen/size40"
+            android:layout_marginBottom="@dimen/gape10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilEmail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:id="@+id/tvBreachesCount"
+            android:textStyle="bold"
+            android:textSize="@dimen/textSize18"
+            android:textColor="@color/Date_bg"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/btnSearchEmail"
+            android:layout_marginTop="@dimen/gape10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    <FrameLayout android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/gape10"
+            app:layout_constraintTop_toBottomOf="@id/tvBreachesCount"
+            app:layout_constraintBottom_toBottomOf="parent">
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPwnedBreaches"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        <TextView
+                android:id="@+id/tvPwnedNoData"
+                android:visibility="gone"
+                android:text="@string/no_data"
+                android:textSize="@dimen/textSize18"
+                android:textColor="@color/colorDifferent"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

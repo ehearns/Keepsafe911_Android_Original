@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginStart="@dimen/size200"
+              android:layout_marginEnd="@dimen/size200"
+              android:orientation="vertical"
+              android:padding="20dp">
+
+    <NumberPicker
+            android:id="@+id/numberPicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@color/colorPrimary"
+            android:scaleX="1.1"
+            android:scaleY="1.1"/>
+
+    <Button
+            android:id="@+id/btnSet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@drawable/button_without_back"
+            android:text="@string/set_pay_month"
+            android:textAllCaps="false"
+            android:textColor="@color/Date_bg"
+            android:textSize="@dimen/textSize18"/>
+
+</LinearLayout>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llCustomDialog"
+    android:background="@drawable/custom_popup_bg"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvPopUpTitle"
+        android:textStyle="bold"
+        android:paddingEnd="@dimen/gape10"
+        android:paddingStart="@dimen/gape10"
+        android:paddingTop="@dimen/size5"
+        android:paddingBottom="@dimen/size5"
+        android:textColor="@color/caldroid_black"
+        android:textSize="@dimen/textSize18"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tvPopUpMessage"
+        android:padding="@dimen/gape10"
+        android:layout_marginBottom="@dimen/size5"
+        android:textSize="@dimen/textSize14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:weightSum="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvCancelPopUp"
+            android:layout_weight="0.5"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:singleLine="true"
+            android:layout_gravity="center_horizontal|start"
+            android:padding="@dimen/gape10"
+            android:textSize="@dimen/textSize16"
+            android:textColor="@color/colorPrimary"
+            android:layout_height="wrap_content"/>
+        <View
+            android:id="@+id/popupDivider"
+            android:layout_marginTop="@dimen/size2"
+            android:layout_marginBottom="@dimen/size2"
+            android:layout_marginStart="@dimen/size8"
+            android:layout_marginEnd="@dimen/size8"
+            android:background="@color/grayText"
+            android:layout_width="@dimen/size1"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:id="@+id/tvApprovePopUp"
+            android:layout_weight="0.5"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:singleLine="true"
+            android:layout_gravity="center_horizontal|end"
+            android:padding="@dimen/gape10"
+            android:textSize="@dimen/textSize16"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</LinearLayout>

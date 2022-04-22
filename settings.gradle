@@ -1,0 +1,2 @@
+include ':app', ':album', ':videocompressor'
+rootProject.name='keepsafe911'

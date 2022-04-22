@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/donation_divider"/>
+    <corners android:radius="@dimen/size25"/>
+    <padding
+        android:bottom="@dimen/size15"
+        android:left="@dimen/size20"
+        android:right="@dimen/size20"
+        android:top="@dimen/size15"/>
+</shape>

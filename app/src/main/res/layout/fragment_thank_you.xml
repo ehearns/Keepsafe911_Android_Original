@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/caldroid_white"
+    tools:context=".fragments.donation.ThankYouFragment">
+
+    <include layout="@layout/background_layout"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include
+            android:id="@+id/tool_bar"
+            layout="@layout/toolbar_header"/>
+        <ImageView
+            android:id="@+id/ivDonationBanner"
+            android:src="@drawable/ic_donation_banner"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tool_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvThankYouTitle"
+            android:layout_marginTop="@dimen/gape10"
+            android:textSize="@dimen/textSize20"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:text="@string/str_thank_you"
+            app:layout_constraintTop_toBottomOf="@id/ivDonationBanner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvDonationDetail"
+            android:text="@string/str_donation_detail"
+            android:gravity="center"
+            android:paddingStart="@dimen/size15"
+            android:paddingEnd="@dimen/size15"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/textSize14"
+            android:layout_marginTop="@dimen/gape10"
+            app:layout_constraintTop_toBottomOf="@id/tvThankYouTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvFollowUs"
+            android:text="@string/str_follow_us"
+            android:gravity="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/textSize14"
+            android:layout_marginTop="@dimen/size15"
+            app:layout_constraintTop_toBottomOf="@id/tvDonationDetail"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFollowUs"
+            app:layout_constraintTop_toBottomOf="@id/tvFollowUs"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/size5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

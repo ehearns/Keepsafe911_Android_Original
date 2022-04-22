@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/rlPlaceHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/size2"
+            android:paddingTop="@dimen/size2"
+            android:background="@color/Date_bg">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_place_date"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/textSize16"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textAllCaps="true"/>
+
+        <ImageView
+                android:id="@+id/iv_popup_dismiss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_x_white"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/size15"
+                android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+
+    <TextView
+            android:id="@+id/tvPlaceDate"
+            android:layout_marginTop="@dimen/size20"
+            android:layout_marginEnd="@dimen/size20"
+            android:layout_marginStart="@dimen/size20"
+            android:layout_marginBottom="@dimen/gape10"
+            app:layout_constraintTop_toBottomOf="@id/rlPlaceHeader"
+            android:layout_width="match_parent"
+            android:padding="@dimen/space_xm"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/textSize16"
+            android:textColorHint="@color/grayText"
+            android:hint="@string/str_place_date"
+            android:background="@drawable/underline_shape"/>
+
+    <Button
+            android:id="@+id/btnSetFreq"
+            android:layout_marginTop="@dimen/gape10"
+            android:layout_marginEnd="@dimen/gape10"
+            android:layout_marginBottom="@dimen/gape10"
+            app:layout_constraintTop_toBottomOf="@id/tvPlaceDate"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_back"
+            android:text="@string/set_pay_month"
+            android:textColor="@android:color/white"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

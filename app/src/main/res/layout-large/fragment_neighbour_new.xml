@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/caldroid_white"
+    tools:context=".fragments.neighbour.NeighbourFragment">
+
+    <include android:id="@+id/tool_bar"
+        layout="@layout/toolbar_header"/>
+    <FrameLayout android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/size200"
+        android:layout_marginEnd="@dimen/size200"
+        app:layout_constraintTop_toBottomOf="@id/tool_bar"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/srlNeighborNewList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.keepSafe911.model.ExoPlayerRecyclerView
+                android:id="@+id/rvNeighbourNewList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <TextView
+            android:id="@+id/tvNeighbourNoData"
+            android:visibility="gone"
+            android:text="@string/no_data"
+            android:textSize="@dimen/textSize18"
+            android:textColor="@color/colorDifferent"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_marginTop="@dimen/gape10"
+        android:layout_marginBottom="@dimen/size20"
+        android:layout_marginStart="@dimen/gape10"
+        android:layout_marginEnd="@dimen/size220"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="wrap_content"
+        android:id="@+id/clAddPost"
+        android:layout_height="wrap_content">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:borderWidth="@dimen/size1"
+            app:elevation="0dp"
+            android:src="@drawable/ic_add_post"
+            app:backgroundTint="@color/grayText"
+            android:backgroundTint="@color/caldroid_white"
+            android:layout_gravity="center"
+            android:id="@+id/floatingActionButton"/>
+        <TextView android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/neighbour_post"
+            android:paddingBottom="@dimen/gape10"
+            android:drawableTop="@drawable/ic_add_post"
+            android:textSize="@dimen/textSize12"
+            android:visibility="gone"
+            android:background="@color/transparent"
+            android:textColor="@color/Date_bg"
+            app:layout_anchor="@id/floatingActionButton"
+            app:layout_anchorGravity="center"/>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

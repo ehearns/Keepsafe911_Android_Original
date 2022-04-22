@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/rlDTestHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/size2"
+        android:paddingTop="@dimen/size2"
+        android:background="@color/Date_bg">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_frequency"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/textSize16"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:textAllCaps="true"/>
+
+        <ImageView
+                android:id="@+id/iv_popup_dismiss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_x_white"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/size15"
+                android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:id="@+id/llFrequency"
+                  android:layout_below="@id/rlDTestHeader"
+                  android:padding="20dp">
+
+        <NumberPicker
+                android:id="@+id/valuePicker"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/size8"
+                android:layout_height="wrap_content"
+                android:divider="@color/colorPrimary"
+                android:scaleX="1.1"
+                android:scaleY="1.1"/>
+        <NumberPicker
+                android:id="@+id/filterPicker"
+                android:layout_marginStart="@dimen/size8"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:divider="@color/colorPrimary"
+                android:scaleX="1.1"
+                android:scaleY="1.1"/>
+
+    </LinearLayout>
+    <!--<android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxStrokeColor="@color/colorPrimary"
+            android:layout_margin="@dimen/space_xxm"
+            android:id="@+id/tl_ping_admin"
+            android:layout_below="@id/rlDTestHeader">
+        <EditText
+                android:id="@+id/etSettingPopFrequency"
+                android:hint="@string/freq_seconds"
+                android:layout_marginTop="@dimen/space_xxm"
+                android:inputType="number"
+                android:imeOptions="actionDone"
+                android:background="@drawable/edittext_border"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+    </android.support.design.widget.TextInputLayout>-->
+    <Button
+        android:id="@+id/btnSetFreq"
+        android:layout_margin="@dimen/gape10"
+        android:layout_below="@id/llFrequency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_back"
+        android:text="@string/set_pay_month"
+        android:textColor="@android:color/white"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>

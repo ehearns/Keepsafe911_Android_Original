@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/rlLiveStream"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LiveStreamActivity">
+
+    <com.keepSafe911.openlive.ui.VideoGridContainer
+        android:id="@+id/live_video_grid_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.keepSafe911.openlive.ui.VideoGridContainer>
+
+    <ImageView
+        android:id="@+id/ivLeaveChannel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/size30"
+        android:layout_marginEnd="@dimen/size20"
+        android:src="@drawable/ic_exit_live"
+        android:padding="@dimen/size8"
+        android:background="@drawable/rounded_bg_half_transparent"
+        android:scaleType="centerCrop" />
+
+    <RelativeLayout
+        android:id="@+id/live_name_space_layout"
+        android:layout_width="@dimen/size150"
+        android:layout_height="@dimen/size50"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="@dimen/size30"
+        android:layout_marginStart="@dimen/size20"
+        android:paddingEnd="@dimen/size5"
+        android:paddingStart="@dimen/size5"
+        android:background="@drawable/live_name_board_bg">
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/live_name_board_icon"
+            android:layout_width="@dimen/size40"
+            android:layout_height="@dimen/size40"
+            android:layout_centerVertical="true"
+            app:roundAsCircle="true"
+            android:scaleType="fitCenter"
+            app:progressBarImage="@drawable/pic1"
+            android:background="@drawable/upload_profile"
+            app:roundingBorderColor="@color/black_half_transparent"
+            app:roundingBorderWidth="@dimen/size1"/>
+        <TextView
+            android:id="@+id/live_room_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toEndOf="@id/live_name_board_icon"
+            android:textAlignment="gravity"
+            android:gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:textColor="@color/caldroid_white"
+            android:textSize="@dimen/textSize12"
+            android:layout_marginStart="@dimen/size5"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/size20"
+        android:layout_centerHorizontal="true">
+        <ImageView
+            android:id="@+id/ivSwitchCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_switch_camera"
+            android:scaleType="center"
+            android:layout_marginEnd="@dimen/space_xm"
+            android:background="@drawable/circle_background_data" />
+
+        <ImageView
+            android:id="@+id/ivAudio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_mute_audio"
+            android:scaleType="center"
+            android:layout_marginStart="@dimen/space_xm"
+            android:background="@drawable/circle_background_data" />
+
+    </LinearLayout>
+</RelativeLayout>

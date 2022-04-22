@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="?actionBarSize"
+        android:gravity="center"
+        android:text="Alert Members"
+        android:id="@+id/tvAlertTitle"
+        android:background="@color/transparent"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.FontSemiPathView"
+        android:textSize="@dimen/text_size_xl"
+        android:textColor="@color/Date_bg"
+        android:layout_centerHorizontal="true"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvAlertMember"
+        android:layout_below="@id/tvAlertTitle"
+        android:layout_width="match_parent"
+        android:minWidth="@dimen/size200"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

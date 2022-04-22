@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:paddingTop="@dimen/size5"
+                android:paddingBottom="@dimen/size5"
+                android:background="@color/list_backcolor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/padding2"
+                    android:background="@color/caldroid_white">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/sdvCommentedUserImage"
+                android:layout_width="@dimen/size40"
+                android:layout_height="@dimen/size40"
+                android:layout_margin="@dimen/gape10"
+                app:roundAsCircle="true"
+                android:background="@drawable/upload_profile_green"
+                app:actualImageScaleType="centerCrop"
+                app:roundingBorderColor="@color/colorPrimary"
+                app:roundingBorderWidth="@dimen/size1"/>
+        <TextView
+                android:id="@+id/tvCommentatorName"
+                android:textColor="@color/Date_bg"
+                android:textStyle="bold"
+                android:textSize="@dimen/textSize14"
+                android:layout_toStartOf="@id/tvDeleteComment"
+                android:layout_alignTop="@id/sdvCommentedUserImage"
+                android:layout_toEndOf="@id/sdvCommentedUserImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/tvCommentatorComment"
+                android:layout_toStartOf="@id/tvDeleteComment"
+                android:layout_below="@id/tvCommentatorName"
+                android:layout_toEndOf="@id/sdvCommentedUserImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/tvCommentatorTime"
+                android:layout_below="@id/tvCommentatorComment"
+                android:layout_toEndOf="@id/sdvCommentedUserImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:id="@+id/tvDeleteComment"
+                android:layout_alignTop="@id/sdvCommentedUserImage"
+                android:padding="@dimen/gape10"
+                android:drawableEnd="@drawable/ic_remove_member"
+                android:layout_alignBottom="@id/sdvCommentedUserImage"
+                android:layout_alignParentEnd="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+    </RelativeLayout>
+</RelativeLayout>

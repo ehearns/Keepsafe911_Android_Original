@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <TextView
+            android:id="@+id/tvRatingPlaceName"
+            android:textAlignment="center"
+            android:textSize="@dimen/textSize20"
+            android:padding="@dimen/gape10"
+            android:textColor="@color/Date_bg"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    <RatingBar
+            android:id="@+id/rbRatingPlace"
+            android:layout_marginTop="@dimen/size20"
+            android:numStars="5"
+            style="?android:attr/ratingBarStyle"
+            android:progressTint="@color/caldroid_darker_yellow"
+            android:secondaryProgressTint="@color/caldroid_darker_yellow"
+            android:stepSize="0.5"
+            app:layout_constraintTop_toBottomOf="@id/tvRatingPlaceName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:id="@+id/tvRatingCancel"
+            android:text="@string/cancel"
+            android:textAlignment="center"
+            android:textSize="@dimen/textSize16"
+            android:textColor="@color/color_red"
+            android:padding="@dimen/gape10"
+            android:layout_marginTop="@dimen/gape10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tvRatingOk"
+            app:layout_constraintTop_toBottomOf="@id/rbRatingPlace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:id="@+id/tvRatingOk"
+            android:text="@string/str_ok"
+            android:textAlignment="center"
+            android:textSize="@dimen/textSize16"
+            android:textColor="@color/special_green"
+            android:padding="@dimen/gape10"
+            android:layout_marginTop="@dimen/gape10"
+            app:layout_constraintStart_toEndOf="@id/tvRatingCancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rbRatingPlace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

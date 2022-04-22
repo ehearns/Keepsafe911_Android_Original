@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.PrivacyTermsFragment">
+
+    <include layout="@layout/toolbar_header" />
+
+    <WebView
+        android:id="@+id/wvPrivacyTerms"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+
+    <Button
+        android:id="@+id/btnPrivacyTerms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:layout_marginStart="@dimen/size20"
+        android:layout_marginEnd="@dimen/size20"
+        android:layout_marginTop="@dimen/gape10"
+        android:layout_marginBottom="@dimen/gape10"
+        android:paddingStart="@dimen/size20"
+        android:paddingEnd="@dimen/size20"
+        android:textSize="@dimen/textSize18"
+        android:text="@string/str_agree_accept"
+        android:textColor="@color/caldroid_white"
+        android:background="@drawable/button_back" />
+</LinearLayout>

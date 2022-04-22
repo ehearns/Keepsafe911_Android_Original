@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="@dimen/gape10"
+    android:paddingBottom="@dimen/gape10"
+    android:paddingEnd="@dimen/size15"
+    android:paddingStart="@dimen/size15"
+    android:id="@+id/clSettingParent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/ivSideData"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/setting_back"
+        android:layout_width="@dimen/size35"
+        android:layout_height="@dimen/size35"/>
+
+    <TextView
+        android:id="@+id/tvSideData"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivSideData"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingStart="@dimen/size20"
+        android:paddingEnd="@dimen/size5"
+        android:drawableEnd="@drawable/redirect_language"
+        android:drawablePadding="@dimen/size5"
+        android:singleLine="true"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/textSize16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

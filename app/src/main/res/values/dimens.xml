@@ -1,0 +1,117 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">8dp</dimen>
+    <dimen name="activity_vertical_margin">8dp</dimen>
+    <dimen name="navigation_drawer_width">250dp</dimen>
+    <dimen name="navigation_drawer_widthXLarge">340dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">180dp</dimen>
+    <dimen name="lable_title_size">17sp</dimen>
+
+    <dimen name="space_xxxs">1dp</dimen>
+    <dimen name="space_xxs">2dp</dimen>
+    <dimen name="space_xxs2">3dp</dimen>
+    <dimen name="space_xs">4dp</dimen>
+    <dimen name="space_s">6dp</dimen>
+    <dimen name="space_ss">7dp</dimen>
+    <dimen name="space_xxm">8dp</dimen>
+    <dimen name="space_xxm9">9dp</dimen>
+    <dimen name="space_xm">10dp</dimen>
+    <dimen name="space_xm_11">11dp</dimen>
+    <dimen name="space_m">12dp</dimen>
+    <dimen name="space_l">14dp</dimen>
+    <dimen name="space_xl">16dp</dimen>
+    <dimen name="space_xxl">18dp</dimen>
+    <dimen name="space_xxxl">20dp</dimen>
+    <dimen name="space_ivl">24dp</dimen>
+    <dimen name="space_jumbo">26dp</dimen>
+    <dimen name="space_large_jumbo">30dp</dimen>
+    <dimen name="space_large_jumbo_36">36dp</dimen>
+    <dimen name="space_super_jumbo">40dp</dimen>
+    <dimen name="space_super_jumbo_50">50dp</dimen>
+    <dimen name="space_extra_large_jumbo">60dp</dimen>
+    <dimen name="space_super_extra_large_jumbo">70dp</dimen>
+    <dimen name="space_super_extra_large_x_jumbo">85dp</dimen>
+    <dimen name="standard_action_bar_height">56dp</dimen>
+
+    <dimen name="text_size_xxxxs">4sp</dimen>
+    <dimen name="text_size_xxxs">6sp</dimen>
+    <dimen name="text_size_xxs">8sp</dimen>
+    <dimen name="text_size_xs">10sp</dimen>
+    <dimen name="text_size_s">12sp</dimen>
+    <dimen name="text_size_m">14sp</dimen><!--preferable-->
+    <dimen name="text_size_l">16sp</dimen>
+    <dimen name="text_size_xl">18sp</dimen>
+    <dimen name="text_size_xxl">20sp</dimen>
+    <dimen name="text_size_xxxl">22sp</dimen>
+    <dimen name="text_size_jumbo">24sp</dimen>
+    <dimen name="text_size_x_jumbo">26sp</dimen>
+    <dimen name="text_size_xx_jumbo">28sp</dimen>
+    <dimen name="top_margin">60dp</dimen>
+    <dimen name="user_top_margin">95dp</dimen>
+
+
+    <dimen name="marker_offset_x">5dp</dimen>
+    <dimen name="marker_offset_y">39dp</dimen>
+    <dimen name="pay_button_width">230dp</dimen>
+
+
+    <dimen name="size1">1dp</dimen>
+    <dimen name="padding1">1.5dp</dimen>
+    <dimen name="size2">2dp</dimen>
+    <dimen name="padding2">2.5dp</dimen>
+    <dimen name="size3">3dp</dimen>
+    <dimen name="size4">4dp</dimen>
+    <dimen name="size5">5dp</dimen>
+    <dimen name="size8">8dp</dimen>
+    <dimen name="gape10">10dp</dimen>
+    <dimen name="size12">12dp</dimen>
+    <dimen name="size15">15dp</dimen>
+    <dimen name="size20">20dp</dimen>
+    <dimen name="size25">25dp</dimen>
+    <dimen name="size28">28dp</dimen>
+    <dimen name="size30">30dp</dimen>
+    <dimen name="size35">35dp</dimen>
+    <dimen name="size40">40dp</dimen>
+    <dimen name="size45">45dp</dimen>
+    <dimen name="size50">50dp</dimen>
+    <dimen name="size53">53dp</dimen>
+    <dimen name="size56">56dp</dimen>
+    <dimen name="size61">61dp</dimen>
+    <dimen name="size70">70dp</dimen>
+    <dimen name="size80">80dp</dimen>
+    <dimen name="size100">100dp</dimen>
+    <dimen name="size120">120dp</dimen>
+    <dimen name="size130">130dp</dimen>
+    <dimen name="size150">150dp</dimen>
+    <dimen name="size180">180dp</dimen>
+    <dimen name="size190">190dp</dimen>
+    <dimen name="size200">200dp</dimen>
+    <dimen name="size220">220dp</dimen>
+    <dimen name="size240">240dp</dimen>
+    <dimen name="size250">250dp</dimen>
+    <dimen name="size280">280dp</dimen>
+    <dimen name="size300">300dp</dimen>
+    <dimen name="size350">350dp</dimen>
+
+    <dimen name="textSize10">10sp</dimen>
+    <dimen name="textSize12">12sp</dimen>
+    <dimen name="textSize14">14sp</dimen>
+    <dimen name="textSize16">16sp</dimen>
+    <dimen name="textSize18">18sp</dimen>
+    <dimen name="textSize20">20sp</dimen>
+    <dimen name="textSize22">22sp</dimen>
+    <dimen name="textSize24">24sp</dimen>
+    <dimen name="textSize26">26sp</dimen>
+    <dimen name="textSize28">28sp</dimen>
+    <dimen name="textSize30">30sp</dimen>
+    <dimen name="textSize32">32sp</dimen>
+    <dimen name="textSize34">34sp</dimen>
+    <dimen name="textSize40">40sp</dimen>
+    <dimen name="textSize45">45sp</dimen>
+    <dimen name="textSize50">50sp</dimen>
+
+    <dimen name="live_stat_margin_bottom">68dp</dimen>
+</resources>

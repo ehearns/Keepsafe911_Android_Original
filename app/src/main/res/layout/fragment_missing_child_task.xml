@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/caldroid_white"
+    tools:context=".fragments.missingchild.MissingChildTaskFragment">
+
+    <include android:id="@+id/tool_bar"
+        layout="@layout/toolbar_header"/>
+
+    <ScrollView
+        android:id="@+id/svMissingTask"
+        app:layout_constraintTop_toBottomOf="@id/tool_bar"
+        app:layout_constraintBottom_toTopOf="@id/btnTaskSubmit"
+        android:layout_width="match_parent"
+        android:fillViewport="true"
+        android:layout_height="0dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvMissingTaskList"
+                android:padding="@dimen/size5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+    </ScrollView>
+    <Button
+        android:id="@+id/btnTaskSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="true"
+        android:textSize="@dimen/textSize22"
+        android:padding="@dimen/size5"
+        android:text="@string/submit"
+        android:layout_marginStart="@dimen/size40"
+        android:layout_marginEnd="@dimen/size40"
+        android:layout_marginBottom="@dimen/gape10"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        android:textColor="@color/caldroid_white"
+        android:background="@drawable/button_back" />
+</androidx.constraintlayout.widget.ConstraintLayout>

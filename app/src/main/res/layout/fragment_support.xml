@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/caldroid_white"
+    android:focusableInTouchMode="false">
+
+    <include layout="@layout/background_layout"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include android:id="@+id/tool_bar"
+            layout="@layout/toolbar_header"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:fitsSystemWindows="true"
+            app:layout_constraintTop_toBottomOf="@id/tool_bar">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:paddingEnd="@dimen/size20"
+                android:paddingStart="@dimen/size20"
+                android:paddingBottom="@dimen/size20"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/ivSupportBanner"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:background="@drawable/ic_support_banner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <FrameLayout
+                    android:id="@+id/flSubject"
+                    android:layout_marginBottom="@dimen/gape10"
+                    android:layout_marginStart="@dimen/size20"
+                    android:layout_marginEnd="@dimen/size20"
+                    app:layout_constraintTop_toBottomOf="@id/ivSupportBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/ed_subject"
+                        android:inputType="textPersonName"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
+                        android:textSize="@dimen/textSize18"
+                        android:layout_marginTop="@dimen/gape10"
+                        android:background="@drawable/edittext_white_back"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:text="@string/subject"
+                        style="@style/hintStyle" />
+                </FrameLayout>
+                <FrameLayout
+                    android:id="@+id/flDescription"
+                    android:layout_marginTop="@dimen/gape10"
+                    android:layout_marginBottom="@dimen/gape10"
+                    android:layout_marginStart="@dimen/size20"
+                    android:layout_marginEnd="@dimen/size20"
+                    app:layout_constraintTop_toBottomOf="@id/flSubject"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ed_description"
+                        android:gravity="top|start"
+                        android:lines="3"
+                        android:layout_marginTop="@dimen/gape10"
+                        android:background="@drawable/edittext_white_back"
+                        android:textSize="@dimen/textSize16"
+                        android:imeOptions="actionDone" />
+                    <TextView
+                        android:text="@string/description"
+                        style="@style/hintStyle" />
+                </FrameLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size200"
+                    android:id="@+id/rl_files"
+                    android:layout_marginTop="@dimen/gape10"
+                    android:layout_marginStart="@dimen/size20"
+                    android:layout_marginEnd="@dimen/size20"
+                    app:layout_constraintTop_toBottomOf="@id/flDescription"
+                    android:background="@drawable/edittext_white_back">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:id="@+id/rv_files"
+                        android:visibility="gone"
+                        android:layout_alignParentTop="true"
+                        android:layout_above="@+id/tv_selectfile"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/upload_file"
+                        android:textSize="@dimen/textSize18"
+                        android:drawablePadding="@dimen/size5"
+                        android:drawableTop="@drawable/ic_add"
+                        android:id="@+id/tv_selectfile"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignParentBottom="true"
+                        android:textColor="@color/colorPrimary"/>
+                </RelativeLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_back"
+                    app:layout_constraintTop_toBottomOf="@id/rl_files"
+                    android:layout_margin="@dimen/size20"
+                    android:id="@+id/btn_submitsupport"
+                    android:text="@string/submit"
+                    android:textColor="@color/caldroid_white"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

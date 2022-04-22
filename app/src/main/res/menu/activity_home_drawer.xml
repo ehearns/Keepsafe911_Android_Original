@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_dash"
+            android:icon="@drawable/ic_home_n"
+            android:title="@string/back_home"/>
+
+        <item
+            android:id="@+id/nav_live_member"
+            android:icon="@drawable/live_member"
+            android:title="@string/here_iam"/>
+        <item
+            android:id="@+id/nav_news"
+            android:icon="@drawable/ic_side_news"
+            android:title="@string/str_neighborhood_news"/>
+        <item
+            android:id="@+id/nav_member_list"
+            android:icon="@drawable/member_list_fss"
+            android:title="@string/members"/>
+
+        <item
+            android:id="@+id/nav_fencing"
+            android:icon="@drawable/geofencing_fcc"
+            android:title="@string/boundary"/>
+
+        <item
+            android:id="@+id/nav_place_visit"
+            android:visible="false"
+            android:icon="@drawable/menu_visit"
+            android:title="@string/str_place_visit"/>
+
+        <item
+            android:id="@+id/nav_child"
+            android:visible="false"
+            android:icon="@drawable/slide_child"
+            android:title="@string/reports"/>
+
+        <item
+            android:id="@+id/nav_bank"
+            android:visible="false"
+            android:icon="@drawable/bank_recoup"
+            android:title="@string/bank_recoup"/>
+
+        <item
+            android:id="@+id/nav_benefit_hub"
+            android:visible="false"
+            android:icon="@drawable/benifit_hub"
+            android:title="@string/benefit_hub"/>
+
+        <item
+            android:id="@+id/nav_hibp"
+            android:visible="false"
+            android:icon="@drawable/ic_side_dark"
+            android:title="@string/str_hibp"/>
+        <item
+            android:id="@+id/nav_missing_child"
+            android:icon="@drawable/ic_missing_child_app"
+            android:title="@string/str_missing_child"/>
+        <item
+            android:id="@+id/nav_injury_referral"
+            android:icon="@drawable/ic_injury_referral_app"
+            android:visible="false"
+            android:title="@string/str_injury_referral"/>
+        <item
+            android:id="@+id/nav_search_child"
+            android:icon="@drawable/ic_search_child"
+            android:title="@string/search_child"/>
+        <item
+            android:id="@+id/nav_donation"
+            android:visible="false"
+            android:icon="@drawable/ic_donation"
+            android:title="@string/str_donation"/>
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/settings_fcc"
+            android:title="@string/action_settings"/>
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/logout_fcc"
+            android:title="@string/logout"/>
+        <item
+            android:id="@+id/nav_noUse"
+            android:checked="false"
+            android:checkable="false"
+            android:enabled="false"
+            android:title=""/>
+
+    </group>
+</menu>

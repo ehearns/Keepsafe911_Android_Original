@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/caldroid_white"
+    tools:context=".fragments.missingchild.MissingDashBoardFragment">
+
+    <include layout="@layout/background_layout"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include android:id="@+id/tool_bar"
+            layout="@layout/toolbar_header"/>
+
+        <View
+            android:id="@+id/viewTransparent"
+            android:background="@color/extraTransparentColor"
+            app:layout_constraintBottom_toTopOf="@id/rvMissingMenuItem"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size35"/>
+        <ImageView
+            android:id="@+id/ivChild"
+            app:layout_constraintTop_toBottomOf="@id/tool_bar"
+            android:background="@drawable/ic_children"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMissingMenuItem"
+            android:background="@color/extraTransparentColor"
+            android:paddingTop="@dimen/size20"
+            app:layout_constraintTop_toBottomOf="@id/ivChild"
+            android:layout_width="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="0dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

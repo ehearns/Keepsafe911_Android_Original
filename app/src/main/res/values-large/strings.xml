@@ -1,0 +1,697 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" translatable="false">Keep Safe 911</string>
+
+    <string name="email_text" tools:ignore="MissingTranslation">Email</string>
+    <string name="referral_text" tools:ignore="MissingTranslation">Referral Code</string>
+    <string name="promotion_text" tools:ignore="MissingTranslation">Promotion Code</string>
+    <string name="password_text" tools:ignore="MissingTranslation">Password</string>
+    <string name="family_name_text" tools:ignore="MissingTranslation">Enter your Family Name</string>
+    <string name="sign_in" tools:ignore="MissingTranslation">Sign In</string>
+    <string name="sign_up" tools:ignore="MissingTranslation">Sign up</string>
+    <string name="add_member" tools:ignore="MissingTranslation">Add User</string>
+    <string name="update_member" tools:ignore="MissingTranslation">Update User</string>
+    <string name="member_list" tools:ignore="MissingTranslation">User List</string>
+    <string name="members" tools:ignore="MissingTranslation">Users</string>
+    <string name="search_member" tools:ignore="MissingTranslation">Search User</string>
+    <string name="search_geofence_name" tools:ignore="MissingTranslation">Search Travel Alert</string>
+    <string name="geofence" tools:ignore="MissingTranslation">Add Travel Alert</string>
+    <string name="geofence_update" tools:ignore="MissingTranslation">Update Travel Alert</string>
+
+    <string name="mem_subscription" tools:ignore="MissingTranslation"><u>USER SUBSCRIPTION</u></string>
+    <string name="freq_subscription" tools:ignore="MissingTranslation"><u>FREQUENCY SUBSCRIPTION</u></string>
+
+    <string name="submit" tools:ignore="MissingTranslation">Submit</string>
+    <string name="submitinvite" tools:ignore="MissingTranslation">Submit &amp; Invite</string>
+    <string name="member_route" tools:ignore="MissingTranslation">Member Route</string>
+    <string name="where_have_been" tools:ignore="MissingTranslation">Date Traveled</string>
+    <string name="live_member" tools:ignore="MissingTranslation">Live User</string>
+    <string name="here_iam" tools:ignore="MissingTranslation">Here I am!</string>
+    <string name="rememeber_me" tools:ignore="MissingTranslation">Remember Me</string>
+    <string name="forgot_password" tools:ignore="MissingTranslation">Forgot Password?</string>
+    <string name="sign_up_text" tools:ignore="MissingTranslation">Don\'t have an account? Sign up</string>
+    <string name="login_with_touch_id" tools:ignore="MissingTranslation">LOGIN WITH TOUCH ID</string>
+    <string name="username" tools:ignore="MissingTranslation">Username</string>
+    <string name="verify" tools:ignore="MissingTranslation">Verify</string>
+    <string name="apply" tools:ignore="MissingTranslation">Apply</string>
+    <string name="text_copy" tools:ignore="MissingTranslation">Copy</string>
+    <string name="text_copied" tools:ignore="MissingTranslation">Copied</string>
+    <string name="firstname" tools:ignore="MissingTranslation">First name</string>
+    <string name="lastname" tools:ignore="MissingTranslation">Last name</string>
+    <string name="pho_number" tools:ignore="MissingTranslation">Phone number</string>
+    <string name="c_passsword" tools:ignore="MissingTranslation">Confirm password</string>
+    <string name="referral_code" tools:ignore="MissingTranslation">Referral name</string>
+    <string name="logout" tools:ignore="MissingTranslation">Logout</string>
+    <string name="edit_profile" tools:ignore="MissingTranslation">
+        <u>Edit Profile</u>
+    </string>
+    <string name="forgot_password_title" tools:ignore="MissingTranslation">Forgot Password</string>
+    <string name="deactivate_account" tools:ignore="MissingTranslation">Deactivate Account</string>
+    <string name="title_activity_home" tools:ignore="MissingTranslation">HomeActivity</string>
+    <string name="navigation_drawer_open" tools:ignore="MissingTranslation">Open navigation drawer</string>
+    <string name="navigation_drawer_close" tools:ignore="MissingTranslation">Close navigation drawer</string>
+    <string name="nav_header_title" tools:ignore="MissingTranslation">Android Studio</string>
+    <string name="nav_header_subtitle" tools:ignore="MissingTranslation">android.studio@android.com</string>
+    <string name="nav_header_desc" tools:ignore="MissingTranslation">Navigation header</string>
+    <string name="action_settings" tools:ignore="MissingTranslation">Settings</string>
+    <string name="no_internet" tools:ignore="MissingTranslation">Please check your internet connection!</string>
+    <string name="blank_pass" tools:ignore="MissingTranslation">Password can not be blank.</string>
+    <string name="valid_pass" tools:ignore="MissingTranslation">Please enter valid password</string>
+    <string name="pass_val" tools:ignore="MissingTranslation">Password must be 8 characters longer.</string>
+    <string name="pass_common_val" tools:ignore="MissingTranslation">Password must contain special character, number and uppercase latter</string>
+    <string name="val_email" tools:ignore="MissingTranslation">Please enter valid Email address.</string>
+    <string name="blank_email" tools:ignore="MissingTranslation">Email address can not be blank.</string>
+    <string name="blank_user" tools:ignore="MissingTranslation">Username can not be blank.</string>
+    <string name="val_username" tools:ignore="MissingTranslation">Please enter valid username.</string>
+    <string name="blank_first" tools:ignore="MissingTranslation">Firstname can not be blank.</string>
+    <string name="blank_last" tools:ignore="MissingTranslation">Lastname can not be blank.</string>
+    <string name="blank_phone" tools:ignore="MissingTranslation">Mobile number can not be blank.</string>
+    <string name="blank_name" tools:ignore="MissingTranslation">Name on card can not be blank.</string>
+    <string name="blank_card" tools:ignore="MissingTranslation">Card number can not be blank.</string>
+    <string name="blank_month" tools:ignore="MissingTranslation">Month can not be blank.</string>
+    <string name="blank_year" tools:ignore="MissingTranslation">Year can not be blank.</string>
+    <string name="blank_cvv" tools:ignore="MissingTranslation">CVV code can not be blank.</string>
+
+
+    <string name="match_pass" tools:ignore="MissingTranslation">Sorry! your password is not match.</string>
+    <string name="bank_recoup" tools:ignore="MissingTranslation">Cash Back Program</string>
+    <string name="benefit_hub" tools:ignore="MissingTranslation">Discount &amp; Rewards</string>
+    <string name="old_new_password" tools:ignore="MissingTranslation">You can not use Current Password as New Password
+    </string>
+    <string name="select_member_geo" tools:ignore="MissingTranslation">Please select users for Travel Alert</string>
+    <string name="select_member_frequency" tools:ignore="MissingTranslation">Please select users for set Frequency</string>
+    <string name="yes" tools:ignore="MissingTranslation">Yes</string>
+    <string name="no" tools:ignore="MissingTranslation">No</string>
+    <string name="logout_conf" tools:ignore="MissingTranslation">Logout confirmation</string>
+    <string name="travel_conf" tools:ignore="MissingTranslation">Delete Travel Alert</string>
+    <string name="travel_ite_conf" tools:ignore="MissingTranslation">Delete Travel Itinerary</string>
+    <string name="wish_logout" tools:ignore="MissingTranslation">Do you wish to logout?</string>
+    <string name="wish_alert" tools:ignore="MissingTranslation">Are you sure you want to delete this alert?</string>
+    <string name="wish_travel_ite" tools:ignore="MissingTranslation">Are you sure you want to delete this travel itinerary?</string>
+    <string name="default_notification_channel_id" translatable="false">
+        KeepSafe911_Notification_Channel
+    </string>
+    <string name="locationError" tools:ignore="MissingTranslation">Location error!</string>
+    <string name="locationMessage" tools:ignore="MissingTranslation">Please, Start your location service and set
+        Location Mode to High accuracy.
+    </string>
+    <string name="delete_conf" tools:ignore="MissingTranslation">Delete User</string>
+    <string name="wish_delete" tools:ignore="MissingTranslation">Are you sure want to delete this User?</string>
+    <string name="phone_length" tools:ignore="MissingTranslation">Please Enter 10 digit phone number</string>
+
+    <string name="profile" tools:ignore="MissingTranslation">Profile</string>
+
+    <string name="app_settings" tools:ignore="MissingTranslation">App Settings</string>
+    <string name="change_password" tools:ignore="MissingTranslation">Change Password</string>
+    <string name="touch_id" tools:ignore="MissingTranslation">Touch ID</string>
+    <string name="others" tools:ignore="MissingTranslation">Others</string>
+    <string name="str_notification" tools:ignore="MissingTranslation">Notification</string>
+    <string name="travel_notification" tools:ignore="MissingTranslation">Travel Notification</string>
+    <string name="str_location" tools:ignore="MissingTranslation">Location</string>
+
+    <string name="no_data" tools:ignore="MissingTranslation">No data to display</string>
+    <string name="login_with_fingerprint_nor" tools:ignore="MissingTranslation">Login with FingerPrint \nOR</string>
+    <string name="GPS_is" tools:ignore="MissingTranslation">Gps Settings</string>
+    <string name="Gps_not_enabled" tools:ignore="MissingTranslation">Locations are only called when you\'re logged into
+        the app. When
+        logged out,
+        locations are not called. So please set your location to High Accuracy mode.\nIf you already enabled GPS then cancel this alert.
+    </string>
+    <string name="cancel" tools:ignore="MissingTranslation">Cancel</string>
+    <string name="confirm_password" tools:ignore="MissingTranslation">Confirm Password</string>
+    <string name="new_password" tools:ignore="MissingTranslation">New Password</string>
+    <string name="old_password" tools:ignore="MissingTranslation">Old Password</string>
+    <string name="business_track" tools:ignore="MissingTranslation">Miles Traveled</string>
+    <string name="child_monitoring" tools:ignore="MissingTranslation">Member Route</string>
+    <string name="start_date" tools:ignore="MissingTranslation">Start date</string>
+    <string name="end_date" tools:ignore="MissingTranslation">End date</string>
+    <string name="geofence_name" tools:ignore="MissingTranslation">Alert name</string>
+    <string name="geofence_detail" tools:ignore="MissingTranslation">Travel Alert details</string>
+    <string name="place_detail" tools:ignore="MissingTranslation">Place Detail</string>
+    <string name="DeleteGeoFenceMember" tools:ignore="MissingTranslation">Are you sure want remove %1$s from this place?</string>
+    <string name="DeletePaymentMember" tools:ignore="MissingTranslation">Are you sure want remove %1$s from this frequency?</string>
+    <string name="selectWorker" tools:ignore="MissingTranslation">Please select user</string>
+    <string name="generate_report" tools:ignore="MissingTranslation">Generate Report</string>
+    <string name="view_report_map" tools:ignore="MissingTranslation">View on Map</string>
+    <string name="wish_action" tools:ignore="MissingTranslation">What do you want to do?</string>
+    <string name="enable_auth" tools:ignore="MissingTranslation">Please enable fingerPrint auth from application
+        settings.
+    </string>
+    <string name="activate_geofence" tools:ignore="MissingTranslation">Please activate %1$s for edit/change.</string>
+    <string name="member_limit" tools:ignore="MissingTranslation">You reached at limit.</string>
+    <string name="offline_upload" tools:ignore="MissingTranslation">Offline data uploaded to server successfully.</string>
+    <string name="error_message" tools:ignore="MissingTranslation">Something went wrong</string>
+    <string name="oops_error_message" tools:ignore="MissingTranslation">Oops! Something went wrong Please try again</string>
+
+
+    <string name="blank_select_date" tools:ignore="MissingTranslation">Please select start date and time.</string>
+    <string name="blank_end_date" tools:ignore="MissingTranslation">Please select end date and time.</string>
+    <string name="val_time" tools:ignore="MissingTranslation">Please select end time (1 hour) greater then start time.
+    </string>
+
+    <string name="geofence_name_text" tools:ignore="MissingTranslation">Please enter alert name</string>
+    <string name="geofence_location_text" tools:ignore="MissingTranslation">Please enter travel alert location</string>
+    <string name="proper_location_text" tools:ignore="MissingTranslation">Please select valid location</string>
+
+
+    <string name="find_your_self" tools:ignore="MissingTranslation">Find Yourself</string>
+    <string name="add_members" tools:ignore="MissingTranslation">Add Users</string>
+    <string name="boundary" tools:ignore="MissingTranslation">Travel Alerts</string>
+    <string name="boundary_list" tools:ignore="MissingTranslation">List of Travel Alerts</string>
+    <string name="report" tools:ignore="MissingTranslation">Report</string>
+    <string name="reports" tools:ignore="MissingTranslation">Reports</string>
+    <string name="money_back" tools:ignore="MissingTranslation">Get Refunds</string>
+    <string name="back_home" tools:ignore="MissingTranslation">Home</string>
+    <string name="summary" tools:ignore="MissingTranslation">Boundary Logs</string>
+
+    <string name="logout_desc" tools:ignore="MissingTranslation">Looking forward to seeing you again</string>
+    <string name="enter_boundary" tools:ignore="MissingTranslation">Enter Travel Alert</string>
+    <string name="exit_boundary" tools:ignore="MissingTranslation">Exit Travel Alert</string>
+    <string name="both_boundary" tools:ignore="MissingTranslation">Both Travel Alert</string>
+    <string name="old_password_match" tools:ignore="MissingTranslation">Old Password is not match</string>
+    <string name="smsalert" tools:ignore="MissingTranslation">SMS Alert</string>
+    <string name="smsalert_desc" tools:ignore="MissingTranslation">Can be turned off or on based on user preference.
+        When off
+        no text messages or alerts will be sent to user.
+    </string>
+    <string name="summaryText" tools:ignore="MissingTranslation">No Location Found</string>
+    <string name="address_to_start_boundary" tools:ignore="MissingTranslation">Address to start boundary</string>
+    <string name="welcome_text" tools:ignore="MissingTranslation">Welcome to Keep Safe 911</string>
+    <string name="prime_text" tools:ignore="MissingTranslation">\u2022 Voice activation\n\u2022 Live stream\n\u2022 Auto record\n\u2022 Geofencing / GPS Locator\n\u2022 Resource hub</string>
+    <string name="subscribe_now" tools:ignore="MissingTranslation">Subscribe Now</string>
+    <string name="free_trial" tools:ignore="MissingTranslation">Free Trial for %1$s days</string>
+    <string name="sub_year_trial" tools:ignore="MissingTranslation">Join Prime at $%1$s per year</string>
+    <string name="sub_month_trial" tools:ignore="MissingTranslation">Join Prime at $%1$s per month</string>
+    <string name="year_trial" tools:ignore="MissingTranslation">Update Prime at $%1$s per year</string>
+    <string name="month_trial" tools:ignore="MissingTranslation">Update Prime at $%1$s per month</string>
+    <string name="skip_text" tools:ignore="MissingTranslation">Already an user? Login</string>
+    <string name="member_text" tools:ignore="MissingTranslation">Select user for getting the route of travelling.
+    </string>
+    <string name="date_text" tools:ignore="MissingTranslation">Select date for getting the route of travelling.</string>
+    <string name="under_dev" tools:ignore="MissingTranslation">Under development</string>
+    <string name="free_trial_desc" tools:ignore="MissingTranslation">Free Trail : Start your free trial for %1$s days.
+        Cancel anytime.
+    </string>
+    <string name="invite_note" tools:ignore="MissingTranslation">By Clicking on Submit &amp; Invite will send a
+        message on
+        user\'s phone number with application link &amp; login credentials.
+    </string>
+    <string name="month_payment" tools:ignore="MissingTranslation">$%1$s will be automatically charge every month for
+        your
+        membership. You can Cancel it anytime.
+    </string>
+    <string name="mem_month_payment" tools:ignore="MissingTranslation">$%1$s will be automatically charge every month
+        for your
+        membership. You can Cancel it anytime.
+    </string>
+    <string name="year_payment" tools:ignore="MissingTranslation">$%1$s will be automatically charge every year for
+        your membership.
+        You can Cancel it anytime.
+    </string>
+    <string name="mem_year_payment" tools:ignore="MissingTranslation">$%1$s will be automatically charge every year for
+        your membership.
+        You can Cancel it anytime.
+    </string>
+    <string name="payment_method" tools:ignore="MissingTranslation">Select Payment Method</string>
+    <string name="name_on_card" tools:ignore="MissingTranslation">Name on card</string>
+    <string name="card_number" tools:ignore="MissingTranslation">Card Number</string>
+    <string name="expire_date" tools:ignore="MissingTranslation">Expire date</string>
+    <string name="google_pay" tools:ignore="MissingTranslation">Google Pay</string>
+    <string name="card" tools:ignore="MissingTranslation">Card</string>
+    <string name="card_details" tools:ignore="MissingTranslation">Card details</string>
+    <string name="mm" tools:ignore="MissingTranslation">Month</string>
+    <string name="yyyy" tools:ignore="MissingTranslation">Year</string>
+    <string name="cvv" tools:ignore="MissingTranslation">CVV</string>
+    <string name="what_is_cvv" tools:ignore="MissingTranslation">What is CVV?</string>
+    <string name="card_note" tools:ignore="MissingTranslation">Remote Note : Bank of America stores all credit card information in their secured payment vault.</string>
+    <string name="pay" tools:ignore="MissingTranslation">Pay</string>
+    <string name="pay_frequency" tools:ignore="MissingTranslation">Pay %s</string>
+    <string name="pay_method" tools:ignore="MissingTranslation">Payment Method</string>
+    <string name="cvv_desc" tools:ignore="MissingTranslation">The CVV Number ("Card Verification Value") on your credit
+        card or debit
+        card is a 3 digit number on VISA®, MasterCard® and Discover® branded credit and debit cards. On your American
+        Express® branded credit or debit card it is a 4 digit numeric code.
+    </string>
+
+    <string name="buy_with_googlepay_button_content_description" tools:ignore="MissingTranslation">Buy with Google Pay
+    </string>
+    <string name="next" tools:ignore="MissingTranslation">Next</string>
+    <string name="card_invalid" tools:ignore="MissingTranslation">Card number is not valid.</string>
+    <string name="subscription" tools:ignore="MissingTranslation">Subscription</string>
+
+    <string name="add" tools:ignore="MissingTranslation">Add</string>
+    <string name="customer_detail" tools:ignore="MissingTranslation">Customer Detail</string>
+    <string name="update_subscription" tools:ignore="MissingTranslation">
+        <u>UPGRADE SUBSCRIPTION</u>
+    </string>
+
+    <string name="user_subscription" tools:ignore="MissingTranslation">
+        <u>USER SUBSCRIPTION</u>
+    </string>
+    <string name="str_user_subscription" tools:ignore="MissingTranslation">User Subscription</string>
+    <string name="customer_name" tools:ignore="MissingTranslation">Customer name</string>
+    <string name="change_payment_card" tools:ignore="MissingTranslation">Change payment method</string>
+    <string name="upgrade_subscription" tools:ignore="MissingTranslation">Upgrade Subscription</string>
+    <string name="cancel_subscription" tools:ignore="MissingTranslation">Cancel Subscription</string>
+    <string name="cancel_filter" tools:ignore="MissingTranslation">Clear</string>
+    <string name="payment" tools:ignore="MissingTranslation">Payment</string>
+
+    <string name="current_subscription_month" tools:ignore="MissingTranslation">Current Subscription: Month($%1$s
+        /Month)
+    </string>
+    <string name="current_subscription_year" tools:ignore="MissingTranslation">Current Subscription: Year($%1$s
+        /Year)
+    </string>
+    <string name="no_subscription_active" tools:ignore="MissingTranslation">No activate subscription.</string>
+    <string name="current_subscription_free_trial" tools:ignore="MissingTranslation">Current Subscription: Free trial</string>
+    <string name="current_subscription_monthly_free_trial" tools:ignore="MissingTranslation">Current Subscription: Monthly Free trial</string>
+    <string name="go" tools:ignore="MissingTranslation">GO</string>
+    <string name="select_date" tools:ignore="MissingTranslation">Select Date</string>
+    <string name="please_select_date" tools:ignore="MissingTranslation">Please Select Date</string>
+    <string name="radius" tools:ignore="MissingTranslation">Radius</string>
+    <string name="start_date_and_time" tools:ignore="MissingTranslation">Start Date and Time</string>
+    <string name="end_date_and_time" tools:ignore="MissingTranslation">End Date and Time</string>
+    <string name="select_user" tools:ignore="MissingTranslation">Select User</string>
+    <string name="summary_title_text" tools:ignore="MissingTranslation">Summary</string>
+    <string name="off" tools:ignore="MissingTranslation">Off</string>
+    <string name="on" tools:ignore="MissingTranslation">On</string>
+    <string name="upd_sub_per_month" tools:ignore="MissingTranslation">$0.99 per month</string>
+    <string name="upd_sub_per_year" tools:ignore="MissingTranslation">$19.99 per year</string>
+    <string name="or" tools:ignore="MissingTranslation">or</string>
+    <string name="name_memb_user" tools:ignore="MissingTranslation">Name:\u00A0</string>
+    <string name="date_memb_start" tools:ignore="MissingTranslation">Date:\u00A0</string>
+    <string name="time_difference_memb" tools:ignore="MissingTranslation">Time Difference:\u00A0</string>
+    <string name="address_memb_ping" tools:ignore="MissingTranslation">Address:\u00A0</string>
+    <string name="device_detail_live" tools:ignore="MissingTranslation">Device Detail:\u00A0</string>
+    <string name="set_pay_month" tools:ignore="MissingTranslation">Set</string>
+    <string name="status_summary" tools:ignore="MissingTranslation">Status:\u00A0</string>
+    <string name="date_time_summary" tools:ignore="MissingTranslation">Date Time:\u00A0</string>
+    <string name="user_summary" tools:ignore="MissingTranslation">User:\u00A0</string>
+    <string name="view_on_map_summary" tools:ignore="MissingTranslation">View On Map</string>
+    <string name="send_email_report" tools:ignore="MissingTranslation">Send Email</string>
+    <string name="view_report_report" tools:ignore="MissingTranslation">View Report</string>
+    <string name="download_report_report" tools:ignore="MissingTranslation">Download Report</string>
+    <string name="touch_id_for_fss" tools:ignore="MissingTranslation">Touch ID for Keep Safe 911</string>
+    <string name="authenticate_with_touch_id" tools:ignore="MissingTranslation">Authenticate with Touch ID</string>
+    <string name="select_country" tools:ignore="MissingTranslation">Select Country</string>
+    <string name="permission_app_set" tools:ignore="MissingTranslation">Please Allow permission from app setting.
+    </string>
+    <string name="day_14" tools:ignore="MissingTranslation">14 days.</string>
+    <string name="month_1" tools:ignore="MissingTranslation">1 month.</string>
+    <string name="year_1" tools:ignore="MissingTranslation">1 year.</string>
+    <string name="pay_success" tools:ignore="MissingTranslation">Payment Success</string>
+    <string name="pay_login" tools:ignore="MissingTranslation">LOGIN</string>
+    <string name="pay_message" tools:ignore="MissingTranslation">Your payment done successfully. You are enrolled now
+        for %1$s \n To start click on login.
+    </string>
+    <string name="month_amt" tools:ignore="MissingTranslation">$%1$s per month</string>
+    <string name="year_amt" tools:ignore="MissingTranslation">$%1$s per year</string>
+    <string name="no_route_date" tools:ignore="MissingTranslation">No route on this date</string>
+    <string name="cover_radius" tools:ignore="MissingTranslation">It will cover %1$d miles from selected boundary
+    </string>
+    <string name="add_user_title_text" tools:ignore="MissingTranslation">Add User</string>
+    <string name="payTitle" tools:ignore="MissingTranslation">PAYMENT</string>
+    <string name="cancellation_message" tools:ignore="MissingTranslation">Are you sure you want to cancel your
+        membership with Keep Safe 911?
+    </string>
+    <string name="conf_call_911" tools:ignore="MissingTranslation">Do you want to call 911?</string>
+    <string name="package_status" tools:ignore="MissingTranslation">This package is Currently going on</string>
+    <string name="subscription_history" tools:ignore="MissingTranslation">Subscription History</string>
+    <string name="frequency_history" tools:ignore="MissingTranslation">Frequency History</string>
+    <string name="forgot_desc_title" tools:ignore="MissingTranslation">Please submit your phone number to receive temporary password.</string>
+    <string name="subscrip_cost" tools:ignore="MissingTranslation">Subscription Cost:\u00A0</string>
+    <string name="subscrip_end_date" tools:ignore="MissingTranslation">Subscription End Date:\u00A0</string>
+    <string name="subscrip_start_date" tools:ignore="MissingTranslation">Subscription Start Date:\u00A0</string>
+    <string name="subscrip_type" tools:ignore="MissingTranslation">Subscription Type:\u00A0</string>
+    <string name="all" tools:ignore="MissingTranslation">All</string>
+    <string name="enter" tools:ignore="MissingTranslation">Enter</string>
+    <string name="exit" tools:ignore="MissingTranslation">Exit</string>
+    <string name="request_start_date" tools:ignore="MissingTranslation">Please select start date</string>
+    <string name="request_end_date" tools:ignore="MissingTranslation">Please select end date</string>
+    <string name="request_proper_date" tools:ignore="MissingTranslation">Please select proper date</string>
+    <string name="file_download" tools:ignore="MissingTranslation">File downloaded</string>
+    <string name="send_email" tools:ignore="MissingTranslation">Sending email…</string>
+    <string name="subscrip_status" tools:ignore="MissingTranslation">Package Status:\u00A0</string>
+    <string name="str_language" tools:ignore="MissingTranslation">Language</string>
+    <string name="active" tools:ignore="MissingTranslation">Active</string>
+    <string name="de_active" tools:ignore="MissingTranslation">De-Active</string>
+    <string name="select_language" tools:ignore="MissingTranslation">Select Language</string>
+    <string name="done" tools:ignore="MissingTranslation">Done</string>
+    <string name="transaction_declined" tools:ignore="MissingTranslation">Please try a different payment method.</string>
+    <string name="str_close" tools:ignore="MissingTranslation">Close</string>
+    <string name="enter_country_name_or_code" tools:ignore="MissingTranslation">Enter Country Name or Code</string>
+    <string name="renew_date" tools:ignore="MissingTranslation">Renewal Date</string>
+    <string name="str_ok" tools:ignore="MissingTranslation">Ok</string>
+    <string-array name="array_language">
+        <item>English</item>
+        <item>Spanish</item>
+    </string-array>
+    <string name="add_additional_user" tools:ignore="MissingTranslation">Add additional user to join Keep Safe 911 and get location alerts and notifications for that user travel plan.</string>
+    <string name="str_frequency" tools:ignore="MissingTranslation">Frequency</string>
+    <string name="frequency_time" tools:ignore="MissingTranslation">Frequency: %1$d Minutes</string>
+    <string name="str_minute" tools:ignore="MissingTranslation">Minutes</string>
+    <string name="str_seconds" tools:ignore="MissingTranslation">Seconds</string>
+    <string name="str_subscrip" tools:ignore="MissingTranslation">Package:\u00A0</string>
+    <string name="str_google_state" tools:ignore="MissingTranslation">Payment Status: Not Supported</string>
+    <string name="str_app_version" tools:ignore="MissingTranslation">App Version</string>
+    <!--this below key is generated from innopadapi@gmail.com project name is FamilyMonitoring-->
+    <!--    <string name="firebase_live_key" translatable="false">AIzaSyBXyBLqyMjr59IhzckmlGiRxTJsw9IVunw</string>-->
+    <!--this below key is generated from client account project name is FamilySafetyNet-->
+    <string name="firebase_live_key" translatable="false">AIzaSyD_Wn58ten9H1jYbv-h8xsSYurNihjGTuE</string>
+    <string name="freq_seconds" tools:ignore="MissingTranslation">Frequency In Seconds</string>
+    <string name="freq_blank" tools:ignore="MissingTranslation">Frequency can not be blank.</string>
+    <string name="recommended_freq" tools:ignore="MissingTranslation">Minimum 60 seconds and Maximum 14400 seconds are highly recommended.</string>
+    <string name="bad_connection" tools:ignore="MissingTranslation">Bad Network Connection, Please Wait…</string>
+    <string name="add_user_desc_text" tools:ignore="MissingTranslation">Unavailable for purchase from application. additional user to join Keep Safe 911 and get
+        location alerts and notifications for that user travel plan.
+    </string>
+    <string name="rate_us" tools:ignore="MissingTranslation">Rate us</string>
+    <string name="support" tools:ignore="MissingTranslation">Support</string>
+    <string name="subject" tools:ignore="MissingTranslation">Subject</string>
+    <string name="description" tools:ignore="MissingTranslation">Description</string>
+    <string name="upload_file" tools:ignore="MissingTranslation">Upload File</string>
+    <string name="no_attachment" tools:ignore="MissingTranslation">No Attachment.</string>
+    <string name="select_file" tools:ignore="MissingTranslation">Select File</string>
+    <string name="blank_subject" tools:ignore="MissingTranslation">Please enter a subject.</string>
+    <string name="you_reached_at_limit" tools:ignore="MissingTranslation">You reached at maximum limit.</string>
+    <string name="your_app_version" tools:ignore="MissingTranslation">Your current application version.</string>
+    <string name="update_title" tools:ignore="MissingTranslation">Update Now</string>
+    <string name="str_update" tools:ignore="MissingTranslation">Update</string>
+    <string name="str_later" tools:ignore="MissingTranslation">Later</string>
+    <string name="update_message" tools:ignore="MissingTranslation">You are running an outdated version of app %1$s. To get the best experience, update to version %2$s now!</string>
+    <string name="pay_firstname" tools:ignore="MissingTranslation">First Name</string>
+    <string name="pay_lastname" tools:ignore="MissingTranslation">Last Name</string>
+    <string name="offline_location_data" tools:ignore="MissingTranslation">Offline Location Data Uploaded to Server Successfully</string>
+    <string name="offline_geofence_data" tools:ignore="MissingTranslation">Offline GeoFence Data Uploaded to Server Successfully</string>
+    <string name="neighbour_title" tools:ignore="MissingTranslation">Neighborly Alerts</string>
+    <string name="neighbour_map" tools:ignore="MissingTranslation">Map</string>
+    <string name="neighbour_share" tools:ignore="MissingTranslation">Share</string>
+    <string name="str_share_friend" tools:ignore="MissingTranslation">Share with Friends</string>
+    <string name="add_photo_video" tools:ignore="MissingTranslation">Add Photos/Videos</string>
+    <string name="update_photo_video" tools:ignore="MissingTranslation">Update Photos/Videos</string>
+    <string name="str_title" tools:ignore="MissingTranslation">Title</string>
+    <string name="neighbour_descript" tools:ignore="MissingTranslation">What happened in your neighborhood?</string>
+    <string name="str_incident_loc" tools:ignore="MissingTranslation">Incident Location</string>
+    <string name="incident_loc_hint" tools:ignore="MissingTranslation">* Your exact address will not be shown.</string>
+    <string name="neighbour_post" tools:ignore="MissingTranslation">New Post</string>
+    <string name="str_add_travel_alert" tools:ignore="MissingTranslation">Add Alert</string>
+    <string name="blank_post_title" tools:ignore="MissingTranslation">Title cannot be blank.</string>
+    <string name="blank_post_desc" tools:ignore="MissingTranslation">What happened in your neighborhood? cannot be blank.</string>
+    <string name="blank_post_file" tools:ignore="MissingTranslation">Please select file for aware other users.</string>
+    <string name="blank_incident_loc" tools:ignore="MissingTranslation">Please select incident location.</string>
+    <string name="str_helpful" tools:ignore="MissingTranslation">Like</string>
+    <string name="str_comment" tools:ignore="MissingTranslation">Comment</string>
+    <string name="str_zoom_map" tools:ignore="MissingTranslation">Zoom to see more</string>
+    <string name="str_hide_filter" tools:ignore="MissingTranslation">Hide Filters</string>
+    <string name="str_show_filter" tools:ignore="MissingTranslation">Show Filters</string>
+    <string name="str_past" tools:ignore="MissingTranslation">Past %1$s \u2022 %2$s Categories</string>
+    <string name="str_past_no" tools:ignore="MissingTranslation">Past %1$s \u2022 %2$s Category</string>
+    <string name="str_past_int" tools:ignore="MissingTranslation">Past %1$s \u2022 %2$d Categories</string>
+    <string name="str_past_int_single" tools:ignore="MissingTranslation">Past %1$s \u2022 %2$d Category</string>
+    <string name="str_news" tools:ignore="MissingTranslation">News</string>
+    <string name="str_crime" tools:ignore="MissingTranslation">Crime</string>
+    <string name="str_safety" tools:ignore="MissingTranslation">Safety</string>
+    <string name="str_suspicious" tools:ignore="MissingTranslation">Suspicious</string>
+    <string name="str_stranger" tools:ignore="MissingTranslation">Stranger</string>
+    <string name="str_lost_pet" tools:ignore="MissingTranslation">Lost Pet</string>
+    <string name="str_24_hours" tools:ignore="MissingTranslation">24 Hours</string>
+    <string name="str_7_days" tools:ignore="MissingTranslation">7 Days</string>
+    <string name="str_14_days" tools:ignore="MissingTranslation">14 Days</string>
+    <string name="str_30_days" tools:ignore="MissingTranslation">30 Days</string>
+    <string name="str_incident_type" tools:ignore="MissingTranslation">Category Type</string>
+    <string name="blank_incident_type" tools:ignore="MissingTranslation">Please select category type.</string>
+    <string name="str_no_category" tools:ignore="MissingTranslation">No Category</string>
+    <string name="send_to" tools:ignore="MissingTranslation">Send To</string>
+    <string name="str_edit" tools:ignore="MissingTranslation">Edit</string>
+    <string name="str_delete" tools:ignore="MissingTranslation">Delete</string>
+    <string name="str_me" tools:ignore="MissingTranslation">Me</string>
+    <string name="str_neighbor" tools:ignore="MissingTranslation">Neighbor</string>
+    <string name="del_post" tools:ignore="MissingTranslation">Delete Post</string>
+    <string name="del_post_conf" tools:ignore="MissingTranslation">Are you sure want to delete this Post?</string>
+    <string name="str_just_now" tools:ignore="MissingTranslation">Just Now</string>
+    <string name="str_second_ago" tools:ignore="MissingTranslation">\u0009seconds ago</string>
+    <string name="str_min_ago" tools:ignore="MissingTranslation">\u0009minutes ago</string>
+    <string name="str_hour_ago" tools:ignore="MissingTranslation">\u0009hours ago</string>
+    <string name="str_day_ago" tools:ignore="MissingTranslation">\u0009days ago</string>
+    <string name="str_neighborhood_alert" tools:ignore="MissingTranslation">News Alert</string>
+    <string name="str_my_post" tools:ignore="MissingTranslation">My Post</string>
+    <string name="str_save" tools:ignore="MissingTranslation">Save</string>
+    <string name="str_list" tools:ignore="MissingTranslation">List</string>
+    <string name="str_post_area" tools:ignore="MissingTranslation">You will only see post from this area.</string>
+    <string name="str_01mi" translatable="false">0.1 MI</string>
+    <string name="str_50mi" translatable="false">5.0 MI</string>
+    <string name="str_finished" tools:ignore="MissingTranslation">Finished</string>
+    <string name="str_buffer" tools:ignore="MissingTranslation">Buffering</string>
+    <string name="video_play_error_occurred" tools:ignore="MissingTranslation">Video play error occurred</string>
+    <string name="add_a_comment" tools:ignore="MissingTranslation">Add a comment</string>
+    <string name="str_post" tools:ignore="MissingTranslation">Post</string>
+    <string name="blank_comment" tools:ignore="MissingTranslation">Comment cannot be blank.</string>
+    <string name="be_first_comment" tools:ignore="MissingTranslation">Be the first commenter</string>
+    <string name="str_neighborhood_news" tools:ignore="MissingTranslation">News</string>
+    <string name="str_mobile_request" tools:ignore="MissingTranslation">Please provide your mobile number.</string>
+    <string name="del_comment" tools:ignore="MissingTranslation">Delete Comment</string>
+    <string name="del_comm_conf" tools:ignore="MissingTranslation">Are you sure want to delete this Comment?</string>
+    <string name="str_explore_by" tools:ignore="MissingTranslation">Explore Nearby</string>
+    <string name="str_hotel" tools:ignore="MissingTranslation">Hotels</string>
+    <string name="str_restaurant" tools:ignore="MissingTranslation">Restaurants</string>
+    <string name="str_theater" tools:ignore="MissingTranslation">Theaters</string>
+    <string name="str_gas" tools:ignore="MissingTranslation">Gas Stations</string>
+    <string name="str_bank" tools:ignore="MissingTranslation">Banks</string>
+    <string name="str_atm" tools:ignore="MissingTranslation">ATM</string>
+    <string name="str_hospital" tools:ignore="MissingTranslation">Hospital</string>
+    <string name="str_auto_mechanic" tools:ignore="MissingTranslation">Auto Mechanics</string>
+    <string name="str_airport" tools:ignore="MissingTranslation">Airports</string>
+    <string name="str_museum" tools:ignore="MissingTranslation">Museums</string>
+    <string name="str_urgent_care" tools:ignore="MissingTranslation">Urgent Care</string>
+    <string name="str_physician_office" tools:ignore="MissingTranslation">Physician Office</string>
+    <string name="str_veterinary_hospital" tools:ignore="MissingTranslation">Veterinary Hospital</string>
+    <string name="str_police_station" tools:ignore="MissingTranslation">Police Station</string>
+    <string name="str_landmark" tools:ignore="MissingTranslation">Landmark</string>
+    <string name="str_no_map_filter" tools:ignore="MissingTranslation">No %1$s near by this location.</string>
+    <string name="str_category" tools:ignore="MissingTranslation">Category</string>
+    <string name="str_price" tools:ignore="MissingTranslation">Price:-\u00A0</string>
+    <string name="str_phone" tools:ignore="MissingTranslation">Phone:-\u00A0</string>
+    <string name="str_distance" tools:ignore="MissingTranslation">Distance:-\u00A0</string>
+    <string name="str_sim_prob" tools:ignore="MissingTranslation">Getting problem with Sim Card.</string>
+    <string name="str_address" tools:ignore="MissingTranslation">Address:-\u00A0</string>
+    <string name="str_place_visit" tools:ignore="MissingTranslation">Travel Itinerary</string>
+    <string name="str_where_visit" tools:ignore="MissingTranslation">Where would you like to go?</string>
+    <string name="str_facebook_login" tools:ignore="MissingTranslation">Sign in with Facebook</string>
+    <string name="str_facebook_signup" tools:ignore="MissingTranslation">Sign up with Facebook</string>
+    <string name="str_select_type_report" tools:ignore="MissingTranslation">Select Type of Reports</string>
+    <string name="blank_report_type" tools:ignore="MissingTranslation">Please select report type.</string>
+    <string name="blank_frequency_type" tools:ignore="MissingTranslation">Please select frequency.</string>
+    <string name="str_username_error" tools:ignore="MissingTranslation">Please verify the username</string>
+    <string name="str_promo_error" tools:ignore="MissingTranslation">Please verify the promotion code</string>
+    <string name="str_referral_error" tools:ignore="MissingTranslation">Please verify the Referral code</string>
+    <string name="str_password_error" tools:ignore="MissingTranslation">Your password must be at least 8 characters long with one special char, one digit and one  uppercase char</string>
+    <string-array name="report_type">
+        <item>@string/str_select_type_report</item>
+        <item>@string/business_track</item>
+        <item>@string/child_monitoring</item>
+        <item>@string/where_have_been</item>
+    </string-array>
+    <string-array name="frequency_payment">
+        <item>@string/str_select_frequency</item>
+        <item>@string/str_60_seconds</item>
+        <item>@string/str_180_seconds</item>
+        <item>@string/str_300_seconds</item>
+    </string-array>
+    <string name="str_select_frequency" tools:ignore="MissingTranslation">Select Frequency</string>
+    <string name="str_60_seconds" tools:ignore="MissingTranslation">60 Seconds</string>
+    <string name="str_180_seconds" tools:ignore="MissingTranslation">180 Seconds</string>
+    <string name="str_300_seconds" tools:ignore="MissingTranslation">300 Seconds</string>
+    <string name="member_subscribe_text" tools:ignore="MissingTranslation">Your account has been deactivated. Please contact your account administrator.</string>
+    <string name="str_subscription_expire" tools:ignore="MissingTranslation">Subscription Expired</string>
+    <string name="str_call" tools:ignore="MissingTranslation">Call</string>
+    <string name="str_message" tools:ignore="MissingTranslation">Message</string>
+    <string name="str_direction" tools:ignore="MissingTranslation">Direction</string>
+    <string name="str_place_save" tools:ignore="MissingTranslation">Save Place</string>
+    <string name="str_place_rate" tools:ignore="MissingTranslation">Rate Place</string>
+    <string name="str_place_update" tools:ignore="MissingTranslation">Update Place</string>
+    <string name="str_place_delete" tools:ignore="MissingTranslation">Delete Place</string>
+    <string name="str_select_place" tools:ignore="MissingTranslation">SELECTED PLACE \n %1$s</string>
+    <string name="str_select_place_date" tools:ignore="MissingTranslation">PLACE VISIT DATE : %1$s</string>
+    <string name="blank_place_address" tools:ignore="MissingTranslation">Please end place to visit location.</string>
+    <string name="blank_place_date" tools:ignore="MissingTranslation">Please select place visit date.</string>
+    <string name="str_gallery" tools:ignore="MissingTranslation">Gallery</string>
+    <string name="str_remove" tools:ignore="MissingTranslation">Remove</string>
+    <string name="str_profile_photo" tools:ignore="MissingTranslation">Profile photo</string>
+    <string name="str_18_old" tools:ignore="MissingTranslation">Are you over 18 years old? \n\n To own an account, you must be 18 or older. As an owner of the account, you set up minor children as active users.</string>
+    <string name="str_child_missing" tools:ignore="MissingTranslation">Is your child missing?</string>
+    <string name="str_update_download" tools:ignore="MissingTranslation">Update Application.</string>
+    <string name="str_restart" tools:ignore="MissingTranslation">Restart</string>
+    <string name="str_miles" tools:ignore="MissingTranslation">Miles:\u00A0</string>
+    <string name="str_place" tools:ignore="MissingTranslation">Place:\u00A0</string>
+    <string name="str_rating" tools:ignore="MissingTranslation">Rating:\u00A0</string>
+    <string name="str_review" tools:ignore="MissingTranslation">Review:-\u00A0</string>
+    <string name="str_nearname" tools:ignore="MissingTranslation">Name:-\u00A0</string>
+    <string name="wrong_card_month" tools:ignore="MissingTranslation">Selected card expiry month is wrong.</string>
+    <string name="str_cancel_user" tools:ignore="MissingTranslation">Cancel User Subscription</string>
+    <string name="wish_cancel_subscription" tools:ignore="MissingTranslation">Are you sure to cancel this user subscription?</string>
+    <string name="str_emergency" tools:ignore="MissingTranslation">911 Alerts</string>
+    <string name="str_family_emergency" tools:ignore="MissingTranslation">Family Alerts</string>
+    <string name="str_hibp" tools:ignore="MissingTranslation">Dark Web Scan</string>
+    <string name="str_upgrade" tools:ignore="MissingTranslation">UPGRADE</string>
+    <string name="cancel_subscribe_user_message" tools:ignore="MissingTranslation">You have cancelled subscription for this user please upgrade to get back in</string>
+    <string name="str_emergency_message" tools:ignore="MissingTranslation">Alert notification or message sent successfully.</string>
+    <string name="str_cancelled_removed" tools:ignore="MissingTranslation">Admin cancelled subscription or removed his account, Please sign-up for your own account.</string>
+    <string name="message_911_alert" tools:ignore="MissingTranslation">Press Call to get help from your connected users.</string>
+    <string name="no_user_message_911_alert" tools:ignore="MissingTranslation">You don\'t have any users to whom you can send an emergency message or email.</string>
+    <string name="str_email_compromised" tools:ignore="MissingTranslation">Email Compromised</string>
+    <string name="str_password_compromised" tools:ignore="MissingTranslation">Password Compromised</string>
+    <string name="email_username" tools:ignore="MissingTranslation">Email or Username</string>
+    <string name="str_search_hibp" tools:ignore="MissingTranslation">Search Have I Been Pwned?</string>
+    <string name="str_used_password" tools:ignore="MissingTranslation">This password has previously appeared %1$d times in a data breach and should never be used. If you\'ve ever used it anywhere before, change it immediately! It is not possible to say which data breach the password was found in, just that it was found in at least one.</string>
+    <string name="str_correct_password" tools:ignore="MissingTranslation">This password wasn\'t found in any of the pwned? passwords loaded into Have I Been Pwned?. That doesn\'t necessarily mean it\'s a good password, merely that it\'s not indexed.</string>
+    <string name="str_no_breaches" tools:ignore="MissingTranslation">No Breaches</string>
+    <string name="str_all_breaches" tools:ignore="MissingTranslation">All Breaches (%1$d)</string>
+    <string name="str_account_breaches" tools:ignore="MissingTranslation">Oh no… %1$d breaches found for %2$s</string>
+    <string name="str_good_account" tools:ignore="MissingTranslation">Good news! %1$s has not been found in any public data breaches!</string>
+    <string name="blank_email_username" tools:ignore="MissingTranslation">Please enter email address or username.</string>
+    <string name="str_note_frequency_payment" tools:ignore="MissingTranslation">It will allow to track activity of selected %1$d users and generate reports of miles travelled, where I have been? And Places visited for 30 or 365 days.</string>
+    <string name="str_paid_amount" tools:ignore="MissingTranslation">Paid Amount</string>
+    <string name="str_paid_user" tools:ignore="MissingTranslation">Paid User</string>
+    <string name="str_monthly" tools:ignore="MissingTranslation">Monthly</string>
+    <string name="str_days" tools:ignore="MissingTranslation">Days</string>
+    <string name="str_yearly" tools:ignore="MissingTranslation">Yearly</string>
+    <string name="str_frequency_set" tools:ignore="MissingTranslation">All user frequency have been set.</string>
+    <string name="str_frequency_update" tools:ignore="MissingTranslation">Please update your frequency subscription.</string>
+
+    <string name="settings_video_quality_title" tools:ignore="MissingTranslation">Video size %s</string>
+    <string name="settings_photo_quality_title" tools:ignore="MissingTranslation">Photo size</string>
+    <string name="str_detection" tools:ignore="MissingTranslation">Detection</string>
+    <string name="str_take_photo" tools:ignore="MissingTranslation">Take Photo</string>
+    <string name="str_upload_photo" tools:ignore="MissingTranslation">Upload Photo</string>
+
+
+    <!-- Preview Activity -->
+    <string name="preview_controls_confirm" tools:ignore="MissingTranslation">Save</string>
+    <string name="preview_controls_retake" tools:ignore="MissingTranslation">Repeat</string>
+    <string name="preview_controls_cancel" tools:ignore="MissingTranslation">Cancel</string>
+    <string name="preview_controls_crop" tools:ignore="MissingTranslation">Crop</string>
+    <string name="preview_controls_original_ratio_label" tools:ignore="MissingTranslation">Original</string>
+    <string name="str_video_store" tools:ignore="MissingTranslation">Video has been stored in your device.</string>
+    <string name="str_allow_permission" tools:ignore="MissingTranslation">You need to allow all permission for better use of Application.</string>
+    <string name="str_setting_cancel" tools:ignore="MissingTranslation">Settings/Cancel</string>
+    <string name="str_find_missing_child" tools:ignore="MissingTranslation">Find Missing Child</string>
+    <string name="str_compare_photo" tools:ignore="MissingTranslation">Compare Image</string>
+    <string name="str_run_search" tools:ignore="MissingTranslation">Image Run Search</string>
+    <string name="str_compare" tools:ignore="MissingTranslation">Compare</string>
+    <string name="str_two_image_upload" tools:ignore="MissingTranslation">Upload image files for compare.</string>
+    <string name="str_first_image_upload" tools:ignore="MissingTranslation">Upload first image for compare with second.</string>
+    <string name="str_second_image_upload" tools:ignore="MissingTranslation">Upload second image for compare with first.</string>
+    <string name="file_does_not_exists" tools:ignore="MissingTranslation">Image file does not exists.</string>
+    <string name="str_face_identify" tools:ignore="MissingTranslation">Face Identified : %1$d</string>
+    <string name="str_missing_since" tools:ignore="MissingTranslation">Missing Since: </string>
+    <string name="str_missing_from" tools:ignore="MissingTranslation">Missing From: </string>
+    <string name="str_missing_age" tools:ignore="MissingTranslation">Age: </string>
+    <string name="str_case_number" tools:ignore="MissingTranslation">Case Number: </string>
+    <string name="str_match_score" tools:ignore="MissingTranslation">Match Score: </string>
+    <string name="str_no_match_found" tools:ignore="MissingTranslation">No Match Found</string>
+    <string name="str_match_found" tools:ignore="MissingTranslation">Match Found</string>
+    <string name="str_try_another_image" tools:ignore="MissingTranslation">Try another image</string>
+    <string name="str_sign" tools:ignore="MissingTranslation">Sign</string>
+    <string name="str_change" tools:ignore="MissingTranslation">Change</string>
+    <string name="str_forgot" tools:ignore="MissingTranslation">Forgot</string>
+    <string name="str_my_profile" tools:ignore="MissingTranslation">My Profile</string>
+    <string name="str_version" tools:ignore="MissingTranslation">Version</string>
+    <string name="str_add_new_member" tools:ignore="MissingTranslation">Add New Member</string>
+    <string name="str_location_permission_disclosure" tools:ignore="MissingTranslation">This app collects location data to enable to ensure we get the most accurate data and minimize any manipulation of time spent inside of any active geofence even when the app is closed or not in use.</string>
+    <string name="str_allow" tools:ignore="MissingTranslation">Allow</string>
+    <string name="str_decline" tools:ignore="MissingTranslation">Decline</string>
+    <string name="update_from_itune" tools:ignore="MissingTranslation">Please update your subscription from iTunes.</string>
+    <string name="sub_from_itune" tools:ignore="MissingTranslation">Please check if you took subscription from iTunes for this account.</string>
+    <string name="str_alert" tools:ignore="MissingTranslation">Alert</string>
+    <string name="str_my_subscription" tools:ignore="MissingTranslation">My Subscription</string>
+    <string name="str_try_free_trial" tools:ignore="MissingTranslation">After %1$s days free trial</string>
+    <string name="str_sub_validation" tools:ignore="MissingTranslation">Please select any subscription</string>
+
+    <string name="search_child" tools:ignore="MissingTranslation">Search Child</string>
+    <string name="str_no_child" tools:ignore="MissingTranslation">No missing child available for search</string>
+    <string name="str_donation" tools:ignore="MissingTranslation">Donation</string>
+    <string name="str_go_live" tools:ignore="MissingTranslation">Go Live</string>
+    <string name="str_make_donation" tools:ignore="MissingTranslation">Make a donation of any amount</string>
+    <string name="str_follow_us" tools:ignore="MissingTranslation">Follow us on</string>
+    <string name="str_help_child" tools:ignore="MissingTranslation">Help a Child</string>
+    <string name="str_thank_you" tools:ignore="MissingTranslation">Thank you!</string>
+    <string name="str_donation_detail" tools:ignore="MissingTranslation">Your donation will help Keep Safe 911 app to incorporate better image recognition, international language support and develop additional database resources.\n\nKeep Safe 911 - a percentage of your donation will be sent to the missing kids foundation.\n\nThank you in advance for your support in this matter.</string>
+    <string name="no_donation_payment" tools:ignore="MissingTranslation">No donations have been made by you.</string>
+    <string name="str_pay_date" tools:ignore="MissingTranslation">Payment Date</string>
+    <string name="str_birth_date" tools:ignore="MissingTranslation">Birth Date</string>
+    <string name="str_missing_since_prompt" tools:ignore="MissingTranslation">Missing Since</string>
+    <string name="str_missing_from_prompt" tools:ignore="MissingTranslation">Missing From</string>
+    <string name="str_missing_age_prompt" tools:ignore="MissingTranslation">Age</string>
+    <string name="str_missing_situation_prompt" tools:ignore="MissingTranslation">Missing Situation</string>
+    <string name="str_missing_phone_prompt" tools:ignore="MissingTranslation">Contact Number</string>
+    <string name="str_missing_hair_prompt" tools:ignore="MissingTranslation">Hair Color</string>
+    <string name="str_missing_eye_prompt" tools:ignore="MissingTranslation">Eye Color</string>
+    <string name="str_height" tools:ignore="MissingTranslation">Height</string>
+    <string name="str_weight" tools:ignore="MissingTranslation">Weight</string>
+    <string name="str_missing_complexion" tools:ignore="MissingTranslation">Complexion</string>
+    <string name="str_missing_spectacle" tools:ignore="MissingTranslation">Child has wear eyeglasses or contact lenses?</string>
+    <string name="str_missing_teeth" tools:ignore="MissingTranslation">Child has braces on teeth?</string>
+    <string name="str_missing_tattoo" tools:ignore="MissingTranslation">Child has any tattoos or other unique physical attributes?</string>
+    <string name="str_missing_physical" tools:ignore="MissingTranslation">Physical Attributes</string>
+    <string name="str_add_missing_child" tools:ignore="MissingTranslation">Add Missing Child</string>
+    <string name="str_task_missing_child" tools:ignore="MissingTranslation">Emergency Response Task</string>
+    <string name="blank_missing_birth" tools:ignore="MissingTranslation">Please select birth date.</string>
+    <string name="blank_missing_date" tools:ignore="MissingTranslation">Please select missing date.</string>
+    <string name="blank_missing_place" tools:ignore="MissingTranslation">Please select missing place.</string>
+    <string name="blank_missing_age" tools:ignore="MissingTranslation">Please select birth date or enter age.</string>
+    <string name="blank_missing_situation" tools:ignore="MissingTranslation">Situation can not be blank.</string>
+    <string name="blank_missing_phone" tools:ignore="MissingTranslation">Contact number can not be blank.</string>
+    <string name="blank_missing_hair" tools:ignore="MissingTranslation">Hair color can not be blank.</string>
+    <string name="blank_missing_eye" tools:ignore="MissingTranslation">Eye color can not be blank.</string>
+    <string name="missing_child_data_description" tools:ignore="MissingTranslation">Please upload your child image and match it to our Keep Safe 911 data</string>
+    <string name="blank_missing_height" tools:ignore="MissingTranslation">Height can not be blank.</string>
+    <string name="valid_missing_height" tools:ignore="MissingTranslation">Please enter valid height.</string>
+    <string name="blank_missing_weight" tools:ignore="MissingTranslation">Weight can not be blank.</string>
+    <string name="valid_missing_weight" tools:ignore="MissingTranslation">Please enter valid weight.</string>
+    <string name="blank_missing_complex" tools:ignore="MissingTranslation">Complexion can not be blank.</string>
+    <string name="blank_missing_physical" tools:ignore="MissingTranslation">Physical attributes can not be blank.</string>
+    <string name="str_voice_recognition" tools:ignore="MissingTranslation">Voice Recognition</string>
+    <string name="str_add_phrase" tools:ignore="MissingTranslation">Add Phrase</string>
+    <string name="str_update_phrase" tools:ignore="MissingTranslation">Update Phrase</string>
+    <string name="str_delete_phrase" tools:ignore="MissingTranslation">Delete Phrase</string>
+    <string name="str_phrase" tools:ignore="MissingTranslation">Phrase</string>
+    <string name="wish_phrase" tools:ignore="MissingTranslation">Are you sure you want to delete this phrase?</string>
+    <string name="str_missing_child_detail" tools:ignore="MissingTranslation">Missing Child Details</string>
+    <string name="str_search_child" tools:ignore="MissingTranslation">Search Missing Child</string>
+    <string name="str_search" tools:ignore="MissingTranslation">Search</string>
+    <string name="str_braces_on_teeth" tools:ignore="MissingTranslation">Braces on Teeth</string>
+    <string name="str_eye_glasses_lenses" tools:ignore="MissingTranslation">Eye Glasses / Lenses</string>
+    <string name="str_child_name" tools:ignore="MissingTranslation">Child Name</string>
+    <string name="end_stream_message" tools:ignore="MissingTranslation">Are you sure you want to end your live stream?</string>
+    <string name="leave_stream_message" tools:ignore="MissingTranslation">Are you sure you want to leave this live stream?</string>
+    <string name="str_end_video" tools:ignore="MissingTranslation">End Stream</string>
+    <string name="str_leave_video" tools:ignore="MissingTranslation">Leave Stream</string>
+    <string name="str_go_back" tools:ignore="MissingTranslation">Go Back</string>
+    <string name="str_stream_end" tools:ignore="MissingTranslation">Live streaming ended.</string>
+    <string name="str_live" tools:ignore="MissingTranslation">Live</string>
+    <string name="str_assign_task" tools:ignore="MissingTranslation">Assign Task</string>
+    <string name="str_assign" tools:ignore="MissingTranslation">Assign</string>
+    <string name="str_missing_child_form" tools:ignore="MissingTranslation">Emergency Response Form</string>
+    <string name="str_allow_mic_permission" tools:ignore="MissingTranslation">You need to allow microphone permission from google for voice recognition feature in Application.</string>
+    <string name="str_pay_now" tools:ignore="MissingTranslation">Pay Now</string>
+    <string name="str_acknowledge_message" tools:ignore="MissingTranslation">To add a child, there is one time $99.0 fees for a lifetime. Your child information will remain in our database.</string>
+    <string name="str_call_client" tools:ignore="MissingTranslation">Call to Eddie Hearns</string>
+    <string name="str_landing_one" tools:ignore="MissingTranslation">Build your community and protect your child\'s safety.</string>
+    <string name="str_free_sign_up" tools:ignore="MissingTranslation">Free Sign Up</string>
+    <string name="str_privacy_policy" tools:ignore="MissingTranslation">Privacy Policy</string>
+    <string name="str_terms_service" tools:ignore="MissingTranslation">Terms of Service</string>
+    <string name="str_landing_two_title" tools:ignore="MissingTranslation">Try Keep Safe 911 premium for free</string>
+    <string name="str_landing_two_desc" tools:ignore="MissingTranslation">\u2022 Voice activation\n\u2022 Live stream\n\u2022 Auto record\n\u2022 Geofencing / GPS Locator\n\u2022 Resource hub\n\u2022 Try it for %1$d days</string>
+    <string name="str_continue_basic" tools:ignore="MissingTranslation">Continue with Free Missing Child</string>
+    <string name="str_visit_privacy_terms" tools:ignore="MissingTranslation">Please accept our privacy policy and terms of service.</string>
+    <string name="str_visit_privacy" tools:ignore="MissingTranslation">Please accept our privacy policy.</string>
+    <string name="str_visit_terms" tools:ignore="MissingTranslation">Please accept our terms of service.</string>
+    <string name="str_check_privacy_terms" tools:ignore="MissingTranslation">I read and accepted the Privacy Policy and Terms of Service</string>
+    <string name="str_try_again" tools:ignore="MissingTranslation">Try Again</string>
+    <string name="str_payment_fail" tools:ignore="MissingTranslation">Payment Failed</string>
+    <string name="str_payment_success" tools:ignore="MissingTranslation">Payment Success</string>
+    <string name="str_payment_success_msg" tools:ignore="MissingTranslation">Your payment was successful!</string>
+    <string name="str_agree_accept" tools:ignore="MissingTranslation">I agree</string>
+    <string name="blank_missing_child_name" tools:ignore="MissingTranslation">Please enter name for search missing child</string>
+    <string name="your_phone_track" tools:ignore="MissingTranslation">Your phone is being tracked by %1$s.</string>
+</resources>

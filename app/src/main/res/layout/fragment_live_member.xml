@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/caldroid_white"
+    tools:context=".fragments.homefragment.find.LiveMemberFragment">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragments.homefragment.find.LiveMemberFragment">
+
+        <include android:id="@+id/tool_bar"
+            layout="@layout/toolbar_header"/>
+        <RelativeLayout
+            android:id="@+id/rlLiveAddUser"
+            app:layout_constraintTop_toBottomOf="@id/tool_bar"
+            app:layout_constraintEnd_toStartOf="parent"
+            android:background="@color/caldroid_white"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:paddingStart="@dimen/size5"
+            android:paddingEnd="@dimen/size5"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="wrap_content"
+                android:background="@color/caldroid_white"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/ivLiveUserPlus"
+                android:id="@+id/rvLiveImageList"
+                android:paddingStart="@dimen/size5"
+                android:paddingEnd="@dimen/size5"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:id="@+id/ivLiveUserPlus"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_circle_plus"
+                android:layout_marginTop="@dimen/size5"
+                android:layout_marginBottom="@dimen/size28"
+                android:layout_width="?actionBarSize"
+                android:layout_height="?actionBarSize"/>
+        </RelativeLayout>
+
+        <com.google.android.gms.maps.MapView
+            app:layout_constraintTop_toBottomOf="@id/rlLiveAddUser"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/map_liveMember"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"/>
+
+        <RelativeLayout
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rlLiveAddUser"
+            android:padding="@dimen/size5"
+            android:id="@+id/rlLiveTitle"
+            android:layout_width="match_parent"
+            android:background="@color/colorPrimaryDark"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvLiveMemberTitle"
+                android:layout_centerInParent="true"
+                android:textAllCaps="true"
+                android:textSize="@dimen/textSize18"
+                android:paddingTop="@dimen/padding2"
+                android:paddingBottom="@dimen/padding2"
+                android:text="@string/here_iam"
+                android:textColor="@color/caldroid_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <ImageView
+                android:id="@+id/ivRefreshLiveUser"
+                app:srcCompat="@drawable/ic_refresh_member"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/gape10"
+                android:layout_toRightOf="@id/tvLiveMemberTitle"
+                android:layout_toEndOf="@id/tvLiveMemberTitle"
+                android:visibility="gone"
+                android:layout_width="@dimen/size20"
+                android:layout_height="@dimen/size20"/>
+            <TextView
+                android:id="@+id/tvVisibleLiveCount"
+                android:layout_centerInParent="true"
+                android:layout_alignParentStart="true"
+                android:textAllCaps="true"
+                android:gravity="center"
+                android:layout_marginStart="@dimen/gape10"
+                android:background="@drawable/imagetext_circle_white"
+                android:textSize="@dimen/textSize14"
+                android:visibility="gone"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="@dimen/size25"
+                android:layout_height="@dimen/size25"/>
+        </RelativeLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <include layout="@layout/bottom_live_member_sheet"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

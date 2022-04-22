@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <RelativeLayout
+            android:id="@+id/rlLiveMember"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/ic_marker_pic"
+            android:layout_width="@dimen/size30"
+            android:layout_height="@dimen/size40">
+    <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/sdvMarkerMemberImage"
+            android:layout_width="@dimen/size20"
+            android:layout_height="@dimen/size20"
+            android:layout_marginTop="@dimen/space_s"
+            android:layout_marginStart="@dimen/size5"
+            android:background="@drawable/upload_profile"
+            app:roundAsCircle="true"
+            app:actualImageScaleType="centerCrop" />
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

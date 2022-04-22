@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "311916014462",
+    "project_id": "keepsafe911-be79c",
+    "storage_bucket": "keepsafe911-be79c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311916014462:android:9aa5afd2aac45e40a8a12f",
+        "android_client_info": {
+          "package_name": "com.keepSafe911"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "311916014462-1njcubvp6n08i6qi5ia99hobcmpdkdia.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4PNdZMyrUJZGt812T0EsMH3xqWzFaSpQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "311916014462-1njcubvp6n08i6qi5ia99hobcmpdkdia.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

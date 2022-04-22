@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ll_position_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/gape10"
+        android:background="@android:color/white">
+
+    <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/name_memb_user"
+            android:textColor="#797979"
+            android:textStyle="bold"/>
+
+    <TextView
+            android:id="@+id/member_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#797979"
+            android:text="@string/name_memb_user"/>
+
+
+    <TextView
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#797979"
+            android:layout_marginTop="@dimen/size5"
+            android:text="@string/date_memb_start"/>
+
+    <TextView
+            android:id="@+id/position_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#797979"
+            android:text="@string/date_memb_start"/>
+
+    <TextView
+            android:id="@+id/tvPositionTime"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#797979"
+            android:layout_marginTop="@dimen/size5"
+            android:text="@string/time_difference_memb"/>
+
+    <TextView
+            android:id="@+id/position_time_difference"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#797979"
+            android:text="@string/time_difference_memb"/>
+
+    <TextView
+            android:textStyle="bold"
+            android:id="@+id/tvPositionAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#797979"
+            android:layout_marginTop="@dimen/size5"
+            android:text="@string/address_memb_ping"/>
+
+    <TextView
+            android:id="@+id/position_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#797979"
+            android:text="@string/address_memb_ping"/>
+
+</LinearLayout>

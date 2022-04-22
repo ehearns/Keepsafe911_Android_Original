@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="@dimen/space_xxm"
+    android:layout_marginTop="@dimen/size5"
+    android:background="@color/list_backcolor"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvVoiceText"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@id/ivEditVoice"
+        android:textSize="@dimen/textSize14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:id="@+id/ivEditVoice"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/button_back"
+        android:layout_toStartOf="@id/ivDeleteVoice"
+        android:layout_marginTop="@dimen/size5"
+        android:layout_marginEnd="@dimen/size5"
+        android:layout_marginStart="@dimen/size1"
+        android:layout_marginBottom="@dimen/size5"
+        android:padding="@dimen/size8"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_edit_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:id="@+id/ivDeleteVoice"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/button_back_data"
+        android:padding="@dimen/size8"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/size5"
+        android:layout_marginEnd="@dimen/size1"
+        android:layout_marginStart="@dimen/size5"
+        android:layout_marginBottom="@dimen/size5"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_delete_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>

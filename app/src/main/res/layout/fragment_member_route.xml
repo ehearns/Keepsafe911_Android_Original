@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/caldroid_white"
+    android:orientation="vertical"
+    tools:context=".fragments.homefragment.find.MemberRouteFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include android:id="@+id/tool_bar"
+            layout="@layout/toolbar_header"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/size5"
+            android:layout_marginBottom="@dimen/size5"
+            android:layout_marginStart="@dimen/size20"
+            android:layout_marginEnd="@dimen/size20"
+            android:paddingBottom="@dimen/size5">
+
+            <Spinner
+                android:id="@+id/spinnerMember"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size40"
+                android:background="@drawable/spinner_bg"
+                android:spinnerMode="dropdown"
+                android:layout_weight="1"
+                android:visibility="visible"
+                android:layout_marginRight="@dimen/size3"
+                android:layout_marginEnd="@dimen/size3"/>
+
+            <EditText
+                android:id="@+id/et_routedate"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size40"
+                android:textSize="@dimen/textSize16"
+                android:textColorHint="@color/grayText"
+                android:hint="@string/select_date"
+                android:layout_weight="1"
+                android:focusableInTouchMode="false"
+                android:background="@drawable/underline_shape"
+                android:textColor="@color/Date_bg"
+                android:layout_marginLeft="@dimen/size3"
+                android:layout_marginStart="@dimen/size3"/>
+
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/map_memberRoute"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </RelativeLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/caldroid_white"
+    tools:context=".fragments.missingchild.AcknowledgePaymentFragment">
+
+    <include layout="@layout/background_layout"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/tool_bar"
+            layout="@layout/toolbar_header"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/size240"
+            android:layout_marginEnd="@dimen/size240"
+            app:layout_constraintTop_toBottomOf="@id/tool_bar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvConfirmMissingPayment"
+                android:paddingStart="@dimen/space_xxl"
+                android:paddingEnd="@dimen/space_xxl"
+                android:gravity="center"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/textSize18"
+                android:text="@string/str_acknowledge_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/btnAcknowledgePayment"
+                android:textSize="@dimen/textSize20"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:textColor="@color/caldroid_white"
+                android:background="@drawable/button_back"
+                android:layout_marginTop="@dimen/size30"
+                android:layout_marginStart="@dimen/size30"
+                android:layout_marginEnd="@dimen/size30"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

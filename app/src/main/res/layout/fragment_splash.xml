@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/caldroid_white"
+    tools:context=".fragments.SplashFragment">
+    <ImageView
+        android:src="@drawable/splash_item"
+        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        android:scaleType="fitStart"
+        android:layout_above="@id/ivSplashLogo"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:id="@+id/ivSplashLogo"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/size20"
+        android:src="@drawable/ic_full_ks_logo"/>
+</RelativeLayout>

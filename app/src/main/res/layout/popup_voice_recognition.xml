@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvVoiceTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="?actionBarSize"
+        android:paddingStart="@dimen/space_xm"
+        android:paddingEnd="@dimen/space_xm"
+        android:background="@color/transparent"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.FontSemiPathView"
+        android:textColor="@color/Date_bg"
+        android:textSize="@dimen/textSize18" />
+
+    <FrameLayout
+        android:id="@+id/flVoicePhrase"
+        android:layout_marginTop="@dimen/size5"
+        android:layout_marginEnd="@dimen/space_xm"
+        android:layout_marginStart="@dimen/space_xm"
+        android:layout_marginBottom="@dimen/size2"
+        android:layout_below="@id/tvVoiceTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/etPhrase"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:inputType="textCapWords|textPersonName"
+            android:layout_marginTop="@dimen/gape10"
+            android:background="@drawable/edittext_white_back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:text="@string/str_phrase"
+            style="@style/hintStyle" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:padding="@dimen/space_xm"
+        android:orientation="horizontal"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/flVoicePhrase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvVoiceCancel"
+            android:padding="@dimen/space_xm"
+            android:textAlignment="center"
+            android:textSize="@dimen/textSize16"
+            android:text="@string/cancel"
+            android:textColor="@color/color_red"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="@dimen/space_xm"
+            android:layout_height="@dimen/size1"/>
+
+        <TextView
+            android:id="@+id/tvVoiceAddUpdate"
+            android:padding="@dimen/space_xm"
+            android:textAlignment="center"
+            android:textSize="@dimen/textSize16"
+            android:text="@string/add"
+            android:layout_width="wrap_content"
+            android:textColor="@color/bgBlack"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</RelativeLayout>

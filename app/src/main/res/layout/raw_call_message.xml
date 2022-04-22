@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+            android:id="@+id/tvCall"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tvSms"
+            android:drawableTop="@drawable/ic_call"
+            android:text="@string/str_call"
+            android:background="@drawable/edittext_border"
+            android:layout_marginEnd="@dimen/size2"
+            android:textAlignment="center"
+            android:textColor="@color/Date_bg"
+            android:textSize="@dimen/textSize16"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+    <TextView
+            android:id="@+id/tvSms"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tvDirection"
+            app:layout_constraintStart_toEndOf="@id/tvCall"
+            android:layout_marginStart="@dimen/size2"
+            android:layout_marginEnd="@dimen/size2"
+            android:textSize="@dimen/textSize16"
+            android:textColor="@color/Date_bg"
+            android:textAlignment="center"
+            android:text="@string/str_message"
+            android:drawableTop="@drawable/chat_black"
+            android:background="@drawable/edittext_border"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+    <TextView
+            android:id="@+id/tvDirection"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvSms"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:drawableTop="@drawable/ic_navigation"
+            android:text="@string/str_direction"
+            android:background="@drawable/edittext_border"
+            android:layout_marginStart="@dimen/size2"
+            android:textAlignment="center"
+            android:textColor="@color/Date_bg"
+            android:textSize="@dimen/textSize16"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
