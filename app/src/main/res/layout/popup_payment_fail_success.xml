@@ -17,7 +17,7 @@
 
     <TextView
         android:id="@+id/tvPaymentStatus"
-        android:textColor="@color/caldroid_black"
+        android:textColor="@color/bgBlack"
         android:layout_gravity="center_horizontal"
         android:textSize="@dimen/textSize20"
         android:padding="@dimen/gape10"
@@ -40,7 +40,7 @@
         android:id="@+id/tvTryAgain"
         android:text="@string/str_try_again"
         android:textSize="@dimen/textSize18"
-        android:textColor="@color/caldroid_black"
+        android:textColor="@color/bgBlack"
         android:gravity="center"
         android:visibility="invisible"
         android:background="@drawable/payment_try_again"

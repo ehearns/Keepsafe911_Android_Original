@@ -518,7 +518,7 @@ public final class Camera2Manager extends BaseCameraManager<String, TextureView.
     protected boolean prepareVideoRecorder() {
         videoRecorder = new MediaRecorder();
         try {
-            videoRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
+            videoRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             videoRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
 
             videoRecorder.setOutputFormat(camcorderProfile.fileFormat);

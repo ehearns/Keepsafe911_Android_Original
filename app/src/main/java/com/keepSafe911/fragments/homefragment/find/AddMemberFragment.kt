@@ -159,12 +159,12 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
 
     companion object {
         fun newInstance(
-            isUpdate: Boolean,
-            familyMonitorResult: FamilyMonitorResult,
-            subscriptionBean: SubscriptionBean,
-            isFromList: Boolean,
-            isFromPayment: Boolean,
-            isFrom: Boolean
+            isUpdate: Boolean = false,
+            familyMonitorResult: FamilyMonitorResult = FamilyMonitorResult(),
+            subscriptionBean: SubscriptionBean = SubscriptionBean(),
+            isFromList: Boolean = false,
+            isFromPayment: Boolean = false,
+            isFrom: Boolean = false
         ): AddMemberFragment {
             val args = Bundle()
             args.putBoolean(ARG_PARAM1, isFromPayment)
@@ -265,19 +265,9 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
             etSignPassword.imeOptions = EditorInfo.IME_ACTION_DONE
             etSignFrequency.imeOptions = EditorInfo.IME_ACTION_DONE
         }
-
-        val filter = InputFilter { source, start, end, dest, dstart, dend ->
-            for (i in start until end) {
-                if (!Character.isLetterOrDigit(source[i])/* &&
-                    source[i].toString() != "_" &&
-                    source[i].toString() != "-"*/
-                ) {
-                    return@InputFilter source.removeRange(end-1, end)
-                }
-            }
-            null
-        }
-        etSignUserName.filters = arrayOf(filter)
+        etSignUserName.filters = arrayOf(Utils.filterUserName)
+        etSignPassword.filters = arrayOf(Utils.filterPassword)
+        etSignCPassword.filters = arrayOf(Utils.filterPassword)
 
         if (isFromPayment) {
             btn_sign_in.text = mActivity.resources.getString(R.string.next)
@@ -330,12 +320,12 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
                 etSignPhone.setText(userMobile)
             }
             etSignPassword.isFocusableInTouchMode = false
+            etSignPassword.isFocusable = false
             flSignConfirmPassword.visibility = View.GONE
             etSignCPassword.visibility = View.GONE
             tvAddMemberTitle.visibility = View.GONE
-            ivShowPassword.visibility = View.VISIBLE
-            etSignPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.white_eye, 0)
             etSignUserName.isFocusableInTouchMode = false
+            etSignUserName.isFocusable = false
 
             if (countryCode != "") {
                 for (i in 0 until phoneCountryCodes.size) {
@@ -392,10 +382,10 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
             flSignConfirmPassword.visibility = View.VISIBLE
             etSignCPassword.visibility = View.VISIBLE
             tvAddMemberTitle.visibility = View.VISIBLE
-            ivShowPassword.visibility = View.GONE
-            etSignPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             etSignPassword.isFocusableInTouchMode = true
+            etSignPassword.isFocusable = true
             etSignUserName.isFocusableInTouchMode = true
+            etSignUserName.isFocusable = true
             etSignFrequency.setText("60")
             selectedMemberId = 0
         }
@@ -630,7 +620,7 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
                 if (status) {
                     val memberData = familyMonitorResult
                     memberData.IsCancelled = true
-                    memberData.isChildMissing = false
+                    memberData.isChildMissing = true
                     appDatabase.memberDao().updateMember(memberData)
 //                            callDeleteApi(familyMonitorResult)
                 }
@@ -665,9 +655,9 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
                     appDatabase.loginDao().updateLogin(loginUpdate)
                     addMemberListAdapter.notifyDataSetChanged()
                     if (memberList.size > 0) {
-                        rvAddUserImageList.visibility = View.VISIBLE
+                        rvAddUserImageList?.visibility = View.VISIBLE
                     } else {
-                        rvAddUserImageList.visibility = View.GONE
+                        rvAddUserImageList?.visibility = View.GONE
                     }
                     mActivity.onBackPressed()
                 }
@@ -685,11 +675,12 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             setLocationPermission()
                         } else {
-                            if (isUpdate) {
+                            /*if (isUpdate) {
                                 callVerifyEmailAPI(familyMonitorResult.iD)
                             } else {
                                 callVerifyEmailAPI(0)
-                            }
+                            }*/
+                            gotoPaymentScreen()
                         }
                     }
                 }
@@ -725,6 +716,7 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
                         ivShowPassword.setImageResource(R.drawable.gone_card_number)
                         passwordShowed = true
                     }
+                    etSignPassword.setSelection(etSignPassword.text.toString().length)
                 }
             }
             R.id.tvCountrySelected -> {
@@ -859,11 +851,12 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
                 if (permissions.size == 2) {
                     location_per = true
 
-                    if (isUpdate) {
+                    /*if (isUpdate) {
                         callVerifyEmailAPI(familyMonitorResult.iD)
                     } else {
                         callVerifyEmailAPI(0)
-                    }
+                    }*/
+                    gotoPaymentScreen()
                 }
 
             }
@@ -903,10 +896,9 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
                         override fun okClickListener() {
                             mActivity.addFragment(
                                 UpdateSubFragment.newInstance(
-                                    false, true,
-                                    false, true,
-                                    familyMonitorResult, ArrayList(),
-                                    false, true, false
+                                    isFromMember = true, isEditUser = true,
+                                    familyMonitorResult = familyMonitorResult,
+                                    isCancelledSubscription = true
                                 ), true, true, AnimationType.fadeInfadeOut
                             )
                         }
@@ -914,20 +906,13 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
             } else if ((familyMonitorResult.IsAdditionalMember == true) && (familyMonitorResult.IsSubscription == false)) {
                 mActivity.addFragment(
                     UpdateSubFragment.newInstance(
-                        false,
-                        true,
-                        false,
-                        true,
-                        familyMonitorResult,
-                        ArrayList(),
-                        isFrom,
-                        familyMonitorResult.IsCancelled ?: false,
-                        false
-                    ), true,
-                    true,
-                    AnimationType.fadeInfadeOut
+                        isFromMember = true, isEditUser = true,
+                        familyMonitorResult = familyMonitorResult,
+                        isFrom = isFrom,
+                        isCancelledSubscription = familyMonitorResult.IsCancelled ?: false
+                    ), true, true, AnimationType.fadeInfadeOut
                 )
-            }else{
+            } else {
                 callApi()
             }
         }else{
@@ -950,13 +935,10 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
             } else {
                 mActivity.addFragment(
                     UpdateSubFragment.newInstance(
-                        false,
-                        true,
-                        false,
-                        false, familyMonitorResult, ArrayList(), isFrom, false, false
-                    ), true,
-                    true,
-                    AnimationType.fadeInfadeOut
+                        isFromMember = true,
+                        familyMonitorResult = familyMonitorResult,
+                        isFrom = isFrom
+                    ), true, true, AnimationType.fadeInfadeOut
                 )
 
                 /*Comman_Methods.isCustomPopUpShow(mActivity,
@@ -1072,6 +1054,10 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
                 mActivity.showMwssage(mActivity.resources.getString(R.string.blank_phone))
                 false
             }*/
+            isRequiredField(etSignPhone.text.toString()) && etSignPhone.text.toString().trim().length != 10 -> {
+                mActivity.showMessage(mActivity.resources.getString(R.string.phone_length))
+                false
+            }
             !isRequiredField(etSignEmail.text.toString().trim()) -> {
                 mActivity.showMessage(mActivity.resources.getString(R.string.blank_email))
                 false
@@ -1100,7 +1086,7 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
                 false
             }
             etSignCPassword.visibility == View.VISIBLE && !isRequiredField(etSignCPassword.text.toString()) -> {
-                mActivity.showMessage(mActivity.resources.getString(R.string.blank_pass))
+                mActivity.showMessage(mActivity.resources.getString(R.string.blank_conf_pass))
                 false
             }
             etSignCPassword.visibility == View.VISIBLE && !isPasswordMatch(
@@ -1111,10 +1097,6 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
 
                 false
             }
-            /*etSignPhone.text.toString().trim().length != 10 -> {
-                mActivity.showMwssage(mActivity.resources.getString(R.string.phone_length))
-                false
-            }*/
             /*etSignFrequency.text.toString().trim().isEmpty() ->{
                 mActivity.showMwssage(mActivity.resources.getString(R.string.freq_blank))
                 false
@@ -1250,6 +1232,7 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
             val createdOn: RequestBody = Utils.getCurrentTimeStamp().toRequestBody(MEDIA_TYPE_TEXT)
             val device_token = "".toRequestBody(MEDIA_TYPE_TEXT)
             val device_id = "1".toRequestBody(MEDIA_TYPE_TEXT)
+            val paymentType = "1".toRequestBody(MEDIA_TYPE_TEXT)
             val loginByApp = "2".toRequestBody(MEDIA_TYPE_TEXT)
             val imageBody: RequestBody
             val isSms: RequestBody = "false".toRequestBody(MEDIA_TYPE_TEXT)
@@ -1320,8 +1303,8 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
                     loginByApp,
                     referralName,
                     promoCode,
-                    isChildMissing
-                )
+                    isChildMissing,
+                    paymentType)
 
             callRegisrationApi?.enqueue(object : Callback<CommonValidationResponse> {
                 override fun onFailure(call: Call<CommonValidationResponse>, t: Throwable) {
@@ -1664,10 +1647,9 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
                             override fun okClickListener() {
                                 mActivity.addFragment(
                                     UpdateSubFragment.newInstance(
-                                        false, true,
-                                        false, true,
-                                        memberList[p1], ArrayList(),
-                                        false, true, false
+                                        isFromMember = true, isEditUser = true,
+                                        familyMonitorResult = memberList[p1],
+                                        isCancelledSubscription = true
                                     ), true, true, AnimationType.fadeInfadeOut
                                 )
                             }
@@ -1780,14 +1762,13 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
                 countryCode = phoneCountryCodes[UNITED__CODE_POSITION].countryCode
                 etSignPhone.setText(userMobile)
             }
-            etSignEmail.isFocusableInTouchMode = false
             etSignPassword.isFocusableInTouchMode = false
+            etSignPassword.isFocusable = false
             flSignConfirmPassword.visibility = View.GONE
             etSignCPassword.visibility = View.GONE
             tvAddMemberTitle.visibility = View.GONE
-            ivShowPassword.visibility = View.VISIBLE
-            etSignPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.white_eye, 0)
             etSignUserName.isFocusableInTouchMode = false
+            etSignUserName.isFocusable = false
 
             if (countryCode != "") {
                 for (i in 0 until phoneCountryCodes.size) {
@@ -1850,14 +1831,13 @@ class AddMemberFragment : HomeBaseFragment(), View.OnClickListener, Listener {
                 0
             )
 //            tvHeader.text = mActivity.resources.getString(R.string.add_member)
-            etSignEmail.isFocusableInTouchMode = true
             flSignConfirmPassword.visibility = View.VISIBLE
             etSignCPassword.visibility = View.VISIBLE
             tvAddMemberTitle.visibility = View.VISIBLE
-            ivShowPassword.visibility = View.GONE
-            etSignPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             etSignPassword.isFocusableInTouchMode = true
+            etSignPassword.isFocusable = true
             etSignUserName.isFocusableInTouchMode = true
+            etSignUserName.isFocusable = true
             etSignFrequency.setText("60")
             etSignUserName.addTextChangedListener(usernameTextChangeListener)
         }

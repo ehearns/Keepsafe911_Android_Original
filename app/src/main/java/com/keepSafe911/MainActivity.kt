@@ -10,14 +10,7 @@ import android.net.NetworkInfo
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.telephony.TelephonyManager
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment

@@ -11,12 +11,4 @@
             android:left="@dimen/gape10"
             android:right="@dimen/gape10"
             android:top="@dimen/gape10"/>
-
-<!--
-    <gradient
-            android:centerColor="@color/transparent_Datebg"
-            android:endColor="@color/transparent_Datebg"
-            android:startColor="@color/transparent_Datebg"/>
--->
-
 </shape>

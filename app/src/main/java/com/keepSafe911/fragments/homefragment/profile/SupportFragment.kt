@@ -2,7 +2,6 @@ package com.keepSafe911.fragments.homefragment.profile
 
 
 import ValidationUtil.Companion.isRequiredField
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.net.Uri
@@ -112,19 +111,18 @@ class SupportFragment : HomeBaseFragment(), View.OnClickListener {
                 } else {
                     mActivity.showMessage(mActivity.resources.getString(R.string.you_reached_at_limit))
                 }
-
             }
             R.id.btn_submitsupport -> {
                 mActivity.hideKeyboard()
-                if (checkforValidations()) {
+                if (checkForValidations()) {
                     Comman_Methods.avoidDoubleClicks(view)
-                    sendfiletoEmail(imageList)
+                    sendFileToEmail(imageList)
                 }
             }
         }
     }
 
-    private fun checkforValidations(): Boolean {
+    private fun checkForValidations(): Boolean {
         return when {
             !isRequiredField(ed_subject.text.toString().trim()) -> {
                 mActivity.showMessage(mActivity.resources.getString(R.string.blank_subject))
@@ -134,7 +132,7 @@ class SupportFragment : HomeBaseFragment(), View.OnClickListener {
         }
     }
 
-    private fun sendfiletoEmail(imageList: ArrayList<Uri>) {
+    private fun sendFileToEmail(imageList: ArrayList<Uri>) {
         val emailIntent = Intent(Intent.ACTION_SEND_MULTIPLE)
         emailIntent.type = "vnd.android.cursor.dir/email"
         val to = arrayOf("childsafety@keepsafe911.com")
@@ -145,7 +143,7 @@ class SupportFragment : HomeBaseFragment(), View.OnClickListener {
         mailScreenLauncher.launch(Intent.createChooser(emailIntent, "Sending File"))
     }
 
-    var fileSelectedLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val fileSelectedLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == AppCompatActivity.RESULT_OK) {
             // Get the user's selected place from the Intent.
             val data = result.data
@@ -156,8 +154,10 @@ class SupportFragment : HomeBaseFragment(), View.OnClickListener {
             }
         }
     }
-    var mailScreenLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        mActivity.onBackPressed()
+    private val mailScreenLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == AppCompatActivity.RESULT_OK) {
+            mActivity.onBackPressed()
+        }
     }
 
     private fun setAdapter() {
@@ -206,7 +206,7 @@ class SupportFragment : HomeBaseFragment(), View.OnClickListener {
         }
     }
 
-    fun getFileName(uri: Uri): String {
+    private fun getFileName(uri: Uri): String {
         var result: String? = ""
         if (uri.scheme == "content") {
             val cursor = mActivity.contentResolver.query(uri, null, null, null, null)

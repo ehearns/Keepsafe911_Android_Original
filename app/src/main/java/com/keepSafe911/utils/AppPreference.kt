@@ -31,26 +31,34 @@ object AppPreference {
 
     fun saveIntPreference(context: Context, key: String, value: Int = 0) {
         initPreference(context)
-        editor?.putInt(key, value)
-        editor?.commit()
+        editor?.apply {
+            putInt(key, value)
+            commit()
+        }
     }
 
     fun saveStringPreference(context: Context, key: String, value: String = "") {
         initPreference(context)
-        editor?.putString(key, value)
-        editor?.commit()
+        editor?.apply {
+            putString(key,value)
+            commit()
+        }
     }
 
     fun saveBooleanPreference(context: Context, key: String, value: Boolean = false) {
         initPreference(context)
-        editor?.putBoolean(key, value)
-        editor?.commit()
+        editor?.apply {
+            putBoolean(key, value)
+            commit()
+        }
     }
 
     fun clearPrivacyTerms(context: Context) {
         initPreference(context)
-        editor?.putBoolean(BuildConfig.privacyPolicyPrefKey, false)
-        editor?.putBoolean(BuildConfig.termsConditionPrefKey, false)
-        editor?.commit()
+        editor?.apply {
+            putBoolean(BuildConfig.privacyPolicyPrefKey, false)
+            putBoolean(BuildConfig.termsConditionPrefKey, false)
+            commit()
+        }
     }
 }

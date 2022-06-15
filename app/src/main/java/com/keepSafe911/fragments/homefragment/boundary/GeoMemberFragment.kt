@@ -65,7 +65,6 @@ class GeoMemberFragment : HomeBaseFragment(), View.OnClickListener {
     private lateinit var timePickerDialog: TimePickerDialog
     private lateinit var appDatabase: OldMe911Database
     var deleteArrayList: ArrayList<Int> = ArrayList()
-    private var dateparse: Date? = null
     private lateinit var geoMemberAdapter: GeoMemberAdapter
 
     companion object {
@@ -205,49 +204,21 @@ class GeoMemberFragment : HomeBaseFragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.etGeoStartDateTime -> {
-                dateparse = null
                 Comman_Methods.avoidDoubleClicks(v)
-                setDateField(etGeoStartDateTime)
+                setDateField(etGeoStartDateTime, 1)
             }
             R.id.etGeoEndDateTime -> {
                 Comman_Methods.avoidDoubleClicks(v)
-                val formatter = SimpleDateFormat(INDIAN_DATE_TIME)
-                val format = SimpleDateFormat(CHECK_DATE_TIME3)
-                try {
-                    val date1: Date? = formatter.parse(geoFenceResult.startDate ?: "")
-                    if (date1 != null) {
-                        if (Date().before(date1)) {
-                            dateFormatter = SimpleDateFormat(OUTED_DATE2, Locale.US)
-                            dateparse = dateFormatter?.parse(dateFormatter?.format(date1.time))
-                        }
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-
-                try {
-                    var date1: Date? = null
-                    if (etGeoStartDateTime.text.toString() != "") {
-                        date1 = format.parse(etGeoStartDateTime.text.toString())
-                    }
-                    if (date1 != null) {
-                        if (Date().before(date1)) {
-                            dateFormatter = SimpleDateFormat(OUTED_DATE2, Locale.US)
-                            dateparse = dateFormatter?.parse(dateFormatter?.format(date1.time))
-                        }
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-                setDateField(etGeoEndDateTime)
+                setDateField(etGeoEndDateTime, 2)
             }
             R.id.ivAddMultipleMember -> {
                 mActivity.hideKeyboard()
                 Comman_Methods.avoidDoubleClicks(v)
+                updateWorkerData()
                 if (memberList.size > 0) {
-                    for (i in 0 until memberList.size){
+                    /*for (i in 0 until memberList.size){
                         memberList[i].isSelected = false
-                    }
+                    }*/
                     showMemberListDialog(memberList)
                 }
             }
@@ -361,7 +332,7 @@ class GeoMemberFragment : HomeBaseFragment(), View.OnClickListener {
         }
     }
 
-    private fun setDateField(et_date: EditText) {
+    private fun setDateField(et_date: EditText, value: Int) {
         var dateString = ""
         mActivity.hideKeyboard()
         dateFormatter = SimpleDateFormat(OUTED_DATE2, Locale.US)
@@ -380,9 +351,7 @@ class GeoMemberFragment : HomeBaseFragment(), View.OnClickListener {
                 dateString = dateFormatter?.format(newDate.time) ?: ""
                 setTimeField(et_date, dateString)
                 try {
-                    if (dateparse == null) {
-                        dateparse = dateFormatter?.parse(dateFormatter?.format(newDate.time))
-                    }
+                    val dateParse = dateFormatter?.parse(dateFormatter?.format(newDate.time))
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -392,10 +361,17 @@ class GeoMemberFragment : HomeBaseFragment(), View.OnClickListener {
             DialogInterface.BUTTON_NEGATIVE, mActivity.resources.getString(R.string.cancel)
         ) { dialog, which -> datePickerDialog.dismiss() }
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
-            if (dateparse != null) {
-                datePickerDialog.datePicker.minDate = dateparse?.time ?: Date().time
-            }else {
-                datePickerDialog.datePicker.minDate = Date().time
+            try {
+                if (etGeoEndDateTime.text.toString().isNotEmpty() && value == 1) {
+                    datePickerDialog.datePicker.minDate = Date().time
+                    datePickerDialog.datePicker.maxDate = dateFormatter?.parse(etGeoEndDateTime.text.toString())?.time ?: Date().time
+                } else if (etGeoStartDateTime.text.toString().isNotEmpty() && value == 2) {
+                    datePickerDialog.datePicker.minDate = dateFormatter?.parse(etGeoStartDateTime.text.toString())?.time ?: Date().time
+                } else {
+                    datePickerDialog.datePicker.minDate = Date().time
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
         datePickerDialog.show()
@@ -420,7 +396,7 @@ class GeoMemberFragment : HomeBaseFragment(), View.OnClickListener {
                 timeString = dateFormatter?.format(newDate.time) ?: ""
                 et_date.setText("$dateString $timeString")
                 try {
-                    dateparse = dateFormatter?.parse(dateFormatter?.format(newDate.time))
+                    val dateParse = dateFormatter?.parse(dateFormatter?.format(newDate.time))
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -606,7 +582,7 @@ class GeoMemberFragment : HomeBaseFragment(), View.OnClickListener {
             val roundValue: Float = Comman_Methods.convertDpToPixel(15f, mActivity)
             val builder: GenericDraweeHierarchyBuilder = GenericDraweeHierarchyBuilder(mActivity.resources)
             val roundingParams : RoundingParams = RoundingParams.fromCornersRadius(roundValue).setBorder(
-                ContextCompat.getColor(mActivity, R.color.caldroid_white), 1.0f)
+                ContextCompat.getColor(mActivity, R.color.list_backcolor), 1.0f)
             val hierarchy: GenericDraweeHierarchy = builder
                 .setRoundingParams(roundingParams)
                 .build()
@@ -775,8 +751,8 @@ class GeoMemberFragment : HomeBaseFragment(), View.OnClickListener {
             return object : Filter() {
                 override fun performFiltering(charSequence: CharSequence): Filter.FilterResults {
                     val charString = charSequence.toString()
-                    if (charString.isEmpty()) {
-                        tempMemberList = memberList
+                    tempMemberList = if (charString.isEmpty()) {
+                        memberList
                     } else {
                         val filterList = ArrayList<MemberBean>()
                         for (row in memberList) {
@@ -785,7 +761,7 @@ class GeoMemberFragment : HomeBaseFragment(), View.OnClickListener {
                                 filterList.add(row)
                             }
                         }
-                        tempMemberList = filterList
+                        filterList
                     }
                     val filterResults = Filter.FilterResults()
                     filterResults.values = tempMemberList
@@ -812,9 +788,10 @@ class GeoMemberFragment : HomeBaseFragment(), View.OnClickListener {
         }
 
         override fun onBindViewHolder(p0: SelectGeoMemberHolder, p1: Int) {
-            p0.checkWorker.text = tempMemberList[p1].memberName
-//            p0.checkWorker.isChecked = tempMemberList[p1].isSelected
-            p0.checkWorker.setTextColor(ContextCompat.getColor(activity, R.color.caldroid_black))
+            p0.checkWorker.text = tempMemberList[p1].memberName ?: ""
+            p0.checkWorker.isChecked = tempMemberList[p1].isSelected
+            p0.checkWorker.isEnabled = !tempMemberList[p1].isPaymentDone
+//            p0.checkWorker.setTextColor(ContextCompat.getColor(activity, R.color.bgBlack))
             p0.checkWorker.setOnCheckedChangeListener(null)
             p0.checkWorker.setOnClickListener { v ->
                 val isSelected = (v as CheckBox).isChecked
@@ -828,6 +805,20 @@ class GeoMemberFragment : HomeBaseFragment(), View.OnClickListener {
         }
     }
 
+    private fun updateWorkerData() {
+        for (i: Int in 0 until memberList.size) {
+            val memberBean = memberList[i]
+            memberBean.isSelected = false
+            memberBean.isPaymentDone = false
+            for (j in 0 until geoMemberList.size) {
+                if (geoMemberList[j].memberID == memberBean.id) {
+                    memberBean.isSelected = true
+                    memberBean.isPaymentDone = true
+                }
+            }
+            memberList[i] = memberBean
+        }
+    }
 
     private fun callGetMember() {
         if (ConnectionUtil.isInternetAvailable(mActivity)) {
@@ -843,31 +834,39 @@ class GeoMemberFragment : HomeBaseFragment(), View.OnClickListener {
                             mActivity.showMessage(mActivity.resources.getString(R.string.no_data))
                         }
                         memberList = ArrayList()
+                        geoMemberList = ArrayList()
+                        val geofenceMemberList = geoFenceResult.lstGeoFenceMembers ?: ArrayList()
                         for (i: Int in 0 until userList.size) {
                             val memberBean = MemberBean()
                             memberBean.id = userList[i].iD
                             memberBean.isSelected = false
+                            memberBean.isPaymentDone = false
                             memberBean.memberName =
                                 (userList[i].firstName ?: "") + " " + (userList[i].lastName ?: "")
-                            memberBean.memberEmail = userList[i].email
-                            memberBean.memberImage = userList[i].image
+                            memberBean.memberEmail = userList[i].email ?: ""
+                            memberBean.memberImage = userList[i].image ?: ""
+                            for (j in 0 until geofenceMemberList.size) {
+                                if (geofenceMemberList[j].memberID == userList[i].iD) {
+                                    memberBean.isSelected = true
+                                    memberBean.isPaymentDone = true
+                                    geoMemberList.add(geofenceMemberList[j])
+                                }
+                            }
                             memberList.add(memberBean)
                         }
-                        geoMemberList = ArrayList()
+
                         when {
-                            userList.size > 0 -> if (geoFenceResult.lstGeoFenceMembers != null) {
-                                when {
-                                    geoFenceResult.lstGeoFenceMembers!!.size > 0 -> for (i in 0 until userList.size) {
-                                        for (j in 0 until geoFenceResult.lstGeoFenceMembers!!.size) {
-                                            if (geoFenceResult.lstGeoFenceMembers!![j].memberID == userList[i].iD) {
-                                                geoMemberList.add(geoFenceResult.lstGeoFenceMembers!![j])
+                            userList.size > 0 -> {
+/*                                when {
+                                    geofenceMemberList.size > 0 -> for (i in 0 until userList.size) {
+                                        for (j in 0 until geofenceMemberList.size) {
+                                            if (geofenceMemberList[j].memberID == userList[i].iD) {
+                                                geoMemberList.add(geofenceMemberList[j])
                                             }
                                         }
                                     }
                                     else -> geoMemberList = ArrayList()
-                                }
-                            } else {
-                                geoMemberList = ArrayList()
+                                }*/
                             }
                             else -> geoMemberList = ArrayList()
                         }

@@ -102,10 +102,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // Check if message contains a notification payload.
         if (remoteMessage.notification != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.notification?.body)
-            val message = remoteMessage.notification?.body
-            val title = remoteMessage.notification?.title
+            val message = remoteMessage.notification?.body ?: ""
+            val title = remoteMessage.notification?.title ?: ""
             if (isNotificationEnabled(context!!)) {
-                sendNotification(title ?: "", message ?: "")
+                sendNotification(title, message)
 
                 Utils.notificationCount++
             }

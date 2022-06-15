@@ -50,14 +50,13 @@
         android:background="@color/transparent"
         android:layout_centerVertical="true"
         android:textAllCaps="true"
-        android:textAppearance="@style/TextAppearance.FontSemiPathView"
+        android:textAppearance="@style/TextAppearance.FontBoldPathView"
         android:textSize="@dimen/textSize16"
         android:textColor="@color/colorPrimary"
         android:layout_centerInParent="true"/>
     <EditText
         android:id="@+id/etSearchChild"
         android:drawablePadding="@dimen/size5"
-        android:drawableEnd="@drawable/ic_x_close"
         android:background="@drawable/search_edittext"
         android:textSize="@dimen/textSize18"
         android:layout_margin="@dimen/gape10"
@@ -75,6 +74,7 @@
         android:textAllCaps="true"
         android:textSize="@dimen/textSize16"
         android:textColor="@color/colorPrimary"
+        android:textAppearance="@style/TextAppearance.FontBoldPathView"
         android:text="@string/app_name"
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
@@ -165,32 +165,23 @@
             android:paddingEnd="@dimen/gape10"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"/>
-        <TextView
+
+        <ImageView
             android:id="@+id/tvMap"
-            android:textSize="@dimen/textSize16"
-            android:textColor="@color/colorAccent"
+            android:src="@drawable/ic_tool_map"
+            android:paddingEnd="@dimen/space_xxxl"
+            android:paddingStart="@dimen/size4"
             android:visibility="gone"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:text="@string/neighbour_map"
-            android:singleLine="true"
             android:layout_width="wrap_content"
-            android:paddingEnd="@dimen/space_l"
-            android:paddingStart="@dimen/size2"
             android:layout_height="match_parent"/>
 
-        <TextView
+        <ImageView
             android:id="@+id/tvShare"
-            android:textSize="@dimen/textSize16"
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold"
-            android:text="@string/neighbour_share"
-            android:gravity="center"
-            android:singleLine="true"
+            android:src="@drawable/ic_share"
+            android:paddingEnd="@dimen/space_xxxl"
+            android:paddingStart="@dimen/size4"
             android:visibility="gone"
             android:layout_width="wrap_content"
-            android:paddingEnd="@dimen/space_l"
-            android:paddingStart="@dimen/size2"
             android:layout_height="match_parent"/>
 
         <TextView

@@ -7,6 +7,8 @@ import com.keepSafe911.model.response.*
 import com.keepSafe911.model.response.findmissingchild.MatchResult
 import com.keepSafe911.model.response.findmissingchild.MissingChildTaskListResult
 import com.keepSafe911.model.response.findmissingchild.MissingChildTaskModel
+import com.keepSafe911.model.response.paypal.SubscriptionResponse
+import com.keepSafe911.model.response.paypal.Transaction
 import com.keepSafe911.model.response.voicerecognition.ManageVoiceRecognitionModel
 import com.keepSafe911.model.response.yelp.Business
 import com.keepSafe911.model.response.yelp.Region
@@ -29,5 +31,8 @@ interface CommonApiListener {
     fun missingChildTaskListResponse(status: Boolean = false, missingChildTaskList: ArrayList<MissingChildTaskListResult> = ArrayList(), message: String = "", responseMessage: String = "") {}
     fun childTaskListResponse(status: Boolean = false, matchResultData: ArrayList<MatchResult> = ArrayList(), missingChildTaskList: ArrayList<MissingChildTaskModel> = ArrayList(), message: String = "", responseMessage: String = "") {}
     fun privacyTermsChecked(type: Int = 0, accepted: Boolean = false) {}
+    fun upgradeSubscription(status: Boolean = false, familyData: FamilyMonitorResult? = FamilyMonitorResult(), message: String = "", responseMessage: String = "") {}
+    fun onSingleSubscriptionSuccessResult(updateTimeCard: SubscriptionResponse = SubscriptionResponse()) {}
+    fun onSubscriptionTransactionResult(transactionList: ArrayList<Transaction> = ArrayList()) {}
     fun onFailureResult() {}
 }

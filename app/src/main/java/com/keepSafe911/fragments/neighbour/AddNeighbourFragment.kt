@@ -6,9 +6,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.media.ThumbnailUtils
-import android.os.Build
-import android.os.Bundle
-import android.os.CancellationSignal
+import android.os.*
 import android.provider.MediaStore
 import android.util.Size
 import android.view.LayoutInflater
@@ -21,6 +19,8 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.FitCenter
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
 import com.keepSafe911.R
 import com.keepSafe911.fragments.commonfrag.HomeBaseFragment
@@ -58,6 +58,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Response
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -203,7 +204,7 @@ class AddNeighbourFragment : HomeBaseFragment(), View.OnClickListener {
         secondLatitude = gpstracker?.getLatitude() ?: 0.0
         secondLongitude = gpstracker?.getLongitude() ?: 0.0
         btnAddPhotoVideo.setOnClickListener(this)
-        rlIncidentAddress.setOnClickListener(this)
+        tvIncidentAddr.setOnClickListener(this)
         tvIncidentType?.setOnClickListener(this)
         if (sharingFileName.isNotEmpty()) {
             videoFileAdjustment(sharingFileName, 1)
@@ -217,11 +218,11 @@ class AddNeighbourFragment : HomeBaseFragment(), View.OnClickListener {
                 Comman_Methods.avoidDoubleClicks(v)
                 setPermission()
             }
-            R.id.rlIncidentAddress -> {
+            R.id.tvIncidentAddr -> {
                 mActivity.hideKeyboard()
                 Comman_Methods.avoidDoubleClicks(v)
-                rlIncidentAddress.isEnabled = false
-                rlIncidentAddress.isClickable = false
+                tvIncidentAddr.isEnabled = false
+                tvIncidentAddr.isClickable = false
                 val fields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG)
                 val autocompleteIntent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
                     .build(mActivity)
@@ -248,8 +249,8 @@ class AddNeighbourFragment : HomeBaseFragment(), View.OnClickListener {
     }
 
     var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        rlIncidentAddress.isEnabled = true
-        rlIncidentAddress.isClickable = true
+        tvIncidentAddr.isEnabled = true
+        tvIncidentAddr.isClickable = true
         if (result.resultCode == RESULT_OK) {
             // Get the user's selected place from the Intent.
             val data = result.data
@@ -261,8 +262,17 @@ class AddNeighbourFragment : HomeBaseFragment(), View.OnClickListener {
                 secondLatitude = place.latLng?.latitude ?: 0.0
                 secondLongitude = place.latLng?.longitude ?: 0.0
                 if (secondLatitude!=0.0 && secondLongitude!=0.0) {
-                    tvIncidentAddr.text = placeName + if (placeAddress.isNotEmpty()) "\n" + placeAddress else ""
-                    neighborRequest.location =  placeName + if (placeAddress.isNotEmpty()) "\n" + placeAddress else ""
+                    val placeAddressed = if (placeAddress.isNotEmpty()) {
+                        if (placeAddress.contains(placeName, ignoreCase = true)) {
+                            placeAddress
+                        } else {
+                            "$placeName\n$placeAddress"
+                        }
+                    } else {
+                        placeName
+                    }
+                    tvIncidentAddr.text = placeAddressed
+                    neighborRequest.location =  placeAddressed
                     neighborRequest._lat = place.latLng?.latitude ?: 0.0
                     neighborRequest._long = place.latLng?.longitude ?: 0.0
                 }else{
@@ -563,14 +573,15 @@ class AddNeighbourFragment : HomeBaseFragment(), View.OnClickListener {
             .afterFilterVisibility(false)
             .onResult { result ->
                 Utils.muteRecognizer(mActivity)
+                val cornerRadius = Comman_Methods.convertDpToPixels(10F, mActivity)
                 println("result[0].path = ${result[0].path}")
                 println("result[0].mimeType = ${result[0].mimeType}")
                 if (result[0].mimeType.contains("video")) {
                     videoFileAdjustment(result[0].path, 0)
                 } else if (result[0].mimeType.contains("image")) {
                     neighborRequest.fileType = IMAGE
-                    flNeighbourFile.visibility = View.VISIBLE
-                    Glide.with(mActivity).load(result[0].path)
+                    ivNeighbourImageFile.visibility = View.VISIBLE
+                    Glide.with(mActivity).load(result[0].path).transform(FitCenter(), RoundedCorners(cornerRadius.roundToInt()))
                         .into(ivNeighbourImageFile)
                     uploadFile = File(result[0].path)
                 }
@@ -585,6 +596,7 @@ class AddNeighbourFragment : HomeBaseFragment(), View.OnClickListener {
         uploadFile = File(fileName)
         val width = if (type > 0) mActivity.getScreenWidth(false) else 0
         val height = if (type > 0) mActivity.getScreenHeight(false) else 0
+        val cornerRadius = Comman_Methods.convertDpToPixels(10F, mActivity)
         try {
             val root = Utils.getStorageRootPath(mActivity)
             if (!root.exists()) {
@@ -592,60 +604,34 @@ class AddNeighbourFragment : HomeBaseFragment(), View.OnClickListener {
             }
             videoFile = File(root, File(fileName).name)
             if (videoFile?.exists() == false) {
-                val videoCompress = VideoCompress.compressVideoLow(fileName,
-                    videoFile?.path ?: "", height, width,
-                    object : VideoCompress.CompressListener {
-                        override fun onStart() {
-                            Comman_Methods.isProgressShow(mActivity)
-                        }
+                val handler = Handler(Looper.getMainLooper())
+                handler.postDelayed({
+                    val videoCompress = VideoCompress.compressVideoLow(fileName,
+                        videoFile?.path ?: "", height, width,
+                        object : VideoCompress.CompressListener {
+                            override fun onStart() {
+                                Comman_Methods.isProgressShow(mActivity)
+                            }
 
-                        override fun onSuccess() {
-                            Comman_Methods.isProgressHide()
-                            uploadFile = videoFile
-                            videoFileDelete = videoFile
-                        }
+                            override fun onSuccess() {
+                                Comman_Methods.isProgressHide()
+                                uploadFile = videoFile
+                                videoFileDelete = videoFile
+                            }
 
-                        override fun onFail() {
-                            Comman_Methods.isProgressHide()
-                        }
+                            override fun onFail() {
+                                Comman_Methods.isProgressHide()
+                            }
 
-                        override fun onProgress(percent: Float) {
-                            Comman_Methods.isProgressShow(mActivity)
-                        }
+                            override fun onProgress(percent: Float) {}
 
-                    })
+                        })
+                }, 700)
             } else {
+                Comman_Methods.isProgressHide()
                 uploadFile = videoFile
                 videoFileDelete = videoFile
             }
-            /*// Two Types is there TYPE_MEDIACODEC and TYPE_FFMPEG
-        GiraffeCompressor.create(TYPE_MEDIACODEC)
-            .input(File(result[0].path))
-            .output(videoFile)
-            .bitRate(3000000)
-            .resizeFactor(1.0F)
-            .ready()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object: Subscriber<GiraffeCompressor.Result>(){
-                override fun onNext(t: GiraffeCompressor.Result?) {
-                    val msg = String.format("compress completed \ntake time:%s \nout put file:%s", t?.costTime, t?.output)
-                    System.out.println(msg)
-                    System.out.println(t?.output)
-                    System.out.println(File(t?.output).length()/1024)
-                }
-
-                override fun onCompleted() {
-                    Comman_Methods.isProgressHide()
-                    uploadFile = videoFile
-
-                }
-
-                override fun onError(e: Throwable?) {
-                    e?.printStackTrace()
-                    flNeighbourFile.visibility = View.GONE
-                    Comman_Methods.isProgressHide()
-                }
-            })*/
             val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 val thumbSize = Size(100, 100)
                 ThumbnailUtils.createVideoThumbnail(
@@ -659,15 +645,16 @@ class AddNeighbourFragment : HomeBaseFragment(), View.OnClickListener {
                 )
             }
             if (bitmap != null) {
-                flNeighbourFile.visibility = View.VISIBLE
-                Glide.with(mActivity).load(bitmap)
+                ivNeighbourImageFile.visibility = View.VISIBLE
+                Glide.with(mActivity).load(bitmap).transform(FitCenter(), RoundedCorners(cornerRadius.roundToInt()))
                     .into(ivNeighbourImageFile)
             } else {
-                flNeighbourFile.visibility = View.GONE
+                ivNeighbourImageFile.visibility = View.GONE
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            flNeighbourFile.visibility = View.GONE
+            Comman_Methods.isProgressHide()
+            ivNeighbourImageFile.visibility = View.GONE
         }
     }
 

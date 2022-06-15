@@ -1,5 +1,6 @@
 package com.keepSafe911.fragments.homefragment.profile
 
+import ValidationUtil.Companion.isRequiredField
 import ValidationUtil.Companion.isValidEmail
 import android.Manifest
 import android.app.Dialog
@@ -278,7 +279,8 @@ class EditProfileFragment : HomeBaseFragment(), View.OnClickListener {
                 mActivity.hideKeyboard()
                 if (checkValidation()) {
                     Comman_Methods.avoidDoubleClicks(v)
-                    callVerifyEmailAPI()
+                    callUpdateProfile(updateImage)
+//                    callVerifyEmailAPI()
                 }
             }
             R.id.ivEditProfile -> {
@@ -554,11 +556,11 @@ class EditProfileFragment : HomeBaseFragment(), View.OnClickListener {
             /*etEditPhoneNumber.text.toString().trim().isEmpty() -> {
                 mActivity.showMwssage(mActivity.resources.getString(R.string.blank_phone))
                 false
-            }
-            etEditPhoneNumber.text.toString().trim().length != 10 -> {
-                mActivity.showMwssage(mActivity.resources.getString(R.string.phone_length))
-                false
             }*/
+            isRequiredField(etEditPhoneNumber.text.toString()) && etEditPhoneNumber.text.toString().trim().length != 10 -> {
+                mActivity.showMessage(mActivity.resources.getString(R.string.phone_length))
+                false
+            }
             else -> true
         }
     }

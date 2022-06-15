@@ -30,6 +30,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.FitCenter
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -57,6 +60,7 @@ import java.text.DecimalFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 
 private const val ARG_PARAM1 = "param1"
@@ -115,8 +119,10 @@ class IdentityDetectionFragment : HomeBaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHeader()
+        val cornerRadius = Comman_Methods.convertDpToPixels(10F, mActivity)
         val options = RequestOptions()
             .fitCenter()
+            .transform(FitCenter(), RoundedCorners(cornerRadius.roundToInt()))
             .placeholder(R.drawable.ic_person_placeholder)
             .error(R.drawable.ic_person_placeholder)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -426,9 +432,10 @@ class IdentityDetectionFragment : HomeBaseFragment() {
             val matchResultModel: MatchResult = matchResultList[position]
 
 //            val url = URLEncoder.encode(matchResultModel.imageName, "UTF-8")
-
+            val cornerRadius = Comman_Methods.convertDpToPixels(10F, context)
             val options = RequestOptions()
                 .centerCrop()
+                .transform(CenterCrop(), RoundedCorners(cornerRadius.roundToInt()))
                 .placeholder(R.drawable.ic_person_placeholder)
                 .error(R.drawable.ic_person_placeholder)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)

@@ -251,6 +251,21 @@ class LoginObject {
     @Expose
     var isAdminLoggedIn: Boolean? = false
 
+    @ColumnInfo(name = "PayeID")
+    @SerializedName("PayeID")
+    @Expose
+    var payId: String? = ""
+
+    @ColumnInfo(name = "ProductId")
+    @SerializedName("ProductId")
+    @Expose
+    var productId: String? = ""
+
+    @ColumnInfo(name = "PaymentType")
+    @SerializedName("PaymentType")
+    @Expose
+    var paymentType: Int? = 0
+
     companion object {
         fun create(serializedData: String): LoginObject {
             // Use GSON to instantiate this class using the JSON representation of the state

@@ -2,7 +2,6 @@ package com.keepSafe911.application
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.os.PowerManager
 import androidx.multidex.MultiDexApplication
 import com.keepSafe911.openlive.rtc.AgoraEventHandler
@@ -65,7 +64,7 @@ open class KeepSafe911Application: MultiDexApplication() {
 
         wakeLock =
             (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
-                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "OldMe911App::OldMe911WakelockTag").apply {
+                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "KeepSafe911App::KeepSafe911WakelockTag").apply {
                     acquire()
                 }
             }
@@ -126,10 +125,6 @@ open class KeepSafe911Application: MultiDexApplication() {
         handler?.let {
             mHandler.removeHandler(it)
         }
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
     }
 
     override fun onTerminate() {

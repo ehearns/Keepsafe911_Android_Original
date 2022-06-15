@@ -4,7 +4,6 @@ import AnimationType
 import addFragment
 import android.Manifest
 import android.app.DatePickerDialog
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -31,7 +30,6 @@ import com.keepSafe911.model.response.MemberRouteResponse
 import com.keepSafe911.room.OldMe911Database
 import com.keepSafe911.utils.Comman_Methods.Companion.isProgressHide
 import com.keepSafe911.utils.Comman_Methods.Companion.isProgressShow
-import com.keepSafe911.webservices.WebApi
 import com.keepSafe911.webservices.WebApiClient
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -784,7 +782,7 @@ class ReportFragment : HomeBaseFragment(), View.OnClickListener {
                     }
                 } else {
                     // extracts file name from URL
-                    val callDownloadReport = WebApiClient.getInstance(mActivity).webApi_without?.BusinessReport(
+                    val callDownloadReport = WebApiClient.getInstance(mActivity).webApi_without?.businessReport(
                         memberID,
                         diagStartDate,
                         diagEndDate,

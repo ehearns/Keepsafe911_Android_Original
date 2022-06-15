@@ -98,28 +98,19 @@
         <EditText
             android:layout_alignTop="@id/sdvCommentUserImage"
             android:layout_toEndOf="@id/sdvCommentUserImage"
-            android:layout_toStartOf="@id/tvPost"
+            android:layout_alignParentEnd="true"
             android:id="@+id/etNeighborComment"
             android:hint="@string/add_a_comment"
             android:imeOptions="actionDone"
             android:layout_marginEnd="@dimen/size5"
             android:maxLines="5"
-            android:textColorHint="@color/caldroid_white"
-            android:background="@color/caldroid_gray"
+            android:inputType="textCapWords"
+            android:textColorHint="@color/grayText"
+            android:background="@drawable/ic_comment_curv"
+            android:drawableEnd="@drawable/send_post"
+            android:drawablePadding="@dimen/size5"
             android:padding="@dimen/gape10"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/tvPost"
-            android:layout_alignTop="@id/etNeighborComment"
-            android:layout_alignBottom="@id/etNeighborComment"
-            android:gravity="center"
-            android:layout_alignParentEnd="true"
-            android:drawableEnd="@drawable/send_post"
-            android:paddingStart="@dimen/gape10"
-            android:paddingEnd="@dimen/gape10"
-            android:textColor="@color/Date_bg"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

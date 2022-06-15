@@ -102,8 +102,8 @@ class LiveMemberFragment : HomeBaseFragment(), OnMapReadyCallback, GoogleApiClie
     private var updateMembers: TimerTask? = null
     private var timer: Timer? = Timer()
     private var isFromHandler = false
-    internal lateinit var marker1: Marker
-    internal lateinit var marker2: Marker
+    internal var marker1: Marker? = null
+    internal var marker2: Marker? = null
     lateinit var appDatabase: OldMe911Database
     private var sheetBehavior: BottomSheetBehavior<*>? = null
     private var mapFilterLatitude: Double = 0.0
@@ -648,18 +648,14 @@ class LiveMemberFragment : HomeBaseFragment(), OnMapReadyCallback, GoogleApiClie
     }
 
     private fun hideInfoWindow() {
-        if (this::marker1.isInitialized) {
-            if (marker1 != null) {
-                if (marker1.isInfoWindowShown) {
-                    marker1.hideInfoWindow()
-                }
+        marker1?.let {
+            if (it.isInfoWindowShown) {
+                it.hideInfoWindow()
             }
         }
-        if (this::marker2.isInitialized) {
-            if (marker2 != null) {
-                if (marker2.isInfoWindowShown) {
-                    marker2.hideInfoWindow()
-                }
+        marker2?.let {
+            if (it.isInfoWindowShown) {
+                it.hideInfoWindow()
             }
         }
     }
@@ -859,7 +855,6 @@ class LiveMemberFragment : HomeBaseFragment(), OnMapReadyCallback, GoogleApiClie
                                     filterIcon =
                                         BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_landmark)
                                 }
-
                                 else -> {
                                     filterIcon =
                                         BitmapDescriptorFactory.fromResource(R.drawable.ic_location_setting)
@@ -873,9 +868,11 @@ class LiveMemberFragment : HomeBaseFragment(), OnMapReadyCallback, GoogleApiClie
                                         .snippet("filter")
                                         .icon(filterIcon)
                                     val hashMapMarker = HashMap<String, Marker>()
-                                    marker2 = map.addMarker(markerOptions4)!!
-                                    hashMapMarker[yelpBusinessList[i].id ?: ""] = marker2
-                                    hashMapMarkerList.add(hashMapMarker)
+                                    marker2 = map.addMarker(markerOptions4)
+                                    marker2?.let {
+                                        hashMapMarker[yelpBusinessList[i].id ?: ""] = it
+                                        hashMapMarkerList.add(hashMapMarker)
+                                    }
                                 } catch (e: Exception) {
                                     e.printStackTrace()
                                 }
@@ -1289,7 +1286,9 @@ class LiveMemberFragment : HomeBaseFragment(), OnMapReadyCallback, GoogleApiClie
                         Comman_Methods.isProgressHide()
                         response.body()?.let {
                             if (it.status == true) {
-                                map.setPadding(0, 0, 0, 0)
+                                if (this@LiveMemberFragment::map.isInitialized) {
+                                    map.setPadding(0, 0, 0, 0)
+                                }
                                 val liveResultList = it.result ?: ArrayList()
                                 if (liveResultList.size > 0) {
                                     if (bottom_live_member_filter != null) {
@@ -1357,7 +1356,9 @@ class LiveMemberFragment : HomeBaseFragment(), OnMapReadyCallback, GoogleApiClie
                                                         )
                                                     )
 
-                                            marker1 = map.addMarker(markerOptions4)!!
+                                            if (this@LiveMemberFragment::map.isInitialized) {
+                                                marker1 = map.addMarker(markerOptions4)
+                                            }
                                             if (liveMemberBean.memberID == appDatabase.loginDao().getAll().memberID) {
                                                 mapFilterLatitude = liveMemberBean.latitude
                                                 mapFilterLongitude = liveMemberBean.longitude
@@ -2055,6 +2056,12 @@ class LiveMemberFragment : HomeBaseFragment(), OnMapReadyCallback, GoogleApiClie
                                 if (loginData.liveStreamDuration != null) loginData.liveStreamDuration else if (oldLoginData.liveStreamDuration != null) oldLoginData.liveStreamDuration else 15
                             login_obj.adminName =
                                 if (loginData.adminName != null) loginData.adminName else if (oldLoginData.adminName != null) oldLoginData.adminName else ""
+                            login_obj.payId =
+                                if (loginData.payId != null) loginData.payId else if (oldLoginData.payId != null) oldLoginData.payId else ""
+                            login_obj.productId =
+                                if (loginData.productId != null) loginData.productId else if (oldLoginData.productId != null) oldLoginData.productId else ""
+                            login_obj.paymentType =
+                                if (loginData.paymentType != null) loginData.paymentType else if (oldLoginData.paymentType != null) oldLoginData.paymentType else 0
                             login_obj.isAdminLoggedIn =
                                 if (loginData.isAdminLoggedIn != null) loginData.isAdminLoggedIn else if (oldLoginData.isAdminLoggedIn != null) oldLoginData.isAdminLoggedIn else false
                             appDatabase.loginDao().addLogin(login_obj)

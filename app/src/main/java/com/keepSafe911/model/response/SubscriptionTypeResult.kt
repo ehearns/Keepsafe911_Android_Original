@@ -2,8 +2,8 @@ package com.keepSafe911.model.response
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
 class SubscriptionTypeResult(): Parcelable {
 
@@ -22,6 +22,9 @@ class SubscriptionTypeResult(): Parcelable {
     @SerializedName("TotalCost")
     @Expose
     var totalCost: Double? = 0.0
+    @SerializedName("PlanId")
+    @Expose
+    var planId: String? = ""
 
     constructor(parcel: Parcel) : this() {
         id = parcel.readValue(Int::class.java.classLoader) as? Int
@@ -29,6 +32,7 @@ class SubscriptionTypeResult(): Parcelable {
         days = parcel.readValue(Int::class.java.classLoader) as? Int
         users = parcel.readValue(Int::class.java.classLoader) as? Int
         totalCost = parcel.readValue(Double::class.java.classLoader) as? Double
+        planId = parcel.readString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -37,6 +41,7 @@ class SubscriptionTypeResult(): Parcelable {
         parcel.writeValue(days)
         parcel.writeValue(users)
         parcel.writeValue(totalCost)
+        parcel.writeString(planId)
     }
 
     override fun describeContents(): Int {

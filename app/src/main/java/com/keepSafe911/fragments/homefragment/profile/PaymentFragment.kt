@@ -3,7 +3,6 @@ package com.keepSafe911.fragments.homefragment.profile
 
 import AnimationType
 import addFragment
-import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,8 +14,8 @@ import com.keepSafe911.R
 import com.keepSafe911.fragments.commonfrag.HomeBaseFragment
 import com.keepSafe911.fragments.payment_selection.UpdateSubFragment
 import com.keepSafe911.listner.CommonApiListener
+import com.keepSafe911.listner.PaymentOptionListener
 import com.keepSafe911.listner.PositiveButtonListener
-import com.keepSafe911.model.FamilyMonitorResult
 import com.keepSafe911.model.SubscriptionBean
 import com.keepSafe911.model.response.*
 import com.keepSafe911.model.roomobj.LoginObject
@@ -90,8 +89,7 @@ class PaymentFragment : HomeBaseFragment(), View.OnClickListener {
                 if (status) {
                     subscriptionTypeResultList.addAll(subscriptionTypeResult)
                     if (subscriptionTypeResultList.size > 0) {
-                        val subscriptionPackage =
-                            appDatabase.loginDao().getAll().Package
+                        val subscriptionPackage = appDatabase.loginDao().getAll().Package
                         if (tv_package != null) {
                             if (isCancelledSubscription || subscriptionPackage == "0") {
                                 tv_package.text =
@@ -139,38 +137,38 @@ class PaymentFragment : HomeBaseFragment(), View.OnClickListener {
             R.id.btn_upgrade -> {
                 mActivity.hideKeyboard()
                 Comman_Methods.avoidDoubleClicks(v)
-                if (deviceType == 1) {
-                    mActivity.addFragment(
-                        UpdateSubFragment.newInstance(
-                            false,
-                            false, true, false, FamilyMonitorResult(),
-                            subscriptionTypeResultList, false, isCancelledSubscription, false
-                        ),
-                        true,
-                        true,
-                        AnimationType.fadeInfadeOut
-                    )
-                } else {
-                    mActivity.showMessage(mActivity.resources.getString(R.string.update_from_itune))
+                when (deviceType) {
+                    1, 3 -> {
+                        mActivity.addFragment(
+                            UpdateSubFragment.newInstance(isFromPayment = true,
+                                subscriptionTypeResultList = subscriptionTypeResultList,
+                                isCancelledSubscription = isCancelledSubscription
+                            ), true, true, AnimationType.fadeInfadeOut
+                        )
+                    }
+                    else -> {
+                        mActivity.showMessage(mActivity.resources.getString(R.string.update_from_itune))
+                    }
                 }
             }
             R.id.btn_change_card -> {
                 mActivity.hideKeyboard()
                 Comman_Methods.avoidDoubleClicks(v)
-                if (deviceType == 1) {
-                    mActivity.addFragment(
-                        UpdatePayentFragment.newInstance(
-                            false,
-                            false,
-                            SubscriptionBean(CHANGE_PAYMENT, 0, FREE_PAYMENT),
-                            FamilyMonitorResult(),
-                            false,
-                            false
-                        ),
-                        true, false, animationType = AnimationType.fadeInfadeOut
-                    )
-                } else {
-                    mActivity.showMessage(mActivity.resources.getString(R.string.sub_from_itune))
+                when (deviceType) {
+                    1 -> {
+                        mActivity.addFragment(
+                            UpdatePayentFragment.newInstance(
+                                subscriptionBean = SubscriptionBean(CHANGE_PAYMENT, 0, FREE_PAYMENT, ""),
+                            ),
+                            true, false, animationType = AnimationType.fadeInfadeOut
+                        )
+                    }
+                    3 -> {
+                        mActivity.showMessage(mActivity.resources.getString(R.string.sub_from_paypal))
+                    }
+                    else -> {
+                        mActivity.showMessage(mActivity.resources.getString(R.string.sub_from_itune))
+                    }
                 }
             }
             R.id.btn_cancel -> {
@@ -182,15 +180,15 @@ class PaymentFragment : HomeBaseFragment(), View.OnClickListener {
             R.id.btn_sub_history -> {
                 mActivity.hideKeyboard()
                 Comman_Methods.avoidDoubleClicks(v)
-                if (deviceType == 1) {
-                    mActivity.addFragment(
-                        SubscriptionHistoryFragment(),
-                        true,
-                        true,
-                        AnimationType.fadeInfadeOut
-                    )
-                } else {
-                    mActivity.showMessage(mActivity.resources.getString(R.string.sub_from_itune))
+                when (deviceType) {
+                    1, 3 -> {
+                        mActivity.addFragment(SubscriptionHistoryFragment(),
+                            true, true, AnimationType.fadeInfadeOut
+                        )
+                    }
+                    else -> {
+                        mActivity.showMessage(mActivity.resources.getString(R.string.sub_from_itune))
+                    }
                 }
             }
         }
@@ -249,9 +247,51 @@ class PaymentFragment : HomeBaseFragment(), View.OnClickListener {
                         btn_sub_history.visibility = View.GONE
                         callInAppPurchaseSubscriptionApi()
                     }
+                    3 -> {
+                        btn_sub_history.visibility = View.VISIBLE
+                        checkPayPalAccountStatus(versionCheck)
+                    }
                 }
             }
         })
+    }
+
+    private fun checkPayPalAccountStatus(versionCheck: Boolean, isFromCancel: Boolean = false, isLoader: Boolean = true) {
+        val loginData = appDatabase.loginDao().getAll()
+        val subscriptionId = loginData.payId ?: ""
+
+        mActivity.checkPaypalSubscription(subscriptionId, object : PaymentOptionListener {
+            override fun onCreditCardOption() {}
+
+            override fun onPayPalOption(
+                subscriptionId: String, firstName: String,
+                lastName: String, email: String
+            ) {
+                if (!isFromCancel) {
+                    ed_customer_name.setText("$firstName $lastName")
+                    ed_cardno.setText("")
+                    isCancelledSubscription = false
+                    performCancelButtonAlpha(loginData)
+                    callSubscriptionTypeApi(versionCheck)
+                }
+            }
+
+            override fun onPaymentExpired() {
+                if (!isFromCancel) {
+                    ed_customer_name.setText("")
+                    ed_cardno.setText("")
+                    isCancelledSubscription = true
+                    if (btn_cancel!=null) {
+                        val alpha = 0.45f
+                        val alphaUp = AlphaAnimation(alpha, alpha)
+                        alphaUp.fillAfter = true
+                        btn_cancel.startAnimation(alphaUp)
+                        btn_cancel.isEnabled = false
+                        btn_cancel.isClickable = false
+                    }
+                }
+            }
+        }, loader = isLoader)
     }
 
     private fun callInAppPurchaseSubscriptionApi() {
@@ -386,7 +426,7 @@ class PaymentFragment : HomeBaseFragment(), View.OnClickListener {
                             if (updateResponse.isStatus) {
                                 updateResponse.result?.let { result ->
                                     val firstName = result.FirstName ?: ""
-                                    val lastName = result.FirstName ?: ""
+                                    val lastName = result.LastName ?: ""
                                     val cardNumber = result.CardNumber ?: ""
                                     if (result.FirstName!=null) {
                                         if (firstName.contains("_")) {
@@ -397,27 +437,10 @@ class PaymentFragment : HomeBaseFragment(), View.OnClickListener {
                                     }else{
                                         ed_customer_name.setText("")
                                     }
-                                    val loginupdate: LoginObject = appDatabase.loginDao().getAll()
+                                    val loginUpdate: LoginObject = appDatabase.loginDao().getAll()
                                     ed_cardno.setText(cardNumber)
                                     isCancelledSubscription = result.isCancelled ?: false
-                                    if (btn_cancel!=null) {
-                                        if (isCancelledSubscription || loginupdate.Package == "0") {
-                                            val alpha = 0.45f
-                                            val alphaUp = AlphaAnimation(alpha, alpha)
-                                            alphaUp.fillAfter = true
-                                            btn_cancel.startAnimation(alphaUp)
-                                            btn_cancel.isEnabled = false
-                                            btn_cancel.isClickable = false
-                                        } else {
-                                            val alpha = 1.0f
-                                            val alphaUp = AlphaAnimation(alpha, alpha)
-                                            alphaUp.fillAfter = true
-                                            btn_cancel.startAnimation(alphaUp)
-                                            btn_cancel.isEnabled = true
-                                            btn_cancel.isClickable = true
-                                            btn_cancel.setOnClickListener(this@PaymentFragment)
-                                        }
-                                    }
+                                    performCancelButtonAlpha(loginUpdate)
                                 }
                             } else {
                                 mActivity.showMessage(updateResponse.message ?: "")
@@ -429,6 +452,27 @@ class PaymentFragment : HomeBaseFragment(), View.OnClickListener {
             })
         } else {
             Utils.showNoInternetMessage(mActivity)
+        }
+    }
+
+    private fun performCancelButtonAlpha(loginUpdate: LoginObject) {
+        if (btn_cancel!=null) {
+            if (isCancelledSubscription || loginUpdate.Package == "0") {
+                val alpha = 0.45f
+                val alphaUp = AlphaAnimation(alpha, alpha)
+                alphaUp.fillAfter = true
+                btn_cancel.startAnimation(alphaUp)
+                btn_cancel.isEnabled = false
+                btn_cancel.isClickable = false
+            } else {
+                val alpha = 1.0f
+                val alphaUp = AlphaAnimation(alpha, alpha)
+                alphaUp.fillAfter = true
+                btn_cancel.startAnimation(alphaUp)
+                btn_cancel.isEnabled = true
+                btn_cancel.isClickable = true
+                btn_cancel.setOnClickListener(this@PaymentFragment)
+            }
         }
     }
 
@@ -445,7 +489,9 @@ class PaymentFragment : HomeBaseFragment(), View.OnClickListener {
 
     private fun callCancelSubscriptionApi() {
         mActivity.isSpeedAvailable()
-        val memberId = appDatabase.loginDao().getAll().memberID
+        val loginObject: LoginObject = appDatabase.loginDao().getAll()
+        val memberId = loginObject.memberID
+        val paymentType = loginObject.paymentType ?: 0
         Utils.userSubscriptionCancel(mActivity, memberId, object : CommonApiListener {
             override fun commonResponse(
                 status: Boolean,
@@ -453,23 +499,25 @@ class PaymentFragment : HomeBaseFragment(), View.OnClickListener {
                 responseMessage: String,
                 result: String
             ) {
-                if (btn_cancel != null) {
-                    if (status) {
+                if (status) {
+                    if (btn_cancel != null) {
                         val alpha = 0.45f
                         val alphaUp = AlphaAnimation(alpha, alpha)
                         alphaUp.fillAfter = true
                         btn_cancel.startAnimation(alphaUp)
                         btn_cancel.isEnabled = false
                         btn_cancel.isClickable = false
-                        val loginupdate: LoginObject = appDatabase.loginDao().getAll()
-                        loginupdate.Package = "0"
-                        loginupdate.isChildMissing = false
-                        appDatabase.loginDao().updateLogin(loginupdate)
-                        mActivity.callLogOutPingApi(
-                            LOGOUT_RECORD_STATUS.toString(),
-                            true
-                        )
-                    } else {
+                    }
+                    val loginupdate: LoginObject = appDatabase.loginDao().getAll()
+                    loginupdate.Package = "0"
+                    loginupdate.isChildMissing = true
+                    appDatabase.loginDao().updateLogin(loginupdate)
+                    mActivity.callLogOutPingApi(
+                        LOGOUT_RECORD_STATUS.toString(),
+                        true
+                    )
+                } else {
+                    if (btn_cancel != null) {
                         val alpha = 1.0f
                         val alphaUp = AlphaAnimation(alpha, alpha)
                         alphaUp.fillAfter = true
@@ -478,7 +526,15 @@ class PaymentFragment : HomeBaseFragment(), View.OnClickListener {
                         btn_cancel.isClickable = true
                     }
                 }
-                callCheckSubscriptionApi(responseMessage)
+                if (paymentType == 3) {
+                    checkPayPalAccountStatus(
+                        versionCheck = false,
+                        isFromCancel = true,
+                        isLoader = false
+                    )
+                } else {
+                    callCheckSubscriptionApi(responseMessage)
+                }
             }
         })
     }

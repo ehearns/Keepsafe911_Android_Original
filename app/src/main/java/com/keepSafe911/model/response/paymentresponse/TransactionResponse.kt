@@ -44,10 +44,13 @@ class TransactionResponse() : Parcelable {
     var accountType: String? = ""
     @SerializedName("messages")
     @Expose
-    var messages: List<Message_>? = ArrayList()
+    var messages: ArrayList<Message_>? = ArrayList()
     @SerializedName("transHashSha2")
     @Expose
     var transHashSha2: String? = ""
+    @SerializedName("secureAcceptance")
+    @Expose
+    var secureAcceptance: SecureAcceptance? = SecureAcceptance()
     @SerializedName("SupplementalDataQualificationIndicator")
     @Expose
     var supplementalDataQualificationIndicator: Int? = 0
@@ -67,6 +70,8 @@ class TransactionResponse() : Parcelable {
         avsResultCode = parcel.readString()
         testRequest = parcel.readString()
         refTransID = parcel.readString()
+        messages = parcel.createTypedArrayList(Message_.CREATOR) ?: ArrayList()
+        secureAcceptance = parcel.readParcelable(SecureAcceptance::class.java.classLoader)
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -83,6 +88,8 @@ class TransactionResponse() : Parcelable {
         parcel.writeString(avsResultCode)
         parcel.writeString(testRequest)
         parcel.writeString(refTransID)
+        parcel.writeTypedList(messages)
+        parcel.writeParcelable(secureAcceptance, flags)
     }
 
     override fun describeContents(): Int {

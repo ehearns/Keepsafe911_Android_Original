@@ -18,6 +18,8 @@
     <color name="colorAccent">#444444</color>
     <color name="colorDifferent">#475D6D</color>
     <color name="colorPrimaryLight">#EEA7C3</color>
+    <color name="colorPrimaryTransParent">#CC881A46</color>
+    <color name="colorPrimaryExtraLight">#F9F4F6</color>
     <color name="colorPrimaryDull">#CF276A</color>
     <color name="menuIconColor">#838383</color>
     <color name="extraColor">#E5F5F5</color>
@@ -34,7 +36,7 @@
     <color name="color_view1">#a2d05b</color>
     <color name="color_gray">#626262</color>
     <color name="caldroid_white">#FFFFFF</color>
-    <color name="caldroid_black">#000000</color>
+    <color name="half_transparent_black">#50000000</color>
     <color name="bgBlack">#000000</color>
     <color name="color_purple">#800080</color>
     <color name="color_light_purple">#B488DD</color>
@@ -44,6 +46,7 @@
     <color name="dark_purple">#20205C</color>
     <color name="medium_blue">#06BFE8</color>
     <color name="caldroid_dark_yellow">#FEC957</color>
+    <color name="paypal_color">#ffc439</color>
     <color name="caldroid_darker_yellow">#f47b00</color>
     <!-- For settings framework -->
     <color name="caldroid_lighter_gray">#3D000000</color>

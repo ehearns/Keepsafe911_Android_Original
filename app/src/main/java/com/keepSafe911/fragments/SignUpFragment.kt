@@ -1,7 +1,6 @@
 package com.keepSafe911.fragments
 
 import AnimationType
-
 import ValidationUtil.Companion.isPasswordMatch
 import ValidationUtil.Companion.isPasswordValidate
 import ValidationUtil.Companion.isRequiredField
@@ -19,6 +18,8 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.*
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
@@ -28,16 +29,10 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import checkLocationPermission
-import com.keepSafe911.fragments.commonfrag.MainBaseFragment
-import com.keepSafe911.gps.GpsTracker
-import com.keepSafe911.model.FamilyMonitorResult
-import com.keepSafe911.model.PhoneCountryCode
-import com.keepSafe911.room.OldMe911Database
-import com.keepSafe911.utils.Comman_Methods.Companion.getdeviceVersion
-import com.keepSafe911.webservices.WebApiClient
 import com.example.easywaylocation.EasyWayLocation
 import com.example.easywaylocation.Listener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -47,18 +42,27 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
+import com.itextpdf.text.SpecialSymbol.index
 import com.keepSafe911.BuildConfig
-import com.kotlinpermissions.KotlinPermissions
 import com.keepSafe911.MainActivity
 import com.keepSafe911.R
+import com.keepSafe911.fragments.commonfrag.MainBaseFragment
 import com.keepSafe911.fragments.payment_selection.PaymentMethodFragment
-import com.keepSafe911.fragments.payment_selection.SubscriptionFragment
+import com.keepSafe911.gps.GpsTracker
 import com.keepSafe911.listner.CommonApiListener
+import com.keepSafe911.listner.PaymentOptionListener
 import com.keepSafe911.listner.PositiveButtonListener
+import com.keepSafe911.model.FamilyMonitorResult
+import com.keepSafe911.model.PhoneCountryCode
 import com.keepSafe911.model.SubscriptionBean
 import com.keepSafe911.model.response.CommonValidationResponse
 import com.keepSafe911.model.response.SubscriptionTypeResult
+import com.keepSafe911.model.response.paypal.SubscriptionResponse
+import com.keepSafe911.room.OldMe911Database
 import com.keepSafe911.utils.*
+import com.keepSafe911.utils.Comman_Methods.Companion.getdeviceVersion
+import com.keepSafe911.webservices.WebApiClient
+import com.kotlinpermissions.KotlinPermissions
 import com.yanzhenjie.album.Album
 import hideKeyboard
 import kotlinx.android.synthetic.main.background_layout.*
@@ -76,13 +80,13 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import visitUrl
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.*
+
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -115,6 +119,8 @@ class SignUpFragment : MainBaseFragment(), View.OnClickListener, Listener {
     private var selectedSubscription: SubscriptionTypeResult? = null
     private var isMissingChild: Boolean = false
     private var subscriptionBean: SubscriptionBean = SubscriptionBean()
+    private lateinit var paypalBottomSheetDialog: BottomSheetDialog
+    private lateinit var payPalPaymentFragment: PayPalPaymentFragment
 
 
     private val mBatInfoReceiver = object : BroadcastReceiver() {
@@ -182,6 +188,7 @@ class SignUpFragment : MainBaseFragment(), View.OnClickListener, Listener {
         img_nphotoUpload.setOnClickListener(this)
         imgPhotoUpload.setOnClickListener(this)
         tvCountrySelected.setOnClickListener(this)
+        ivShowPassword.setOnClickListener(this)
         rvAddUserImageList.visibility = View.GONE
         imgPhotoUpload.visibility = View.GONE
         img_nphotoUpload.visibility = View.VISIBLE
@@ -252,26 +259,15 @@ class SignUpFragment : MainBaseFragment(), View.OnClickListener, Listener {
             btn_sign_in.text = mActivity.resources.getString(R.string.next)
         }
         etSignEmail.isFocusableInTouchMode = true
-        ivShowPassword.visibility = View.GONE
         viewDash2.visibility = View.GONE
         tvAddMemberTitle.visibility = View.GONE
-        etSignPassword.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
         etSignCPassword.visibility = View.VISIBLE
         etSignPassword.isFocusableInTouchMode = true
         etSignUserName.isFocusableInTouchMode = true
-        val filter = InputFilter { source, start, end, dest, dstart, dend ->
-            for (i in start until end) {
-                if (!Character.isLetterOrDigit(source[i])/* &&
-                    source[i].toString() != "_" &&
-                    source[i].toString() != "-"*/
-                ) {
-                    return@InputFilter source.removeRange(end-1, end)
-                }
-            }
-            null
-        }
-        etSignUserName.filters = arrayOf(filter)
 
+        etSignUserName.filters = arrayOf(Utils.filterUserName)
+        etSignPassword.filters = arrayOf(Utils.filterPassword)
+        etSignCPassword.filters = arrayOf(Utils.filterPassword)
         btnVerifyUsername.setOnClickListener{
             checkUserNameUniqueApi(etSignUserName.text.toString().trim(), 2)
         }
@@ -589,6 +585,23 @@ class SignUpFragment : MainBaseFragment(), View.OnClickListener, Listener {
                 mActivity.hideKeyboard()
                 mActivity.showMessage(mActivity.resources.getString(R.string.under_dev))
             }
+            R.id.ivShowPassword -> {
+                mActivity.hideKeyboard()
+                if (etSignPassword.text.toString().isNotEmpty()) {
+                    if (passwordShowed) {
+                        etSignPassword.transformationMethod =
+                            PasswordTransformationMethod.getInstance()
+                        ivShowPassword.setImageResource(R.drawable.show_card_number)
+                        passwordShowed = false
+                    } else {
+                        etSignPassword.transformationMethod =
+                            HideReturnsTransformationMethod.getInstance()
+                        ivShowPassword.setImageResource(R.drawable.gone_card_number)
+                        passwordShowed = true
+                    }
+                    etSignPassword.setSelection(etSignPassword.text.toString().length)
+                }
+            }
         }
     }
 
@@ -597,8 +610,7 @@ class SignUpFragment : MainBaseFragment(), View.OnClickListener, Listener {
             message = mActivity.resources.getString(R.string.str_location_permission_disclosure),
             positiveButtonText = mActivity.resources.getString(R.string.str_allow),
             negativeButtonText = mActivity.resources.getString(R.string.str_decline),
-            positiveButtonListener = object :
-                PositiveButtonListener {
+            positiveButtonListener = object : PositiveButtonListener {
                 override fun okClickListener() {
                     setLocationPermission()
                 }
@@ -651,11 +663,11 @@ class SignUpFragment : MainBaseFragment(), View.OnClickListener, Listener {
         bottomSheetDialog.show()
     }
 
-    private fun callApi() {
+    private fun callApi(paymentType: String, subscriptionId: String, paymentMethod: String) {
         easyWayLocation = EasyWayLocation(mActivity)
         easyWayLocation.setListener(this)
         if (gpstracker?.CheckForLoCation() == true) {
-            callSignUpAPI()
+            callSignUpAPI(paymentType, subscriptionId, paymentMethod)
         } else {
             Utils.showLocationSettingsAlert(mActivity)
         }
@@ -756,27 +768,32 @@ class SignUpFragment : MainBaseFragment(), View.OnClickListener, Listener {
 
         when {
             isMissingChild -> {
-                callApi()
+                val paymentMethodData = if (selectedSubscription != null) if (selectedSubscription?.id!! > 0) selectedSubscription?.id!!.toString() else "" else ""
+                callApi("1", "", paymentMethodData)
             }
             isPromotionValid -> {
-                mActivity.addFragment(
+                val promotionSubscription = SubscriptionBean(
+                    selectedSubscription?.id ?: 0,
+                    selectedSubscription?.days ?: 0,
+                    selectedSubscription?.totalCost ?: 0.0,
+                    selectedSubscription?.planId ?: ""
+                )
+                /*mActivity.addFragment(
                     PaymentMethodFragment.newInstance(
                         familyMonitorResult,
-                        SubscriptionBean(
-                            selectedSubscription?.id ?: 0,
-                            selectedSubscription?.days ?: 0,
-                            selectedSubscription?.totalCost ?: 0.0
-                        )
+                        promotionSubscription
                     ), true, true, AnimationType.fadeInfadeOut
-                )
+                )*/
+                showPaypalOption(familyMonitorResult, promotionSubscription)
             }
             else -> {
-                mActivity.addFragment(
+                showPaypalOption(familyMonitorResult, subscriptionBean)
+                /*mActivity.addFragment(
                     PaymentMethodFragment.newInstance(
                         familyMonitorResult,
                         subscriptionBean
                     ), true, true, AnimationType.fadeInfadeOut
-                )
+                )*/
                 /*mActivity.addFragment(
                     SubscriptionFragment.newInstance(
                         familyMonitorResult
@@ -891,6 +908,10 @@ class SignUpFragment : MainBaseFragment(), View.OnClickListener, Listener {
                 mActivity.showMwssage(mActivity.resources.getString(R.string.blank_phone))
                 false
             }*/
+            isRequiredField(etSignPhone.text.toString()) && etSignPhone.text.toString().trim().length != 10 -> {
+                mActivity.showMessage(mActivity.resources.getString(R.string.phone_length))
+                false
+            }
             !isRequiredField(etSignEmail.text.toString().trim()) -> {
                 mActivity.showMessage(mActivity.resources.getString(R.string.blank_email))
                 false
@@ -917,7 +938,7 @@ class SignUpFragment : MainBaseFragment(), View.OnClickListener, Listener {
             }
 
             etSignCPassword.visibility == View.VISIBLE && !isRequiredField(etSignCPassword.text.toString()) -> {
-                mActivity.showMessage(mActivity.resources.getString(R.string.blank_pass))
+                mActivity.showMessage(mActivity.resources.getString(R.string.blank_conf_pass))
                 false
             }
             etSignCPassword.visibility == View.VISIBLE && !isPasswordMatch(
@@ -931,12 +952,6 @@ class SignUpFragment : MainBaseFragment(), View.OnClickListener, Listener {
                 mActivity.showMessage(mActivity.resources.getString(R.string.str_visit_privacy_terms))
                 false
             }*/
-
-            /*etSignPhone.text.toString().trim().length != 10 -> {
-                mActivity.showMwssage(mActivity.resources.getString(R.string.phone_length))
-                false
-            }
-*/
             else -> true
         }
     }
@@ -988,7 +1003,7 @@ class SignUpFragment : MainBaseFragment(), View.OnClickListener, Listener {
         })
     }
 
-    private fun callSignUpAPI() {
+    private fun callSignUpAPI(paymentTypeData: String, subscriptionId: String, paymentMethod: String) {
         if (ConnectionUtil.isInternetAvailable(mActivity)) {
             var referral_name : RequestBody = "".toRequestBody()
             var promoCode : RequestBody = "".toRequestBody()
@@ -1038,6 +1053,7 @@ class SignUpFragment : MainBaseFragment(), View.OnClickListener, Listener {
             val isAdminMem: RequestBody = "false".toRequestBody(MEDIA_TYPE_TEXT)
             val device_token = "".toRequestBody(MEDIA_TYPE_TEXT)
             val device_id = "1".toRequestBody(MEDIA_TYPE_TEXT)
+            val paymentType = paymentTypeData.toRequestBody(MEDIA_TYPE_TEXT)
             val loginByApp = "2".toRequestBody(MEDIA_TYPE_TEXT)
             val imageBody: RequestBody
             val isSms: RequestBody =
@@ -1045,9 +1061,8 @@ class SignUpFragment : MainBaseFragment(), View.OnClickListener, Listener {
                     MEDIA_TYPE_TEXT
                 )
             val frequency = "60".toRequestBody(MEDIA_TYPE_TEXT)
-            val payment_token = "".toRequestBody(MEDIA_TYPE_TEXT)
-            val dataPaymentMethod: String = if (isMissingChild) if (selectedSubscription != null) if (selectedSubscription?.id!! > 0) selectedSubscription?.id!!.toString() else "" else "" else ""
-            val payment_method = dataPaymentMethod.toRequestBody(MEDIA_TYPE_TEXT)
+            val payment_token = subscriptionId.toRequestBody(MEDIA_TYPE_TEXT)
+            val payment_method = paymentMethod.toRequestBody(MEDIA_TYPE_TEXT)
             val notification_permission: RequestBody =
                 if (NotificationManagerCompat.from(mActivity).areNotificationsEnabled()) {
                     "true".toRequestBody(MEDIA_TYPE_TEXT)
@@ -1112,7 +1127,8 @@ class SignUpFragment : MainBaseFragment(), View.OnClickListener, Listener {
                     loginByApp,
                     referral_name,
                     promoCode,
-                    isChildMissing)
+                    isChildMissing,
+                paymentType)
 
             callRegisrationApi?.enqueue(object : Callback<CommonValidationResponse> {
                 override fun onFailure(call: Call<CommonValidationResponse>, t: Throwable) {
@@ -1303,4 +1319,105 @@ class SignUpFragment : MainBaseFragment(), View.OnClickListener, Listener {
         }
     }
 
+    private fun showPaypalOption(
+        familyMonitorResult: FamilyMonitorResult,
+        subscriptionBean: SubscriptionBean
+    ) {
+        val view = LayoutInflater.from(mActivity)
+            .inflate(R.layout.popup_paypal_layout, mActivity.window.decorView.rootView as ViewGroup, false)
+        if (this::paypalBottomSheetDialog.isInitialized) {
+            if (paypalBottomSheetDialog.isShowing) {
+                paypalBottomSheetDialog.dismiss()
+            }
+        }
+        paypalBottomSheetDialog = BottomSheetDialog(mActivity, R.style.appBottomSheetDialogTheme)
+        paypalBottomSheetDialog.setContentView(view)
+        val mBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(view.parent as View)
+        mBehavior.isHideable = false
+        paypalBottomSheetDialog.setOnShowListener {
+            mBehavior.peekHeight = view.height
+        }
+        val llCreditCard: LinearLayout? = paypalBottomSheetDialog.findViewById(R.id.llCreditCard)
+        val tvCreditCard: TextView? = paypalBottomSheetDialog.findViewById(R.id.tvCreditCard)
+        val ivPaypal: ImageView? = paypalBottomSheetDialog.findViewById(R.id.ivPaypal)
+        llCreditCard?.setOnClickListener {
+            paypalBottomSheetDialog.dismiss()
+            mActivity.hideKeyboard()
+            Comman_Methods.avoidDoubleClicks(it)
+            mActivity.addFragment(
+                PaymentMethodFragment.newInstance(
+                    familyMonitorResult,
+                    subscriptionBean
+                ), true, true, AnimationType.fadeInfadeOut
+            )
+        }
+        ivPaypal?.setOnClickListener {
+            paypalBottomSheetDialog.dismiss()
+            mActivity.hideKeyboard()
+            Comman_Methods.avoidDoubleClicks(it)
+
+            Comman_Methods.isCustomTrackingPopUpShow(mActivity,
+                message = mActivity.resources.getString(R.string.str_paypal_fee_warning),
+                positiveButtonText = mActivity.resources.getString(R.string.str_ok),
+                negativeButtonText = mActivity.resources.getString(R.string.cancel),
+                positiveButtonListener = object : PositiveButtonListener {
+                    override fun okClickListener() {
+                        Utils.callDifferentPaypalApi(mActivity, 3,
+                            planId = subscriptionBean.payPalPlanId,
+                            firstName = familyMonitorResult.firstName ?: "",
+                            lastName = familyMonitorResult.lastName ?: "",
+                            email = familyMonitorResult.email ?: "",
+                            commonApiListener = object : CommonApiListener {
+                                override fun onSingleSubscriptionSuccessResult(updateTimeCard: SubscriptionResponse) {
+                                    val subscriptionLink = updateTimeCard.links ?: ArrayList()
+                                    val redirectLink = Utils.openLinkForPayment(subscriptionLink)
+                                    openPaypalPaymentScreen(redirectLink, updateTimeCard.id ?: "", subscriptionBean.subScriptionCode.toString())
+                                }
+                            })
+                    }
+            })
+        }
+        paypalBottomSheetDialog.show()
+    }
+
+    private fun checkPaypalSubscription(subscriptionId: String, paymentMethod: String) {
+        Utils.callDifferentPaypalApi(mActivity, 2, subscriptionId, commonApiListener = object : CommonApiListener {
+            override fun onSingleSubscriptionSuccessResult(updateTimeCard: SubscriptionResponse) {
+                when (updateTimeCard.status) {
+                    "APPROVAL_PENDING" -> {
+                        val subscriptionLink = updateTimeCard.links ?: ArrayList()
+                        val redirectLink = Utils.openLinkForPayment(subscriptionLink)
+                    }
+                    "APPROVED", "ACTIVE" -> {
+                        callApi("3", updateTimeCard.id ?: "", paymentMethod)
+                    }
+                    "SUSPENDED", "CANCELLED", "EXPIRED" -> {
+                    }
+                }
+            }
+        })
+    }
+
+    private fun openPaypalPaymentScreen(linkUrl: String, subscriptionIdData: String, paymentMethod: String) {
+        if (this@SignUpFragment::payPalPaymentFragment.isInitialized) {
+            if (payPalPaymentFragment != null) {
+                if (payPalPaymentFragment.isAdded) {
+                    return
+                }
+            }
+        }
+        payPalPaymentFragment = PayPalPaymentFragment.newInstance(linkUrl)
+        payPalPaymentFragment.paymentOptionListener = object : PaymentOptionListener {
+            override fun onCreditCardOption() {}
+
+            override fun onPayPalOption(
+                subscriptionId: String, firstName: String,
+                lastName: String, email: String
+            ) {
+                checkPaypalSubscription(subscriptionIdData, paymentMethod)
+            }
+        }
+        payPalPaymentFragment.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme)
+        payPalPaymentFragment.show(mActivity.supportFragmentManager, "payPalPaymentFragment")
+    }
 }

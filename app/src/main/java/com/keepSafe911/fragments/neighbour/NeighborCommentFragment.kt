@@ -3,7 +3,9 @@ package com.keepSafe911.fragments.neighbour
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
@@ -37,7 +39,7 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private const val ARG_PARAM3 = "param3"
 
-class NeighborCommentFragment : HomeBaseFragment(), View.OnClickListener {
+class NeighborCommentFragment : HomeBaseFragment() {
     var isFrom: Boolean = false
     var isFromUser: ArrayList<FeedResponseResult> = ArrayList()
     companion object {
@@ -49,22 +51,6 @@ class NeighborCommentFragment : HomeBaseFragment(), View.OnClickListener {
             val fragment = NeighborCommentFragment()
             fragment.arguments = args
             return fragment
-        }
-    }
-
-    override fun onClick(v: View?) {
-        when (v?.id){
-            R.id.tvPost -> {
-                mActivity.hideKeyboard()
-                if (etNeighborComment.text.toString().trim().isNotEmpty()){
-                    Comman_Methods.avoidDoubleClicks(v)
-                    callLikeCommentShareApi(uploadObject, etNeighborComment.text.toString().trim(),
-                        LstOfFeedLikeOrComment()
-                    )
-                }else{
-                    mActivity.showMessage(mActivity.resources.getString(R.string.blank_comment))
-                }
-            }
         }
     }
 
@@ -85,7 +71,7 @@ class NeighborCommentFragment : HomeBaseFragment(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         arguments?.let {
             uploadObject = it.getParcelable(ARG_PARAM1) ?: FeedResponseResult()
-            isFrom = it.getBoolean(ARG_PARAM2)
+            isFrom = it.getBoolean(ARG_PARAM2, false)
             isFromUser = it.getParcelableArrayList(ARG_PARAM3) ?: ArrayList()
         }
     }
@@ -162,7 +148,35 @@ class NeighborCommentFragment : HomeBaseFragment(), View.OnClickListener {
         sdvCommentImageFile.loadFrescoImage(mActivity, uploadObject.userImage ?: "", 1)
 
         sdvCommentUserImage.loadFrescoImage(mActivity, profilePath, 1)
-        tvPost.setOnClickListener(this)
+        etNeighborComment.movementMethod = ScrollingMovementMethod()
+        etNeighborComment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.send_post, 0)
+        val viewDataPaddingValue = Comman_Methods.convertDpToPixels(10F, mActivity)
+        etNeighborComment.setOnTouchListener { v, event ->
+            val DRAWABLE_LEFT = 0
+            val DRAWABLE_TOP = 1
+            val DRAWABLE_RIGHT = 2
+            val DRAWABLE_BOTTOM = 3
+
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                if (event.rawX >= (etNeighborComment.right - (etNeighborComment.compoundDrawables[DRAWABLE_RIGHT].bounds.width() + viewDataPaddingValue))) {
+                    if (etNeighborComment.text.toString().trim().isNotEmpty()) {
+                        mActivity.hideKeyboard()
+                        etNeighborComment.isFocusableInTouchMode = false
+                        etNeighborComment.isFocusable = false
+                        callLikeCommentShareApi(uploadObject, etNeighborComment.text.toString().trim(),
+                            LstOfFeedLikeOrComment()
+                        )
+                        etNeighborComment.setText("")
+                    }
+                    true
+                } else {
+                    etNeighborComment.isFocusableInTouchMode = true
+                    etNeighborComment.isFocusable = true
+
+                }
+            }
+            false
+        }
     }
 
     fun setCommentAdapter(){
@@ -182,6 +196,7 @@ class NeighborCommentFragment : HomeBaseFragment(), View.OnClickListener {
 
     private fun setHeader() {
         tvHeader.text = mActivity.resources.getString(R.string.str_comment)
+        tvHeader.setPadding(0, 0, 50, 0)
         Utils.setTextGradientColor(tvHeader)
         iv_back.visibility = View.VISIBLE
         iv_back.setOnClickListener {
@@ -205,6 +220,10 @@ class NeighborCommentFragment : HomeBaseFragment(), View.OnClickListener {
         val minutesInMilli = secondsInMilli * 60
         val hoursInMilli = minutesInMilli * 60
         val daysInMilli = hoursInMilli * 24
+        val monthInMilli = daysInMilli * 30
+
+        val elapsedMonths = different / monthInMilli
+        different %= monthInMilli
 
         val elapsedDays = different / daysInMilli
         different %= daysInMilli
@@ -218,6 +237,7 @@ class NeighborCommentFragment : HomeBaseFragment(), View.OnClickListener {
         val elapsedSeconds = different / secondsInMilli
 
         timeDifference = when {
+            elapsedMonths > 0L -> elapsedDays.toString()+ mActivity.resources.getString(R.string.str_month_ago)
             elapsedDays > 0L -> elapsedDays.toString()+ mActivity.resources.getString(R.string.str_day_ago)
             elapsedHours > 0L -> elapsedHours.toString()+ mActivity.resources.getString(R.string.str_hour_ago)
             elapsedMinutes > 0L -> elapsedMinutes.toString() + mActivity.resources.getString(R.string.str_min_ago)
@@ -375,6 +395,10 @@ class NeighborCommentFragment : HomeBaseFragment(), View.OnClickListener {
             val minutesInMilli = secondsInMilli * 60
             val hoursInMilli = minutesInMilli * 60
             val daysInMilli = hoursInMilli * 24
+            val monthInMilli = daysInMilli * 30
+
+            val elapsedMonths = different / monthInMilli
+            different %= monthInMilli
 
             val elapsedDays = different / daysInMilli
             different %= daysInMilli
@@ -388,6 +412,7 @@ class NeighborCommentFragment : HomeBaseFragment(), View.OnClickListener {
             val elapsedSeconds = different / secondsInMilli
 
             timeDifference = when {
+                elapsedMonths > 0L -> elapsedDays.toString()+ mActivity.resources.getString(R.string.str_month_ago)
                 elapsedDays > 0L -> elapsedDays.toString()+ mActivity.resources.getString(R.string.str_day_ago)
                 elapsedHours > 0L -> elapsedHours.toString()+ mActivity.resources.getString(R.string.str_hour_ago)
                 elapsedMinutes > 0L -> elapsedMinutes.toString() + mActivity.resources.getString(R.string.str_min_ago)

@@ -50,6 +50,7 @@
     <string name="action_settings">Ajustes</string>
     <string name="no_internet">¡Por favor revise su conexion a internet!</string>
     <string name="blank_pass">La contraseña no puede estar en blanco.</string>
+    <string name="blank_conf_pass">Confirmar contraseña no puede estar en blanco.</string>
     <string name="valid_pass">Ingrese una contraseña válida</string>
     <string name="pass_val">La contraseña debe tener 8 caracteres más.</string>
     <string name="pass_common_val">La contraseña debe contener caracteres especiales, números y letras mayúsculas</string>
@@ -67,7 +68,7 @@
     <string name="blank_cvv">El código CVC no puede estar en blanco.</string>
 
 
-    <string name="match_pass">¡Lo siento! su contraseña no es coincidente</string>
+    <string name="match_pass">¡Lo siento! su contraseña no coincide con la contraseña de confirmación.</string>
     <string name="bank_recoup">Programa de devolución de dinero</string>
     <string name="benefit_hub">Descuento Y Recompensas</string>
     <string name="old_new_password">No puede utilizar la contraseña actual como nueva contraseña</string>
@@ -135,7 +136,7 @@
 
     <string name="geofence_name_text">Por favor ingrese el nombre de la alerta</string>
     <string name="geofence_location_text">Por favor ingrese la ubicación de alerta de viaje</string>
-    <string name="proper_location_text">Por favor seleccione una ubicación válida</string>
+    <string name="proper_location_text">Seleccione una ubicación válida</string>
 
 
     <string name="find_your_self">Encontrarse</string>
@@ -350,6 +351,7 @@
     <string name="add_photo_video">Añadir Fotos/Videos</string>
     <string name="update_photo_video">Actualizar Fotos/Videos</string>
     <string name="str_title">Título</string>
+    <string name="str_details">Detalles</string>
     <string name="neighbour_descript">¿Qué pasó en tu barrio?</string>
     <string name="str_incident_loc">Ubicación del incidente</string>
     <string name="incident_loc_hint">* Su dirección exacta no se mostrará.</string>
@@ -389,10 +391,11 @@
     <string name="del_post">Borrar Enviar</string>
     <string name="del_post_conf">¿Seguro que quieres borrar este Enviar?</string>
     <string name="str_just_now">Justo Ahora</string>
-    <string name="str_second_ago">\u0009hace segundos</string>
-    <string name="str_min_ago">\u0009hace minutos</string>
-    <string name="str_hour_ago">\u0009horas atras</string>
-    <string name="str_day_ago">\u0009hace días</string>
+    <string name="str_second_ago">\u00A0hace segundos</string>
+    <string name="str_min_ago">\u00A0hace minutos</string>
+    <string name="str_hour_ago">\u00A0horas atras</string>
+    <string name="str_day_ago">\u00A0hace días</string>
+    <string name="str_month_ago">\u00A0hace meses</string>
     <string name="str_neighborhood_alert">Alerta de noticias</string>
     <string name="str_my_post">Mi Publicacion</string>
     <string name="str_save">Salvar</string>
@@ -559,6 +562,7 @@
     <string name="str_decline">Disminución</string>
     <string name="update_from_itune">Actualice su suscripción desde iTunes.</string>
     <string name="sub_from_itune">Compruebe si se suscribió a iTunes para esta cuenta.</string>
+    <string name="sub_from_paypal">Compruebe si se suscribió a PayPal para esta cuenta.</string>
     <string name="str_alert">Alerta</string>
     <string name="referral_text">Código de referencia</string>
     <string name="str_my_subscription">Mi suscripción</string>
@@ -652,4 +656,7 @@
     <string name="str_agree_accept">Estoy de acuerdo</string>
     <string name="blank_missing_child_name">Por favor ingrese el nombre para buscar niño desaparecido</string>
     <string name="your_phone_track">Su teléfono está siendo rastreado por %1$s.</string>
+    <string name="str_credit_card">Tarjeta de crédito</string>
+    <string name="str_paypal_subscription">Suscripción Paypal</string>
+    <string name="str_paypal_fee_warning">Tenga en cuenta que paypal agrega sus tarifas al cargo de suscripción mensual o anual.</string>
 </resources>

@@ -82,7 +82,6 @@ class AddMissingChildFragment : HomeBaseFragment(), View.OnClickListener {
     var imageFile: File? = null
     private lateinit var datePickerDialog: DatePickerDialog
     private var dateFormatter: SimpleDateFormat? = null
-    private var dateParse: Date? = null
     private var missingCity: String = ""
     private var missingState: String = ""
     private var countryCode: String = ""
@@ -409,7 +408,7 @@ class AddMissingChildFragment : HomeBaseFragment(), View.OnClickListener {
                     }
                 }
                 try {
-                    dateParse = dateFormatter?.parse(dateFormatter?.format(newDate.time))
+                    val dateParse = dateFormatter?.parse(dateFormatter?.format(newDate.time))
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -599,6 +598,10 @@ class AddMissingChildFragment : HomeBaseFragment(), View.OnClickListener {
             }
             !isRequiredField(etMissingPhone.text.toString().trim()) -> {
                 mActivity.showMessage(mActivity.resources.getString(R.string.blank_missing_phone))
+                false
+            }
+            etMissingPhone.text.toString().trim().length != 10 -> {
+                mActivity.showMessage(mActivity.resources.getString(R.string.phone_length))
                 false
             }
             !isRequiredField(etHairColor.text.toString().trim()) -> {

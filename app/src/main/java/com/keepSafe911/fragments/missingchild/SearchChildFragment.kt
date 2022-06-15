@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.keepSafe911.BuildConfig
 import com.keepSafe911.R
@@ -33,6 +35,7 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -203,9 +206,10 @@ class SearchChildFragment : HomeBaseFragment() {
                     val matchResultModel: MatchResult = matchResultList[position]
 
 //            val url = URLEncoder.encode(matchResultModel.imageName, "UTF-8")
-
+                    val cornerRadius = Comman_Methods.convertDpToPixels(10F, context)
                     val options = RequestOptions()
                         .centerCrop()
+                        .transform(CenterCrop(), RoundedCorners(cornerRadius.roundToInt()))
                         .placeholder(R.drawable.ic_person_placeholder)
                         .error(R.drawable.ic_person_placeholder)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)

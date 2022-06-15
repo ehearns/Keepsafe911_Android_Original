@@ -1,7 +1,6 @@
 package com.keepSafe911.utils
 
 import android.app.ActivityManager
-import android.app.AlertDialog
 import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.content.Context
@@ -14,6 +13,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.Settings
+import android.text.InputFilter
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -35,6 +35,7 @@ import com.keepSafe911.gps.GpsTracker
 import com.keepSafe911.listner.CommonApiListener
 import com.keepSafe911.listner.PositiveButtonListener
 import com.keepSafe911.model.AreaRadius
+import com.keepSafe911.model.FamilyMonitorResult
 import com.keepSafe911.model.FlagCountryCode
 import com.keepSafe911.model.request.LoginRequest
 import com.keepSafe911.model.response.*
@@ -42,6 +43,7 @@ import com.keepSafe911.model.response.findmissingchild.MatchResult
 import com.keepSafe911.model.response.findmissingchild.MissingChildTaskListResult
 import com.keepSafe911.model.response.findmissingchild.MissingChildTaskModel
 import com.keepSafe911.model.response.paymentresponse.PaymentResponse
+import com.keepSafe911.model.response.paypal.*
 import com.keepSafe911.model.response.voicerecognition.ManageVoiceRecognitionModel
 import com.keepSafe911.model.response.yelp.Region
 import com.keepSafe911.model.response.yelp.YelpResponse
@@ -49,14 +51,13 @@ import com.keepSafe911.openlive.Constants
 import com.keepSafe911.room.OldMe911Database
 import com.keepSafe911.webservices.WebApiClient
 import deleteLiveStreamFile
+import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.io.InputStreamReader
-import java.math.BigDecimal
-import java.math.RoundingMode
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
@@ -87,7 +88,7 @@ object Utils {
         //Long.MIN_VALUE == -Long.MIN_VALUE so we need an adjustment here
         if (value == java.lang.Long.MIN_VALUE) return numberFormat(java.lang.Long.MIN_VALUE + 1)
         if (value < 0) return "-" + numberFormat(-value)
-        if (value < 1000) return java.lang.Long.toString(value) //deal with easy case
+        if (value < 1000) return value.toString() //deal with easy case
 
         val e = suffixes.floorEntry(value)
         val divideBy = e.key
@@ -135,28 +136,35 @@ object Utils {
         val geocoder = Geocoder(context, Locale.getDefault())
 
         try {
-            addresses = geocoder.getFromLocation(
-                LATITUDE,
-                LONGITUDE,
-                1
-            ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            if (LATITUDE != 0.0 && LONGITUDE != 0.0) {
+                addresses = geocoder.getFromLocation(
+                    LATITUDE,
+                    LONGITUDE,
+                    1
+                ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
 
-            if (addresses.isNotEmpty()) {
-                val address =
-                    addresses[0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                val address1 =
-                    addresses[0].getAddressLine(1) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                val city = addresses[0].locality
-                val state = addresses[0].adminArea
-                val country = addresses[0].countryName
-                val postalCode = addresses[0].postalCode
-                val knownName = addresses[0].featureName // Only if available else return NULL
-                if (address!=null) {
-                    val finaladdress = address
-                    strAdd = finaladdress
+                if (addresses.isNotEmpty()) {
+                    val address =
+                        addresses[0].getAddressLine(0)
+                            ?: "" // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                    val address1 =
+                        addresses[0].getAddressLine(1)
+                            ?: "" // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                    val city = addresses[0].locality ?: ""
+                    val state = addresses[0].adminArea ?: ""
+                    val country = addresses[0].countryName ?: ""
+                    val postalCode = addresses[0].postalCode ?: ""
+                    val premises = addresses[0].premises ?: ""
+                    val knownName =
+                        addresses[0].featureName ?: "" // Only if available else return NULL
+                    if (address.isNotEmpty()) {
+                        val finalAddress =
+                            if (premises.isNotEmpty()) address.drop(premises.length + 1) else address
+                        strAdd = finalAddress.trim()
+                    }
+                    Log.e("address", "getCompleteAddressString: $strAdd")
+                    Log.e("address", "getCompleteAddressString: $address---->$address1")
                 }
-                Log.e("address", "getCompleteAddressString: $strAdd")
-                Log.e("address", "getCompleteAddressString: $address---->$address1")
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -166,7 +174,7 @@ object Utils {
     }
 
     fun getNotificationIcon(): Int {
-        val useWhiteIcon = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP
+        val useWhiteIcon = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
         return if (useWhiteIcon) R.mipmap.ic_launcher_push_ks else R.mipmap.ic_launcher_origin_ks
     }
 
@@ -176,7 +184,7 @@ object Utils {
             .replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
     }
 
-    fun GetUniqueDeviceId(context: Context): String {
+    fun getUniqueDeviceId(context: Context): String {
         return Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
     }
 
@@ -211,35 +219,35 @@ object Utils {
 
     fun showSettingsAlert(context: Context) {
         Comman_Methods.isCustomPopUpShow(context,
-        message = context.resources.getString(R.string.str_allow_permission),
-        positiveButtonText = context.resources.getString(R.string.action_settings),
-        singlePositive = true,
-        positiveButtonListener = object : PositiveButtonListener {
-            override fun okClickListener() {
-                val intent = Intent()
-                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                val uri = Uri.fromParts("package", context.packageName, null)
-                intent.data = uri
-                context.startActivity(intent)
-            }
-        })
+            message = context.resources.getString(R.string.str_allow_permission),
+            positiveButtonText = context.resources.getString(R.string.action_settings),
+            singlePositive = true,
+            positiveButtonListener = object : PositiveButtonListener {
+                override fun okClickListener() {
+                    val intent = Intent()
+                    intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                    val uri = Uri.fromParts("package", context.packageName, null)
+                    intent.data = uri
+                    context.startActivity(intent)
+                }
+            })
     }
 
     fun showLocationSettingsAlert(context: Context) {
         Comman_Methods.isCustomPopUpShow(context,
-        title = context.resources.getString(R.string.GPS_is),
-        message = context.resources.getString(R.string.Gps_not_enabled),
-        positiveButtonText = context.resources.getString(R.string.str_setting_cancel),
-        singlePositive = true,
-        positiveButtonListener = object : PositiveButtonListener {
-            override fun okClickListener() {
-                val gpsTracker = GpsTracker(context)
-                if (!gpsTracker.CheckForLoCation()) {
-                    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                    context.startActivity(intent)
+            title = context.resources.getString(R.string.GPS_is),
+            message = context.resources.getString(R.string.Gps_not_enabled),
+            positiveButtonText = context.resources.getString(R.string.str_setting_cancel),
+            singlePositive = true,
+            positiveButtonListener = object : PositiveButtonListener {
+                override fun okClickListener() {
+                    val gpsTracker = GpsTracker(context)
+                    if (!gpsTracker.CheckForLoCation()) {
+                        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                        context.startActivity(intent)
+                    }
                 }
-            }
-        })
+            })
     }
 
     fun AutocompletePlaces(context: Context, input: String): ArrayList<*>? {
@@ -720,6 +728,77 @@ object Utils {
         }
     }
 
+    fun remainSubscriptionApi(mActivity: Context, jsonObject: JsonObject, commonApiListener: CommonApiListener) {
+        if (ConnectionUtil.isInternetAvailable(mActivity)) {
+            Comman_Methods.isProgressShow(mActivity)
+            val callUpgradeSubscription =
+                WebApiClient.getInstance(mActivity).webApi_without?.callRegisterUserSubscription(jsonObject)
+            callUpgradeSubscription?.enqueue(object : Callback<GetFamilyMonitoringResponse> {
+                override fun onResponse(
+                    call: Call<GetFamilyMonitoringResponse>,
+                    response: Response<GetFamilyMonitoringResponse>
+                ) {
+                    val statusCode: Int = response.code()
+                    if (statusCode == 200) {
+                        Comman_Methods.isProgressHide()
+                        response.body()?.let {
+                            commonApiListener.familyUserList(it.isStatus, it.result ?: ArrayList(), it.message ?: "")
+                        }
+                    } else {
+                        Comman_Methods.isProgressHide()
+                        showSomeThingWrongMessage(mActivity)
+                    }
+                }
+
+                override fun onFailure(call: Call<GetFamilyMonitoringResponse>, t: Throwable) {
+                    Comman_Methods.isProgressHide()
+                }
+
+            })
+        } else {
+            showNoInternetMessage(mActivity)
+        }
+    }
+
+    fun upgradeSubscriptionApi(mActivity: Context, jsonObject: JsonObject, commonApiListener: CommonApiListener) {
+        if (ConnectionUtil.isInternetAvailable(mActivity)) {
+            Comman_Methods.isProgressShow(mActivity)
+            val callUpgradeSubscription =
+                WebApiClient.getInstance(mActivity).webApi_without?.callUpdateSubscription(jsonObject)
+            callUpgradeSubscription?.enqueue(object : Callback<UpgradeSubscriptionResponse> {
+                override fun onResponse(
+                    call: Call<UpgradeSubscriptionResponse>,
+                    response: Response<UpgradeSubscriptionResponse>
+                ) {
+                    val statusCode: Int = response.code()
+                    if (statusCode == 200) {
+                        Comman_Methods.isProgressHide()
+                        response.body()?.let {
+                            val gson: Gson = GsonBuilder().create()
+                            val responseTypeToken: TypeToken<FamilyMonitorResult> =
+                                object : TypeToken<FamilyMonitorResult>() {}
+                            val responseData: FamilyMonitorResult? = gson.fromJson(
+                                gson.toJson(it.result),
+                                responseTypeToken.type
+                            )
+                            commonApiListener.upgradeSubscription(it.status ?: false, responseData, it.message ?: "", it.responseMessage ?: "")
+                        }
+                    } else {
+                        Comman_Methods.isProgressHide()
+                        showSomeThingWrongMessage(mActivity)
+                    }
+                }
+
+                override fun onFailure(call: Call<UpgradeSubscriptionResponse>, t: Throwable) {
+                    Comman_Methods.isProgressHide()
+                }
+
+            })
+        } else {
+            showNoInternetMessage(mActivity)
+        }
+    }
+
     fun categoryList(context: Context, commonApiListener: CommonApiListener) {
         if (ConnectionUtil.isInternetAvailable(context)) {
             Comman_Methods.isProgressShow(context)
@@ -902,7 +981,7 @@ object Utils {
                                 commonApiListener.childTaskListResponse(
                                     it.status ?: false,
                                     filteredMatch,
-                                    filteredTaskList ?: ArrayList(),
+                                    filteredTaskList,
                                     it.message ?: "",
                                     it.responseMessage ?: ""
                                 )
@@ -1695,5 +1774,253 @@ object Utils {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    fun errorMessageData(errorBody: ResponseBody?, context: Context) {
+        errorBody.let {
+            it.let { error ->
+                var errorMessage = ""
+                try {
+                    val gson = GsonBuilder().create()
+                    val type = object : TypeToken<ErrorResponse>() {}.type
+                    val errorResponse: ErrorResponse? = gson.fromJson(error?.charStream(), type)
+                    errorMessage = errorResponse?.message ?: ""
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                if (errorMessage != "") {
+                    showToastMessage(context, errorMessage)
+                }
+            }
+        }
+    }
+
+    private fun callCancelSubscription(mActivity: Context, subscriptionId: String, commonListApiResultListener: CommonApiListener) {
+        if (ConnectionUtil.isInternetAvailable(mActivity)){
+            Comman_Methods.isProgressShow(mActivity)
+
+            val loginResponseCall= WebApiClient.getInstance(mActivity).webApi_without?.cancelSubscription(subscriptionId)
+            loginResponseCall?.enqueue(object : Callback<PaypalResponse>{
+                override fun onFailure(call: Call<PaypalResponse>, t: Throwable) {
+                    Comman_Methods.isProgressHide()
+                    commonListApiResultListener.onFailureResult()
+                }
+                override fun onResponse(call: Call<PaypalResponse>, response: Response<PaypalResponse>) {
+                    Comman_Methods.isProgressHide()
+                    when {
+                        response.code() == 200 -> {
+                            response.body()?.let {
+                                if (it.success == true) {
+                                    commonListApiResultListener.onSingleSubscriptionSuccessResult()
+                                }
+                            }
+                        }
+                        else -> {
+                            commonListApiResultListener.onFailureResult()
+                            showToastMessage(mActivity,response.message() ?: "")
+                        }
+                    }
+                }
+            })
+        } else {
+            showNoInternetMessage(mActivity)
+        }
+    }
+
+    private fun callSingleSubscription(mActivity: Context, subscriptionId: String, commonListApiResultListener: CommonApiListener, isLoader: Boolean) {
+        if (ConnectionUtil.isInternetAvailable(mActivity)){
+            Comman_Methods.isProgressShow(mActivity, isLoader)
+
+            val loginResponseCall= WebApiClient.getInstance(mActivity)
+                .webApi_without?.subscriptionDetail(subscriptionId)
+            loginResponseCall?.enqueue(object : Callback<PaypalResponse>{
+                override fun onFailure(call: Call<PaypalResponse>, t: Throwable) {
+                    Comman_Methods.isProgressHide(isLoader)
+                    commonListApiResultListener.onFailureResult()
+                }
+                override fun onResponse(call: Call<PaypalResponse>, response: Response<PaypalResponse>) {
+                    Comman_Methods.isProgressHide(isLoader)
+                    when {
+                        response.code() == 200 -> {
+                            response.body()?.let {
+                                val gson: Gson = GsonBuilder().create()
+                                val responseTypeToken: TypeToken<SubscriptionResponse> =
+                                    object : TypeToken<SubscriptionResponse>() {}
+                                val responseData: SubscriptionResponse? = gson.fromJson(
+                                    gson.toJson(it.data),
+                                    responseTypeToken.type
+                                )
+                                if (responseData != null) {
+                                    commonListApiResultListener.onSingleSubscriptionSuccessResult(responseData)
+                                } else {
+                                    showToastMessage(mActivity,it.message ?: "")
+                                }
+                            }
+                        }
+                        else -> {
+                            commonListApiResultListener.onFailureResult()
+                            showToastMessage(mActivity,response.message() ?: "")
+                        }
+                    }
+                }
+            })
+        } else {
+            showNoInternetMessage(mActivity)
+        }
+    }
+
+    private fun callCreateSubscription(mActivity: Context, jsonObject: JsonObject, commonListApiResultListener: CommonApiListener) {
+        if (ConnectionUtil.isInternetAvailable(mActivity)){
+            Comman_Methods.isProgressShow(mActivity)
+
+            val loginResponseCall= WebApiClient.getInstance(mActivity)
+                .webApi_without?.createSubscription(jsonObject)
+            loginResponseCall?.enqueue(object : Callback<PaypalResponse>{
+                override fun onFailure(call: Call<PaypalResponse>, t: Throwable) {
+                    Comman_Methods.isProgressHide()
+                    commonListApiResultListener.onFailureResult()
+                }
+                override fun onResponse(call: Call<PaypalResponse>, response: Response<PaypalResponse>) {
+                    Comman_Methods.isProgressHide()
+                    when {
+                        response.code() == 200 -> {
+                            response.body()?.let {
+                                val gson: Gson = GsonBuilder().create()
+                                val responseTypeToken: TypeToken<SubscriptionResponse> =
+                                    object : TypeToken<SubscriptionResponse>() {}
+                                val responseData: SubscriptionResponse? = gson.fromJson(
+                                    gson.toJson(it.data),
+                                    responseTypeToken.type
+                                )
+                                if (responseData != null) {
+                                    commonListApiResultListener.onSingleSubscriptionSuccessResult(responseData)
+                                } else {
+                                    showToastMessage(mActivity,it.message ?: "")
+                                }
+                            }
+                        }
+                        else -> {
+                            commonListApiResultListener.onFailureResult()
+                            showToastMessage(mActivity,response.message() ?: "")
+                        }
+                    }
+                }
+            })
+        } else {
+            showNoInternetMessage(mActivity)
+        }
+    }
+
+    private fun callSubscriptionTransactionList(mActivity: Context, subscriptionId: String, endDate: String, commonListApiResultListener: CommonApiListener) {
+        if (ConnectionUtil.isInternetAvailable(mActivity)){
+            Comman_Methods.isProgressShow(mActivity)
+
+            val loginResponseCall= WebApiClient.getInstance(mActivity).webApi_without?.
+            subscriptionTransactionList(subscriptionId, "2022-01-01T00:00:00.000Z", endDate)
+            loginResponseCall?.enqueue(object : Callback<SubscriptionTransactionResponse>{
+                override fun onFailure(call: Call<SubscriptionTransactionResponse>, t: Throwable) {
+                    Comman_Methods.isProgressHide()
+                    commonListApiResultListener.onFailureResult()
+                }
+                override fun onResponse(call: Call<SubscriptionTransactionResponse>, response: Response<SubscriptionTransactionResponse>) {
+                    Comman_Methods.isProgressHide()
+                    when {
+                        response.code() == 200 -> {
+                            response.body()?.let {
+                                commonListApiResultListener.onSubscriptionTransactionResult(it.transactions ?: ArrayList())
+                            }
+                        }
+                        else -> {
+                            commonListApiResultListener.onFailureResult()
+                            errorMessageData(response.errorBody(), mActivity)
+                        }
+                    }
+                }
+            })
+        } else {
+            showNoInternetMessage(mActivity)
+        }
+    }
+
+    fun callDifferentPaypalApi(context: Context,
+                               type: Int, subscriptionId: String = "",
+                               planId: String = "", firstName: String = "", lastName: String = "",
+                               email: String = "", commonApiListener: CommonApiListener, isLoader: Boolean = true) {
+        when (type) {
+            1 -> {
+                callCancelSubscription(context, subscriptionId, commonApiListener)
+            }
+            2 -> {
+                callSingleSubscription(context, subscriptionId, commonApiListener, isLoader)
+            }
+            3 -> {
+
+                val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+                val cal = Calendar.getInstance()
+                cal.add(Calendar.MINUTE, 30)
+                val newDate = df.format(cal.time)
+
+                val mainObject = JsonObject()
+                mainObject.addProperty("planid", planId)
+                mainObject.addProperty("starttime", newDate)
+                mainObject.addProperty("givenname", firstName)
+                mainObject.addProperty("surname", lastName)
+                mainObject.addProperty("emailaddress", email)
+
+                callCreateSubscription(context, mainObject, commonApiListener)
+            }
+            4 -> {
+                val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                val cal = Calendar.getInstance()
+                val endDate = df.format(cal.time)
+                callSubscriptionTransactionList(context, subscriptionId, endDate, commonApiListener)
+            }
+        }
+    }
+
+    fun openLinkForPayment(subscriptionLink: ArrayList<Link>): String {
+        var dataRefUrl = ""
+        for (i in 0 until subscriptionLink.size) {
+            val linkData = subscriptionLink[i]
+            val rel = linkData.rel ?: ""
+            val redirectLink = linkData.href ?: ""
+            if (rel.equals("approve", true)) {
+                dataRefUrl = redirectLink
+            }
+        }
+        return dataRefUrl
+    }
+
+    val filterUserName = InputFilter { source, start, end, dest, dstart, dend ->
+        for (i in start until end) {
+            if (!Character.isLetterOrDigit(source[i])/* &&
+                    source[i].toString() != "_" &&
+                    source[i].toString() != "-"*/
+            ) {
+                val type: Int = Character.getType(source[i])
+
+                if ((type == Character.SURROGATE.toInt()) || (type == Character.NON_SPACING_MARK.toInt()) || (type == Character.OTHER_SYMBOL.toInt())) {
+                    return@InputFilter ""
+                } else {
+                    return@InputFilter source.removeRange(end-1, end)
+                }
+            }
+        }
+        null
+    }
+
+    val filterPassword = InputFilter { source, start, end, dest, dstart, dend ->
+        for (i in start until end) {
+            if (Character.isWhitespace(source[i])) {
+                val type: Int = Character.getType(source[i])
+
+                if ((type == Character.SURROGATE.toInt()) || (type == Character.NON_SPACING_MARK.toInt()) || (type == Character.OTHER_SYMBOL.toInt())) {
+                    return@InputFilter ""
+                } else {
+                    return@InputFilter ""
+                }
+            }
+        }
+        null
     }
 }

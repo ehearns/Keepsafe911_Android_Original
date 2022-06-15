@@ -32,7 +32,6 @@ import com.keepSafe911.HomeActivity
 import com.keepSafe911.R
 import com.keepSafe911.fragments.commonfrag.HomeBaseFragment
 import com.keepSafe911.fragments.homefragment.find.AddMemberFragment
-import com.keepSafe911.fragments.homefragment.placetovisit.PlacesToVisitFragment
 import com.keepSafe911.fragments.payment_selection.UpdateSubFragment
 import com.keepSafe911.gps.GpsTracker
 import com.keepSafe911.internal.configuration.AnncaConfiguration
@@ -43,7 +42,6 @@ import com.keepSafe911.model.FamilyMonitorResult
 import com.keepSafe911.model.SubscriptionBean
 import com.keepSafe911.model.response.ApiResponse
 import com.keepSafe911.model.response.LiveStreamResult
-import com.keepSafe911.model.response.SubscriptionTypeResult
 import com.keepSafe911.model.roomobj.LoginObject
 import com.keepSafe911.room.OldMe911Database
 import com.keepSafe911.utils.*
@@ -61,7 +59,6 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Response
-import takeCall
 import java.io.File
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -82,21 +79,15 @@ class DashBoardFragment : HomeBaseFragment(), View.OnClickListener {
                 if (!mActivity.purchaseSubscription()) {
                     if (appDatabase.memberDao().countMember() <= FIXED_USER_COUNT) {
                         mActivity.addFragment(
-                            AddMemberFragment.newInstance(
-                                false,
-                                FamilyMonitorResult(),
-                                SubscriptionBean(),
-                                true,
-                                false,
-                                false
-                            )
+                            AddMemberFragment.newInstance(isFromList = true),
+                            true, true, animationType = AnimationType.fadeInfadeOut
                         )
                     } else {
                         mActivity.showMessage(mActivity.resources.getString(R.string.member_limit))
                     }
                 }
             }
-            R.id.ivOldMe911 -> {
+            R.id.ivKeepSafe911 -> {
                 mActivity.hideKeyboard()
                 Comman_Methods.avoidDoubleClicks(v)
                 if (!mActivity.purchaseSubscription()) {
@@ -193,8 +184,8 @@ class DashBoardFragment : HomeBaseFragment(), View.OnClickListener {
         appDatabase = OldMe911Database.getDatabase(mActivity)
         gpstracker = GpsTracker(mActivity)
 
-        ivOldMe911.setImageResource(R.drawable.ic_oldme_call)
-        ivOldMe911.setOnClickListener(this)
+        ivKeepSafe911.setImageResource(R.drawable.ic_oldme_call)
+        ivKeepSafe911.setOnClickListener(this)
         /*if (mActivity.resources.getBoolean(R.bool.isTablet))
             rvMenuItem.layoutManager = GridLayoutManager(mActivity, 3, RecyclerView.VERTICAL, false)
         else
@@ -510,16 +501,7 @@ class DashBoardFragment : HomeBaseFragment(), View.OnClickListener {
             emergencyLat = gpstracker?.getLatitude() ?: 0.0
             emergencyLng = gpstracker?.getLongitude() ?: 0.0
 
-            currentAddress =
-                if (emergencyLat != 0.0 && emergencyLng != 0.0) {
-                    Utils.getCompleteAddressString(mActivity, emergencyLat, emergencyLng)
-                } else {
-                    ""
-                    /* if ((loginObject.locationAddress ?: "")!="") (loginObject.locationAddress ?: "") else
-                         Utils.getCompleteAddressString(mActivity, loginObject.latitude, loginObject.longitude)*/
-                }
-
-
+            currentAddress = Utils.getCompleteAddressString(mActivity, emergencyLat, emergencyLng)
         }
 
 
@@ -1082,10 +1064,9 @@ class DashBoardFragment : HomeBaseFragment(), View.OnClickListener {
                                     override fun okClickListener() {
                                         mActivity.addFragment(
                                             UpdateSubFragment.newInstance(
-                                                false, true,
-                                                false, true,
-                                                memberList[p1], ArrayList(),
-                                                false, true, false
+                                                isFromMember = true, isEditUser = true,
+                                                familyMonitorResult = memberList[p1],
+                                                isCancelledSubscription = true
                                             ), true, true, AnimationType.fadeInfadeOut
                                         )
                                     }
@@ -1095,8 +1076,9 @@ class DashBoardFragment : HomeBaseFragment(), View.OnClickListener {
                             if (memberList[p1].iD != appDatabase.loginDao().getAll().memberID) {
                                 mActivity.addFragment(
                                     AddMemberFragment.newInstance(
-                                        true,
-                                        memberList[p1], SubscriptionBean(), true, false, false
+                                        isUpdate = true,
+                                        familyMonitorResult = memberList[p1],
+                                        isFromList = true
                                     ), true, true, animationType = AnimationType.fadeInfadeOut
                                 )
                             }

@@ -252,7 +252,8 @@ class LandingTwoFragment : MainBaseFragment(), View.OnClickListener {
                     SignUpFragment.newInstance(false, SubscriptionBean(
                         dataSubscriptionList[position].id ?: 0,
                         dataSubscriptionList[position].days ?: 0,
-                        dataSubscriptionList[position].totalCost ?: 0.0
+                        dataSubscriptionList[position].totalCost ?: 0.0,
+                        dataSubscriptionList[position].planId ?: ""
                     )),
                     true,
                     true,
@@ -288,13 +289,13 @@ class LandingTwoFragment : MainBaseFragment(), View.OnClickListener {
                     holder.tvTypeSubs.text = dataSubscriptionList[position].title
                     holder.tvPrice.text = "$ " + dataSubscriptionList[position].totalCost.toString()
                     holder.tvType.text = mActivity.resources.getString(R.string.str_monthly) + " " + mActivity.resources.getString(R.string.subscription)
-                    holder.tvTypeSubs.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20F)
+                    holder.tvTypeSubs.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15F)
                 }
                 5 -> {
                     holder.tvTypeSubs.text = dataSubscriptionList[position].title
                     holder.tvPrice.text = "$ " + dataSubscriptionList[position].totalCost.toString()
                     holder.tvType.text = mActivity.resources.getString(R.string.str_yearly) + " " + mActivity.resources.getString(R.string.subscription)
-                    holder.tvTypeSubs.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20F)
+                    holder.tvTypeSubs.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15F)
                 }
             }
 

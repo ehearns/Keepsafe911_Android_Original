@@ -97,26 +97,16 @@
         <ImageView
             android:id="@+id/ivEditGeo"
             android:layout_alignParentTop="true"
-            android:background="@drawable/setting_back"
             android:layout_toStartOf="@id/ivDeleteGeo"
-            android:layout_marginTop="@dimen/size5"
-            android:layout_marginEnd="@dimen/size5"
-            android:layout_marginStart="@dimen/size1"
-            android:layout_marginBottom="@dimen/size5"
-            android:padding="@dimen/size8"
+            android:padding="@dimen/size5"
             android:src="@drawable/ic_edit_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <ImageView
             android:id="@+id/ivDeleteGeo"
             android:layout_alignParentTop="true"
-            android:background="@drawable/setting_back"
-            android:padding="@dimen/size8"
+            android:padding="@dimen/size5"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="@dimen/size5"
-            android:layout_marginEnd="@dimen/size1"
-            android:layout_marginStart="@dimen/size5"
-            android:layout_marginBottom="@dimen/size5"
             android:src="@drawable/ic_delete_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

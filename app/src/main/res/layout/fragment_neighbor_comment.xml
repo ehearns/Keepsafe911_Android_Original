@@ -13,6 +13,7 @@
         layout="@layout/toolbar_header"/>
     <RelativeLayout
         android:id="@+id/rlPostDetail"
+        android:background="@color/colorPrimaryExtraLight"
         app:layout_constraintTop_toBottomOf="@id/tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -30,6 +31,7 @@
             android:id="@+id/tvCommentPostTitle"
             android:textStyle="bold"
             android:textSize="@dimen/textSize16"
+            android:textColor="@color/Date_bg"
             android:layout_alignTop="@id/sdvCommentImageFile"
             android:layout_toEndOf="@id/sdvCommentImageFile"
             android:layout_width="match_parent"
@@ -37,16 +39,11 @@
 
         <TextView
             android:id="@+id/tvCommentatorTime"
+            android:textSize="@dimen/textSize12"
             android:layout_below="@id/tvCommentPostTitle"
             android:layout_toEndOf="@id/sdvCommentImageFile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-        <View
-            android:layout_marginTop="@dimen/size5"
-            android:background="@color/colorDifferent"
-            android:layout_below="@id/sdvCommentImageFile"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/size2"/>
     </RelativeLayout>
     <FrameLayout
         app:layout_constraintTop_toBottomOf="@id/rlPostDetail"
@@ -92,28 +89,18 @@
         <EditText
             android:layout_alignTop="@id/sdvCommentUserImage"
             android:layout_toEndOf="@id/sdvCommentUserImage"
-            android:layout_toStartOf="@id/tvPost"
+            android:layout_alignParentEnd="true"
             android:id="@+id/etNeighborComment"
             android:hint="@string/add_a_comment"
             android:imeOptions="actionDone"
             android:layout_marginEnd="@dimen/size5"
             android:maxLines="5"
-            android:textColorHint="@color/caldroid_white"
-            android:background="@color/caldroid_gray"
-            android:padding="@dimen/gape10"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/tvPost"
-            android:layout_alignTop="@id/etNeighborComment"
-            android:layout_alignBottom="@id/etNeighborComment"
-            android:gravity="center"
-            android:layout_alignParentEnd="true"
+            android:inputType="textCapWords"
+            android:textColorHint="@color/grayText"
+            android:background="@drawable/ic_comment_curv"
             android:drawableEnd="@drawable/send_post"
-            android:paddingStart="@dimen/gape10"
-            android:paddingEnd="@dimen/gape10"
-            android:textColor="@color/Date_bg"
-            android:layout_width="wrap_content"
+            android:drawablePadding="@dimen/size5"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

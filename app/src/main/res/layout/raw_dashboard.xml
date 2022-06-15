@@ -50,7 +50,7 @@
             android:text="@string/or"
             android:textSize="@dimen/textSize16"
             android:visibility="gone"
-            android:textColor="@color/caldroid_black"
+            android:textColor="@color/bgBlack"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textAlignment="center"

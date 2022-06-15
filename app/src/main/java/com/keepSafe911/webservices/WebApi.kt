@@ -13,6 +13,8 @@ import com.keepSafe911.model.response.*
 import com.keepSafe911.model.response.findmissingchild.DonationHistoryResponse
 import com.keepSafe911.model.response.findmissingchild.MissingChildListResponse
 import com.keepSafe911.model.response.findmissingchild.RunSearchResponse
+import com.keepSafe911.model.response.paypal.PaypalResponse
+import com.keepSafe911.model.response.paypal.SubscriptionTransactionResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -27,7 +29,7 @@ interface WebApi {
 
 
     @Multipart
-    @POST("KeepSafe911/UserRegistraionV4")
+    @POST("KeepSafe911/UserRegistraionV5")
     fun callSignUpApi(
         @Part("Email") email_add: RequestBody,
         @Part("Mobile") mob_no: RequestBody,
@@ -62,7 +64,8 @@ interface WebApi {
         @Part("LoginByApp") loginByApp: RequestBody,
         @Part("ReferralName") referralName : RequestBody,
         @Part("Promocode") promoCode: RequestBody,
-        @Part("IsChildMissing") isChildMissing: RequestBody): Call<CommonValidationResponse>
+        @Part("IsChildMissing") isChildMissing: RequestBody,
+        @Part("PaymentType") paymentType: RequestBody): Call<CommonValidationResponse>
 
 
     @GET("KeepSafe911/GetFamilyMonitoringUsersDetails")
@@ -107,7 +110,7 @@ interface WebApi {
     ): Call<ResponseBody>
 
     @GET("KeepSafe911Application/DownloadReport")
-    fun BusinessReport(
+    fun businessReport(
         @Query("MemberID") memberId: Int,
         @Query("StartDate") startDate: String,
         @Query("EndDate") endDate: String,
@@ -189,8 +192,8 @@ interface WebApi {
     @POST("KeepSafe911UserSubscription/ChangePaymentCard")
     fun callChangePaymentCard(@Body jsn_obj: JsonObject): Call<ApiResponse>
 
-    @POST("KeepSafe911UserSubscription/UpgradeUserSubscription")
-    fun callUpdateSubscription(@Body jsonObject: JsonObject): Call<ApiResponse>
+    @POST("KeepSafe911UserSubscription/UpgradeUserSubscriptionV1")
+    fun callUpdateSubscription(@Body jsonObject: JsonObject): Call<UpgradeSubscriptionResponse>
 
     @GET("KeepSafe911UserSubscription/GetUserSubscriptionHistory")
     fun callSubscriptionHistory(@Query("UserID") user_id: Int): Call<SubScriptionHistoryResponse>
@@ -201,7 +204,7 @@ interface WebApi {
     @GET("KeepSafe911UserSubscription/InAppPurchaseSubscriptionDetails")
     fun callInAppPurchaseSubscription(@Query("userid") user_id: Int): Call<InAppPurchaseSubscriptionResponse>
 
-    @POST("KeepSafe911/RegisterUserSubscription")
+    @POST("KeepSafe911/RegisterUserSubscriptionV1")
     fun callRegisterUserSubscription(@Body jsonObject: JsonObject): Call<GetFamilyMonitoringResponse>
 
     @GET("KeepSafe911/ForGotPassword")
@@ -436,4 +439,18 @@ interface WebApi {
 
     @GET("KeepSafe911/DeleteLiveStream")
     fun deleteLiveStream(@Query("Id") id: Int): Call<ApiResponse>
+
+    @POST("paypal/createsubscription")
+    fun createSubscription(@Body jsonObject: JsonObject): Call<PaypalResponse>
+
+    @GET("paypal/getsubscriptiondetails")
+    fun subscriptionDetail(@Query("subscriptionid") subscriptionId: String): Call<PaypalResponse>
+
+    @GET("paypal/cancelsubscription")
+    fun cancelSubscription(@Query("subscriptionid") subscriptionId: String): Call<PaypalResponse>
+
+    @GET("paypal/transactions")
+    fun subscriptionTransactionList(@Query("subscription_id") subscriptionId: String,
+                                    @Query("start_time") startTime: String,
+                                    @Query("end_time") endTime: String): Call<SubscriptionTransactionResponse>
 }

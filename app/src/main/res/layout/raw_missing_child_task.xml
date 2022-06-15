@@ -98,7 +98,7 @@
 
                 <TextView
                     android:id="@+id/tvAssignTime"
-                    android:textColor="@color/caldroid_black"
+                    android:textColor="@color/bgBlack"
                     android:textSize="@dimen/textSize12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>

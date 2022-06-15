@@ -748,6 +748,12 @@ class GpsJobService : JobService(), GoogleApiClient.ConnectionCallbacks, GoogleA
                                 if (loginData.liveStreamDuration != null) loginData.liveStreamDuration else if (oldLoginData.liveStreamDuration != null) oldLoginData.liveStreamDuration else 15
                             login_obj.adminName =
                                 if (loginData.adminName != null) loginData.adminName else if (oldLoginData.adminName != null) oldLoginData.adminName else ""
+                            login_obj.payId =
+                                if (loginData.payId != null) loginData.payId else if (oldLoginData.payId != null) oldLoginData.payId else ""
+                            login_obj.productId =
+                                if (loginData.productId != null) loginData.productId else if (oldLoginData.productId != null) oldLoginData.productId else ""
+                            login_obj.paymentType =
+                                if (loginData.paymentType != null) loginData.paymentType else if (oldLoginData.paymentType != null) oldLoginData.paymentType else 0
                             login_obj.isAdminLoggedIn =
                                 if (loginData.isAdminLoggedIn != null) loginData.isAdminLoggedIn else if (oldLoginData.isAdminLoggedIn != null) oldLoginData.isAdminLoggedIn else false
 

@@ -1,6 +1,7 @@
 package com.keepSafe911.fragments.payment_selection
 
 import ValidationUtil.Companion.isRequiredField
+import addFragment
 import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.os.Bundle
@@ -28,6 +29,7 @@ import com.keepSafe911.webservices.WebApiClient
 import com.google.gson.JsonObject
 import com.keepSafe911.BuildConfig
 import com.keepSafe911.fragments.commonfrag.HomeBaseFragment
+import com.keepSafe911.fragments.homefragment.profile.PaymentFragment
 import com.keepSafe911.listner.CommonApiListener
 import com.keepSafe911.model.FamilyMonitorResult
 import com.keepSafe911.model.response.GetFamilyMonitoringResponse
@@ -71,10 +73,10 @@ class RemainPaymentMethodFragment : HomeBaseFragment(), View.OnClickListener, En
 
     companion object {
         fun newInstance(
-            showFreeTrial: Boolean,
-            subscriptionBean: SubscriptionBean,
-            isFromMember: Boolean,
-            memberDetail: FamilyMonitorResult
+            showFreeTrial: Boolean = false,
+            subscriptionBean: SubscriptionBean = SubscriptionBean(),
+            isFromMember: Boolean = false,
+            memberDetail: FamilyMonitorResult = FamilyMonitorResult()
         ): RemainPaymentMethodFragment {
             val args = Bundle()
             args.putBoolean(ARG_PARAM1, showFreeTrial)
@@ -537,66 +539,10 @@ class RemainPaymentMethodFragment : HomeBaseFragment(), View.OnClickListener, En
     }
 
     private fun callIPhoneUserSubscription() {
-        if (ConnectionUtil.isInternetAvailable(mActivity)) {
-            Comman_Methods.isProgressShow(mActivity)
-            mActivity.isSpeedAvailable()
-            val loginObject = appDatabase.loginDao().getAll()
-            val jsonObject = JsonObject()
-            jsonObject.addProperty("firstname", etFirstName.text.toString().trim())
-            jsonObject.addProperty("lastname", etLastName.text.toString().trim())
-            if (isFromMember) {
-                jsonObject.addProperty("userid", familyMonitorResult.iD)
-            } else {
-                jsonObject.addProperty("userid", loginObject.memberID)
-            }
-            jsonObject.addProperty("package", subscriptionBean.subScriptionCode)
-            jsonObject.addProperty("token", token)
-
-
-            val callUpgradeSubscription =
-                WebApiClient.getInstance(mActivity).webApi_without?.callRegisterUserSubscription(jsonObject)
-            callUpgradeSubscription?.enqueue(object : retrofit2.Callback<GetFamilyMonitoringResponse> {
-                override fun onFailure(call: Call<GetFamilyMonitoringResponse>, t: Throwable) {
-                    Comman_Methods.isProgressHide()
-                }
-
-                override fun onResponse(call: Call<GetFamilyMonitoringResponse>, response: Response<GetFamilyMonitoringResponse>) {
-                    val statusCode: Int = response.code()
-                    if (statusCode == 200) {
-                        if (response.isSuccessful) {
-                            Comman_Methods.isProgressHide()
-                            response.body()?.let {
-                                if (it.isStatus) {
-                                    val listData = it.result ?: ArrayList()
-                                    if (listData.size > 0) {
-                                        val subPackage =  listData[0].Package
-                                        if (isFromMember) {
-                                            val memberData = familyMonitorResult
-                                            memberData.Package = subPackage
-                                            appDatabase.memberDao().updateMember(memberData)
-                                        } else {
-                                            val loginupdate: LoginObject = appDatabase.loginDao().getAll()
-                                            loginupdate.Package = subPackage.toString()
-                                            loginupdate.isChildMissing = false
-                                            loginupdate.isFromIos = false
-                                            appDatabase.loginDao().updateLogin(loginupdate)
-                                        }
-                                    }
-                                    mActivity.gotoDashBoard()
-                                } else {
-                                    mActivity.showMessage(it.message ?: "")
-                                }
-                            }
-                        }
-                    } else {
-                        Comman_Methods.isProgressHide()
-                        Utils.showSomeThingWrongMessage(mActivity)
-                    }
-                }
-            })
-        } else {
-            Utils.showNoInternetMessage(mActivity)
-        }
+        mActivity.callRemainSubscriptionApi(token,
+            subscriptionBean, 1,
+            familyMonitorResult, isFromMember,
+            etFirstName.text.toString().trim(), etLastName.text.toString().trim())
     }
 
     private fun paymentApi() {

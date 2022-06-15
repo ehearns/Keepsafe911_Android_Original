@@ -28,43 +28,23 @@
             android:id="@+id/tvNeighbourNoData"
             android:visibility="gone"
             android:text="@string/no_data"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/ic_no_news"
             android:textSize="@dimen/textSize18"
             android:textColor="@color/colorDifferent"
             android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"/>
     </FrameLayout>
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_marginTop="@dimen/gape10"
-        android:layout_marginBottom="@dimen/size20"
-        android:layout_marginStart="@dimen/gape10"
-        android:layout_marginEnd="@dimen/size220"
+    <ImageView
+        android:id="@+id/ivAddNeighbour"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.96"
+        app:layout_constraintHorizontal_bias="0.75"
+        android:src="@drawable/ic_colored_add"
         android:layout_width="wrap_content"
-        android:id="@+id/clAddPost"
-        android:layout_height="wrap_content">
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            app:borderWidth="@dimen/size1"
-            app:elevation="0dp"
-            android:src="@drawable/ic_add_post"
-            app:backgroundTint="@color/grayText"
-            android:backgroundTint="@color/caldroid_white"
-            android:layout_gravity="center"
-            android:id="@+id/floatingActionButton"/>
-        <TextView android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:text="@string/neighbour_post"
-            android:paddingBottom="@dimen/gape10"
-            android:drawableTop="@drawable/ic_add_post"
-            android:textSize="@dimen/textSize12"
-            android:visibility="gone"
-            android:background="@color/transparent"
-            android:textColor="@color/Date_bg"
-            app:layout_anchor="@id/floatingActionButton"
-            app:layout_anchorGravity="center"/>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        android:layout_height="wrap_content"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

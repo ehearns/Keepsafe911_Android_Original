@@ -641,6 +641,9 @@ class LoginFragment : MainBaseFragment(), View.OnClickListener, Listener {
                         login_obj.liveStreamDuration = loginData.liveStreamDuration ?: 15
                         login_obj.adminName = loginData.adminName ?: ""
                         login_obj.isAdminLoggedIn = loginData.isAdminLoggedIn ?: false
+                        login_obj.payId = loginData.payId ?: ""
+                        login_obj.productId = loginData.productId ?: ""
+                        login_obj.paymentType = loginData.paymentType ?: 0
 
                         appDatabase.loginDao().addLogin(login_obj)
 

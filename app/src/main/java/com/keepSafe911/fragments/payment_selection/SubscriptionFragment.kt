@@ -197,7 +197,8 @@ class SubscriptionFragment : MainBaseFragment(), View.OnClickListener {
                             SubscriptionBean(
                                 subscriptionTypeResultList[0].id ?: 0,
                                 subscriptionTypeResultList[0].days ?: 0,
-                                subscriptionTypeResultList[0].totalCost ?: 0.0
+                                subscriptionTypeResultList[0].totalCost ?: 0.0,
+                                subscriptionTypeResultList[0].planId ?: ""
                             )
                         ), true, true, AnimationType.fadeInfadeOut
                     )
@@ -213,7 +214,8 @@ class SubscriptionFragment : MainBaseFragment(), View.OnClickListener {
                             SubscriptionBean(
                                 subscriptionTypeResultList[1].id ?: 0,
                                 subscriptionTypeResultList[1].days ?: 0,
-                                subscriptionTypeResultList[1].totalCost ?: 0.0
+                                subscriptionTypeResultList[1].totalCost ?: 0.0,
+                                subscriptionTypeResultList[1].planId ?: ""
                             )
                         ), true, true, AnimationType.fadeInfadeOut
                     )
@@ -229,7 +231,8 @@ class SubscriptionFragment : MainBaseFragment(), View.OnClickListener {
                             SubscriptionBean(
                                 subscriptionTypeResultList[2].id ?: 0,
                                 subscriptionTypeResultList[2].days ?: 0,
-                                subscriptionTypeResultList[2].totalCost ?: 0.0
+                                subscriptionTypeResultList[2].totalCost ?: 0.0,
+                                subscriptionTypeResultList[2].planId ?: ""
                             )
                         ), true, true, AnimationType.fadeInfadeOut
                     )
@@ -287,7 +290,8 @@ class SubscriptionFragment : MainBaseFragment(), View.OnClickListener {
                 selectedSubscribe = SubscriptionBean(
                     subscriptionTypeResultList[position].id ?: 0,
                     subscriptionTypeResultList[position].days ?: 0,
-                    subscriptionTypeResultList[position].totalCost ?: 0.0
+                    subscriptionTypeResultList[position].totalCost ?: 0.0,
+                    subscriptionTypeResultList[position].planId ?: ""
                 )
                 val imageHeight: Int = Comman_Methods.convertDpToPixels(80F, mActivity).toInt()
                 priceLayoutParams.height = imageHeight
@@ -322,13 +326,13 @@ class SubscriptionFragment : MainBaseFragment(), View.OnClickListener {
                     holder.tvTypeSubs.text = subscriptionTypeResultList[position].title
                     holder.tvPrice.text = "$ " + subscriptionTypeResultList[position].totalCost.toString()
                     holder.tvType.text = mActivity.resources.getString(R.string.str_monthly) + " " + mActivity.resources.getString(R.string.subscription)
-                    holder.tvTypeSubs.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20F)
+                    holder.tvTypeSubs.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15F)
                 }
                 5 -> {
                     holder.tvTypeSubs.text = subscriptionTypeResultList[position].title
                     holder.tvPrice.text = "$ " + subscriptionTypeResultList[position].totalCost.toString()
                     holder.tvType.text = mActivity.resources.getString(R.string.str_yearly) + " " + mActivity.resources.getString(R.string.subscription)
-                    holder.tvTypeSubs.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20F)
+                    holder.tvTypeSubs.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15F)
                 }
             }
 

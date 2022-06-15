@@ -17,7 +17,8 @@
             layout="@layout/toolbar_header"/>
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tool_bar"
             android:fillViewport="true">
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,46 +28,42 @@
                 android:layout_marginEnd="@dimen/size220"
                 android:paddingBottom="@dimen/size70"
                 android:id="@+id/neighbourConstraint">
-                <Button
-                    android:id="@+id/btnAddPhotoVideo"
-                    android:textSize="@dimen/textSize18"
-                    android:text="@string/add_photo_video"
-                    android:textColor="@color/caldroid_white"
-                    android:background="@drawable/button_back"
-                    android:layout_marginEnd="@dimen/size30"
-                    android:layout_marginStart="@dimen/size30"
-                    android:layout_marginTop="@dimen/gape10"
-                    android:layout_marginBottom="@dimen/gape10"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <FrameLayout
+                <ImageView
+                    android:id="@+id/ivNeighbourImageFile"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/clifton_ave"
                     android:visibility="gone"
-                    android:id="@+id/flNeighbourFile"
                     android:layout_margin="@dimen/gape10"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/btnAddPhotoVideo"
-                    android:layout_width="@dimen/size100"
-                    android:layout_height="@dimen/size100">
-                    <ImageView
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/clifton_ave"
-                        android:id="@+id/ivNeighbourImageFile"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
-                </FrameLayout>
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/size150"/>
+                <Button
+                    android:id="@+id/btnAddPhotoVideo"
+                    android:textSize="@dimen/textSize14"
+                    android:text="@string/add_photo_video"
+                    android:textColor="@color/colorPrimary"
+                    android:drawableTop="@drawable/ic_upload_data"
+                    android:drawablePadding="@dimen/gape10"
+                    android:background="@drawable/button_dash_back"
+                    android:layout_margin="@dimen/gape10"
+                    android:textAllCaps="false"
+                    app:layout_constraintTop_toBottomOf="@id/ivNeighbourImageFile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
                 <FrameLayout
                     android:id="@+id/flIncidentType"
                     android:layout_margin="@dimen/gape10"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/flNeighbourFile"
+                    app:layout_constraintTop_toBottomOf="@id/btnAddPhotoVideo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
                         android:id="@+id/tvIncidentType"
                         android:layout_marginTop="@dimen/gape10"
-                        android:background="@drawable/edittext_white_back"
+                        android:background="@drawable/spin_white_back"
                         android:textSize="@dimen/textSize16"
                         android:singleLine="true"
                         android:layout_width="match_parent"
@@ -75,89 +72,93 @@
                         android:text="@string/str_incident_type"
                         style="@style/hintStyle" />
                 </FrameLayout>
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tl_NeighTitle"
-                    android:layout_margin="@dimen/space_xm"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="50"
-                    android:textColorHint="@color/grayText"
+                <FrameLayout
+                    android:id="@+id/flNeighbourTitle"
+                    android:layout_margin="@dimen/gape10"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/flIncidentType"
-                    style="@style/AppTheme_EditText"
-                    android:tooltipText="@string/str_title">
-                    <EditText
-                        android:id="@+id/etNeighbourTitle"
-                        android:inputType="textCapWords"
-                        android:hint="@string/str_title"
-                        android:padding="@dimen/gape10"
-                        android:maxLength="50"
-                        android:textColorHint="@color/grayText"
-                        android:background="@drawable/underline_shape_gray"
-                        android:imeOptions="actionNext"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                </com.google.android.material.textfield.TextInputLayout>
-                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tl_NeighDesc"
-                    android:layout_margin="@dimen/space_xm"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="1000"
-                    android:textColorHint="@color/grayText"
-                    app:hintEnabled="false"
-                    app:layout_constraintTop_toBottomOf="@id/tl_NeighTitle">
-
-                    <EditText
+                    android:layout_height="wrap_content">
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/edNeighbourDescription"
-                        android:gravity="top|start"
-                        android:padding="@dimen/gape10"
-                        android:textColorHint="@color/grayText"
-                        android:lines="6"
-                        android:maxLength="1000"
-                        android:textSize="@dimen/textSize18"
-                        android:background="@drawable/edittext_trans_border"
-                        android:imeOptions="actionDone"
-                        android:hint="@string/neighbour_descript"/>
-                </com.google.android.material.textfield.TextInputLayout>
-                <RelativeLayout
-                    android:id="@+id/rlIncidentAddress"
-                    android:layout_margin="@dimen/space_xm"
-                    app:layout_constraintTop_toBottomOf="@id/tl_NeighDesc"
+                        android:id="@+id/tl_NeighTitle"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="50"
+                        android:layout_marginTop="@dimen/gape10"
+                        app:hintEnabled="false"
+                        app:layout_constraintTop_toBottomOf="@id/flIncidentType"
+                        style="@style/AppTheme_EditText">
+                        <EditText
+                            android:id="@+id/etNeighbourTitle"
+                            android:inputType="textCapWords"
+                            android:maxLength="50"
+                            android:textColorHint="@color/grayText"
+                            android:background="@drawable/edittext_white_back"
+                            android:imeOptions="actionNext"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <TextView
+                        android:text="@string/str_title"
+                        style="@style/hintStyle" />
+                </FrameLayout>
+                <FrameLayout
+                    android:id="@+id/flIncidentDetail"
+                    android:layout_margin="@dimen/gape10"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/flNeighbourTitle"
                     android:layout_width="match_parent"
-                    android:padding="@dimen/gape10"
+                    android:layout_height="wrap_content">
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tl_NeighDesc"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="1000"
+                        android:textColorHint="@color/grayText"
+                        app:hintEnabled="false"
+                        android:layout_marginTop="@dimen/gape10"
+                        app:layout_constraintTop_toBottomOf="@id/flNeighbourTitle">
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/edNeighbourDescription"
+                            android:gravity="top|start"
+                            android:textColorHint="@color/grayText"
+                            android:lines="6"
+                            android:maxLength="1000"
+                            android:textSize="@dimen/textSize18"
+                            android:background="@drawable/edittext_white_back"
+                            android:imeOptions="actionDone" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <TextView
+                        android:text="@string/str_details"
+                        style="@style/hintStyle" />
+                </FrameLayout>
+                <FrameLayout
+                    android:id="@+id/flIncidentAddress"
+                    android:layout_margin="@dimen/gape10"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/flIncidentDetail"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:id="@+id/tvIncident"
-                        android:textStyle="bold"
+                        android:id="@+id/tvIncidentAddr"
+                        android:layout_marginTop="@dimen/gape10"
                         android:textSize="@dimen/textSize16"
-                        android:text="@string/str_incident_loc"
-                        android:drawableStart="@drawable/ic_location_setting"
-                        android:drawablePadding="@dimen/gape10"
+                        android:background="@drawable/edittext_white_back"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                     <TextView
-                        android:id="@+id/tvIncidentAddr"
-                        android:layout_below="@id/tvIncident"
-                        android:layout_marginStart="@dimen/size35"
-                        android:layout_toStartOf="@id/ivNavigateAddr"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                    <ImageView
-                        android:id="@+id/ivNavigateAddr"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerInParent="true"
-                        app:srcCompat="@drawable/redirect_language"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                </RelativeLayout>
+                        android:text="@string/str_incident_loc"
+                        style="@style/hintStyle" />
+                </FrameLayout>
                 <TextView
                     android:id="@+id/tvAddressNotice"
                     android:text="@string/incident_loc_hint"
-                    app:layout_constraintTop_toBottomOf="@id/rlIncidentAddress"
+                    app:layout_constraintTop_toBottomOf="@id/flIncidentAddress"
                     android:layout_margin="@dimen/gape10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

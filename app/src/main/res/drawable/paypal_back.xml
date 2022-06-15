@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+       android:shape="rectangle">
+
+    <corners android:radius="@dimen/size8"/>
+    <padding
+            android:bottom="@dimen/size2"
+            android:left="@dimen/size2"
+            android:right="@dimen/size2"
+            android:top="@dimen/size2"/>
+    <solid android:color="@color/paypal_color" />
+
+</shape>

@@ -20,15 +20,19 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.JsonObject
 import com.keepSafe911.BuildConfig
 import com.keepSafe911.R
 import com.keepSafe911.fragments.LoginFragment
 import com.keepSafe911.fragments.commonfrag.HomeBaseFragment
 import com.keepSafe911.listner.CommonApiListener
+import com.keepSafe911.listner.PaymentOptionListener
 
 import com.keepSafe911.model.FamilyMonitorResult
 import com.keepSafe911.model.SubscriptionBean
 import com.keepSafe911.model.response.SubscriptionTypeResult
+import com.keepSafe911.model.roomobj.LoginObject
+import com.keepSafe911.room.OldMe911Database
 import com.keepSafe911.utils.*
 import hideKeyboard
 import kotlinx.android.synthetic.main.fragment_subscription.*
@@ -54,13 +58,14 @@ class RemainSubscriptionFragment : HomeBaseFragment(), View.OnClickListener {
     private var isFromMember: Boolean = false
     private var familyMonitorResult: FamilyMonitorResult = FamilyMonitorResult()
     private var selectedSubscribe: SubscriptionBean = SubscriptionBean()
+    private lateinit var appDatabase: OldMe911Database
 
     companion object {
         fun newInstance(
-            showFreeTrial: Boolean,
-            isFromMember: Boolean,
-            memberDetail: FamilyMonitorResult,
-            showLogout: Boolean,
+            showFreeTrial: Boolean = false,
+            isFromMember: Boolean = false,
+            memberDetail: FamilyMonitorResult = FamilyMonitorResult(),
+            showLogout: Boolean = false,
             showBack: Boolean = false
         ): RemainSubscriptionFragment {
             val args = Bundle()
@@ -113,6 +118,7 @@ class RemainSubscriptionFragment : HomeBaseFragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         mActivity.disableDrawer()
+        appDatabase = OldMe911Database.getDatabase(mActivity)
         rvSubscription?.layoutManager = LinearLayoutManager(mActivity, LinearLayoutManager.HORIZONTAL, false)
         /*if (showFreeTrial) {
             btn_free.visibility = View.VISIBLE
@@ -303,16 +309,12 @@ class RemainSubscriptionFragment : HomeBaseFragment(), View.OnClickListener {
                 mActivity.hideKeyboard()
                 if (subscriptionTypeResultList.size > 0) {
                     Comman_Methods.avoidDoubleClicks(v)
-                    mActivity.addFragment(
-                        RemainPaymentMethodFragment.newInstance(
-                            showFreeTrial,
-                            SubscriptionBean(
-                                subscriptionTypeResultList[0].id ?: 0,
-                                subscriptionTypeResultList[0].days ?: 0,
-                                subscriptionTypeResultList[0].totalCost ?: 0.0
-                            ), isFromMember, familyMonitorResult
-                        ), true, true, AnimationType.fadeInfadeOut
-                    )
+                    doingPayment(SubscriptionBean(
+                        subscriptionTypeResultList[0].id ?: 0,
+                        subscriptionTypeResultList[0].days ?: 0,
+                        subscriptionTypeResultList[0].totalCost ?: 0.0,
+                        subscriptionTypeResultList[0].planId ?: ""
+                    ))
                 }
             }
             R.id.btn_month -> {
@@ -323,21 +325,18 @@ class RemainSubscriptionFragment : HomeBaseFragment(), View.OnClickListener {
                         SubscriptionBean(
                             subscriptionTypeResultList[3].id ?: 0,
                             subscriptionTypeResultList[3].days ?: 0,
-                            subscriptionTypeResultList[3].totalCost ?: 0.0
+                            subscriptionTypeResultList[3].totalCost ?: 0.0,
+                            subscriptionTypeResultList[3].planId ?: ""
                         )
                     } else {
                         SubscriptionBean(
                             subscriptionTypeResultList[1].id ?: 0,
                             subscriptionTypeResultList[1].days ?: 0,
-                            subscriptionTypeResultList[1].totalCost ?: 0.0
+                            subscriptionTypeResultList[1].totalCost ?: 0.0,
+                            subscriptionTypeResultList[1].planId ?: ""
                         )
                     }
-                    mActivity.addFragment(
-                        RemainPaymentMethodFragment.newInstance(
-                            showFreeTrial,
-                            subscriptionData, isFromMember, familyMonitorResult
-                        ), true, true, AnimationType.fadeInfadeOut
-                    )
+                    doingPayment(subscriptionData)
                 }
             }
             R.id.btn_year -> {
@@ -348,33 +347,25 @@ class RemainSubscriptionFragment : HomeBaseFragment(), View.OnClickListener {
                         SubscriptionBean(
                             subscriptionTypeResultList[4].id ?: 0,
                             subscriptionTypeResultList[4].days ?: 0,
-                            subscriptionTypeResultList[4].totalCost ?: 0.0
+                            subscriptionTypeResultList[4].totalCost ?: 0.0,
+                            subscriptionTypeResultList[4].planId ?: ""
                         )
                     } else {
                         SubscriptionBean(
                             subscriptionTypeResultList[2].id ?: 0,
                             subscriptionTypeResultList[2].days ?: 0,
-                            subscriptionTypeResultList[2].totalCost ?: 0.0
+                            subscriptionTypeResultList[2].totalCost ?: 0.0,
+                            subscriptionTypeResultList[2].planId ?: ""
                         )
                     }
-                    mActivity.addFragment(
-                        RemainPaymentMethodFragment.newInstance(
-                            showFreeTrial,
-                            subscriptionData, isFromMember, familyMonitorResult
-                        ), true, true, AnimationType.fadeInfadeOut
-                    )
+                    doingPayment(subscriptionData)
                 }
             }
             R.id.btnSubscribe -> {
                 mActivity.hideKeyboard()
                 if (selectedSubscribe.subScriptionCode > 0) {
                     Comman_Methods.avoidDoubleClicks(v)
-                    mActivity.addFragment(
-                        RemainPaymentMethodFragment.newInstance(
-                            showFreeTrial,
-                            selectedSubscribe, isFromMember, familyMonitorResult
-                        ), true, true, AnimationType.fadeInfadeOut
-                    )
+                    doingPayment(selectedSubscribe)
                 }
             }
             R.id.btn_logout -> {
@@ -383,6 +374,43 @@ class RemainSubscriptionFragment : HomeBaseFragment(), View.OnClickListener {
                 mActivity.callLogOutPingApi(LOGOUT_RECORD_STATUS.toString(), true)
             }
         }
+    }
+
+    private fun doingPayment(subscriptionBean: SubscriptionBean) {
+        var userFirstName: String = ""
+        var userLastName: String = ""
+        var userEmail: String = ""
+        val loginObject = appDatabase.loginDao().getAll()
+
+        if (isFromMember) {
+            userFirstName = familyMonitorResult.firstName ?: ""
+            userLastName = familyMonitorResult.lastName ?: ""
+            userEmail = familyMonitorResult.email ?: ""
+        } else {
+            userFirstName = loginObject.firstName ?: ""
+            userLastName = loginObject.lastName ?: ""
+            userEmail = loginObject.email ?: ""
+        }
+        mActivity.openPaymentOptions(userFirstName, userLastName, userEmail,
+            subscriptionBean, object : PaymentOptionListener {
+                override fun onCreditCardOption() {
+                    mActivity.addFragment(
+                        RemainPaymentMethodFragment.newInstance(
+                            showFreeTrial, subscriptionBean,
+                            isFromMember, familyMonitorResult
+                        ), true, true, AnimationType.fadeInfadeOut
+                    )
+                }
+
+                override fun onPayPalOption(
+                    subscriptionId: String, firstName: String,
+                    lastName: String, email: String
+                ) {
+                    mActivity.callRemainSubscriptionApi(subscriptionId,
+                        subscriptionBean, 3,
+                        familyMonitorResult, isFromMember, userFirstName, userLastName)
+                }
+            })
     }
 
     inner class SubscriptionAdapter(val subscriptionTypeResultList: ArrayList<SubscriptionTypeResult>) : RecyclerView.Adapter<SubscriptionAdapter.ViewHolder>(){
@@ -435,7 +463,8 @@ class RemainSubscriptionFragment : HomeBaseFragment(), View.OnClickListener {
                 selectedSubscribe = SubscriptionBean(
                     subscriptionTypeResultList[position].id ?: 0,
                     subscriptionTypeResultList[position].days ?: 0,
-                    subscriptionTypeResultList[position].totalCost ?: 0.0
+                    subscriptionTypeResultList[position].totalCost ?: 0.0,
+                    subscriptionTypeResultList[position].planId ?: ""
                 )
                 val imageHeight: Int = Comman_Methods.convertDpToPixels(80F, mActivity).toInt()
                 priceLayoutParams.height = imageHeight
@@ -470,13 +499,13 @@ class RemainSubscriptionFragment : HomeBaseFragment(), View.OnClickListener {
                     holder.tvTypeSubs.text = subscriptionTypeResultList[position].title
                     holder.tvPrice.text = "$ " + subscriptionTypeResultList[position].totalCost.toString()
                     holder.tvType.text = mActivity.resources.getString(R.string.str_monthly) + " " + mActivity.resources.getString(R.string.subscription)
-                    holder.tvTypeSubs.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20F)
+                    holder.tvTypeSubs.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15F)
                 }
                 5 -> {
                     holder.tvTypeSubs.text = subscriptionTypeResultList[position].title
                     holder.tvPrice.text = "$ " + subscriptionTypeResultList[position].totalCost.toString()
                     holder.tvType.text = mActivity.resources.getString(R.string.str_yearly) + " " + mActivity.resources.getString(R.string.subscription)
-                    holder.tvTypeSubs.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20F)
+                    holder.tvTypeSubs.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15F)
                 }
             }
 

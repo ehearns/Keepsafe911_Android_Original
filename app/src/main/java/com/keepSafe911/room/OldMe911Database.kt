@@ -29,7 +29,7 @@ import com.keepSafe911.room.databasetable.GeoFenceNotification
         FingerSucess_User_Object::class,
         PlacesToVisitModel::class,
         ManageVoiceRecognitionModel::class],
-    version = 5, exportSchema = false
+    version = 6, exportSchema = false
 )
 @TypeConverters(
     LoginConvertor::class,
@@ -56,7 +56,7 @@ abstract class OldMe911Database : RoomDatabase() {
             if (instance == null) {
                 instance = Room.databaseBuilder(context.applicationContext, OldMe911Database::class.java, "KeepSafe911")
                     .allowMainThreadQueries()
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
                     .build()
             }
             return instance!!
@@ -88,6 +88,17 @@ abstract class OldMe911Database : RoomDatabase() {
         private val MIGRATION_4_5: Migration = object : Migration(4, 5) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE loginTable ADD COLUMN IsAdminLoggedIn INTEGER")
+            }
+        }
+
+        private val MIGRATION_5_6: Migration = object : Migration(5, 6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE loginTable ADD COLUMN PayeID TEXT")
+                database.execSQL("ALTER TABLE memberTable ADD COLUMN PayeID TEXT")
+                database.execSQL("ALTER TABLE loginTable ADD COLUMN ProductId TEXT")
+                database.execSQL("ALTER TABLE memberTable ADD COLUMN ProductId TEXT")
+                database.execSQL("ALTER TABLE loginTable ADD COLUMN PaymentType INTEGER")
+                database.execSQL("ALTER TABLE memberTable ADD COLUMN PaymentType INTEGER")
             }
         }
 

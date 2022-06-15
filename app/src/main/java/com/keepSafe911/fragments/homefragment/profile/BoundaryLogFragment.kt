@@ -77,7 +77,7 @@ class BoundaryLogFragment : HomeBaseFragment(), View.OnClickListener {
         appDataBase = OldMe911Database.getDatabase(mActivity)
         mActivity.disableDrawer()
         setHeader()
-        if (appDataBase.loginDao().getAll().isAdmin) {
+        /*if (appDataBase.loginDao().getAll().isAdmin) {
             spiSummaryMember.visibility = View.VISIBLE
             ibFilter.visibility = View.VISIBLE
             callGetMember()
@@ -85,7 +85,8 @@ class BoundaryLogFragment : HomeBaseFragment(), View.OnClickListener {
             spiSummaryMember.visibility = View.GONE
             ibFilter.visibility = View.GONE
             mMemberID = appDataBase.loginDao().getAll().memberID
-        }
+        }*/
+        callGetMember()
 
         ibFilter.setOnClickListener(this)
     }

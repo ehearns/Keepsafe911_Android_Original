@@ -202,7 +202,7 @@
                         android:id="@+id/tvRefferal"
                         android:singleLine="true"
                         android:textSize="@dimen/textSize18"
-                        android:textColor="@color/caldroid_black"
+                        android:textColor="@color/bgBlack"
                         android:layout_marginTop="@dimen/gape10"
                         android:background="@drawable/edittext_white_back"
                         android:layout_width="match_parent"

@@ -12,8 +12,8 @@ android {
         applicationId "com.keepSafe911"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 5
-        versionName "1.4"
+        versionCode 7
+        versionName "1.6"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -149,7 +149,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
@@ -165,10 +165,10 @@ dependencies {
     //Retrofit
     implementation 'com.squareup.okhttp3:okhttp:4.9.2'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.7.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:converter-simplexml:2.7.2'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.2'
-    implementation 'com.squareup.retrofit2:converter-scalars:2.7.2'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
     //Enable Multidex
     implementation 'androidx.multidex:multidex:2.0.0'
     implementation "androidx.room:room-runtime:2.3.0"
@@ -185,7 +185,7 @@ dependencies {
     testImplementation "androidx.room:room-testing:2.3.0"
 
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
-    implementation 'com.google.android.gms:play-services-location:19.0.1'
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
     implementation 'com.google.android.gms:play-services-places:17.0.0'
     implementation 'com.google.maps.android:android-maps-utils:1.2.1'
     implementation 'com.google.android.gms:play-services-wallet:19.1.0'
@@ -194,8 +194,8 @@ dependencies {
     implementation 'com.github.prabhat1707:EasyWayLocation:1.0'
     //Set Runtime Permission
     implementation 'ru.superjob:kotlin-permissions:1.0.3'
-    implementation 'com.google.firebase:firebase-messaging:23.0.3'
-    implementation 'com.google.firebase:firebase-core:20.1.2'
+    implementation 'com.google.firebase:firebase-messaging:23.0.5'
+    implementation 'com.google.firebase:firebase-core:21.0.0'
     //Firebase Crashlytics
 //    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
@@ -203,9 +203,9 @@ dependencies {
 
     // Declare the dependencies for the Crashlytics and Analytics libraries
     // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.9'
-    implementation 'com.google.firebase:firebase-analytics:20.1.2'
-    implementation 'com.google.firebase:firebase-analytics-ktx:20.1.2'
+    implementation 'com.google.firebase:firebase-crashlytics:18.2.11'
+    implementation 'com.google.firebase:firebase-analytics:21.0.0'
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.0.0'
     //Quick Action Menu
     implementation 'com.github.douglasjunior:android-simple-tooltip:0.2.3'
     //pdfViewer
@@ -222,7 +222,7 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.12.0'
     implementation 'com.google.android.exoplayer:exoplayer:2.7.3'
     //Like button Animation.
-    implementation 'com.github.jd-alexander:LikeButton:0.2.3'
+//    implementation 'com.github.jd-alexander:LikeButton:0.2.3'
 
     //Picasso for share file
     implementation 'com.squareup.picasso:picasso:2.71828'

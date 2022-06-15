@@ -28,8 +28,10 @@
     <ImageView
         android:id="@+id/ivRemoveGeoMember"
         android:visibility="gone"
+        android:layout_marginEnd="-8dp"
         android:layout_alignEnd="@id/sdvMemberImage"
-        app:srcCompat="@drawable/ic_remove_member"
+        android:src="@drawable/ic_remove_member"
+        android:padding="@dimen/size2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <ImageView

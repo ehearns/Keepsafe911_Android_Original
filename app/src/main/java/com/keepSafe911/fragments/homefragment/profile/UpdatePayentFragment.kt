@@ -15,7 +15,6 @@ import android.text.InputFilter
 import android.text.TextWatcher
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.ScrollingMovementMethod
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
@@ -25,6 +24,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import com.google.gson.Gson
 import com.keepSafe911.R
 import com.keepSafe911.fragments.commonfrag.HomeBaseFragment
 import com.keepSafe911.fragments.homefragment.DashBoardFragment
@@ -45,6 +45,7 @@ import com.google.gson.reflect.TypeToken
 import com.keepSafe911.BuildConfig
 import com.keepSafe911.listner.CommonApiListener
 import com.keepSafe911.model.response.CommonValidationResponse
+import com.keepSafe911.model.response.UpgradeSubscriptionResponse
 import hideKeyboard
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltipUtils
@@ -99,12 +100,12 @@ class UpdatePayentFragment : HomeBaseFragment(), View.OnClickListener, EncryptTr
         var count: Int = 0
         var isFrom: Boolean = false
         fun newInstance(
-            isFromMember: Boolean,
-            isFromPaymentUpdate: Boolean,
-            subscriptionBean: SubscriptionBean,
-            familyMonitorResult: FamilyMonitorResult,
-            isFromActivity: Boolean,
-            isFrom: Boolean
+            isFromMember: Boolean = false,
+            isFromPaymentUpdate: Boolean = false,
+            subscriptionBean: SubscriptionBean = SubscriptionBean(),
+            familyMonitorResult: FamilyMonitorResult = FamilyMonitorResult(),
+            isFromActivity: Boolean = false,
+            isFrom: Boolean = false
         ): UpdatePayentFragment {
             val args = Bundle()
             args.putBoolean(ARG_PARAM1, isFromMember)
@@ -708,176 +709,156 @@ class UpdatePayentFragment : HomeBaseFragment(), View.OnClickListener, EncryptTr
     }
 
     private fun callUpgradeSubscriptionApi(trial_code: Int, dataValue: String) {
-        if (ConnectionUtil.isInternetAvailable(mActivity)) {
-            Comman_Methods.isProgressShow(mActivity)
-            mActivity.isSpeedAvailable()
-            val loginObject = appDatabase.loginDao().getAll()
-            val jsonObject = JsonObject()
-            jsonObject.addProperty("FirstName", etFirstName.text.toString().trim())
-            jsonObject.addProperty("LastName", etLastName.text.toString().trim())
-            if (isFromMember && isFromPayment) {
-                jsonObject.addProperty("UserID", familyMonitorResult.iD)
-            } else {
-                jsonObject.addProperty("UserID", loginObject.memberID)
-            }
-            jsonObject.addProperty("Package", trial_code)
-            jsonObject.addProperty("Token", token)
+        mActivity.isSpeedAvailable()
+        val loginObject = appDatabase.loginDao().getAll()
+        val jsonObject = JsonObject()
+        jsonObject.addProperty("FirstName", etFirstName.text.toString().trim())
+        jsonObject.addProperty("LastName", etLastName.text.toString().trim())
+        if (isFromMember && isFromPayment) {
+            jsonObject.addProperty("UserID", familyMonitorResult.iD)
+        } else {
+            jsonObject.addProperty("UserID", loginObject.memberID)
+        }
+        jsonObject.addProperty("Package", trial_code)
+        jsonObject.addProperty("Token", token)
+        jsonObject.addProperty("PaymentType", 1)
 
+        Utils.upgradeSubscriptionApi(mActivity, jsonObject, object : CommonApiListener {
+            override fun upgradeSubscription(
+                status: Boolean,
+                familyData: FamilyMonitorResult?,
+                message: String,
+                responseMessage: String
+            ) {
+                if (status) {
+                    if (familyData != null) {
+                        if (isFromMember && isFromPayment) {
+                            val memberData = familyMonitorResult
+                            memberData.Package = familyData.Package
+                            memberData.payId = familyData.payId
+                            memberData.paymentType = 1
+                            memberData.isChildMissing = false
+                            appDatabase.memberDao().updateMember(memberData)
+                        } else {
+                            val loginupdate: LoginObject = appDatabase.loginDao().getAll()
+                            loginupdate.Package = familyData.Package.toString()
+                            loginupdate.payId = familyData.payId ?: ""
+                            loginupdate.paymentType = 1
+                            loginupdate.isChildMissing = false
+                            loginupdate.isFromIos = false
+                            appDatabase.loginDao().updateLogin(loginupdate)
+                        }
+                    }
+                    if (isFromActivity && isFromPayment) {
+                        mActivity.gotoDashBoard()
+                    } else if (isFromMember && isFromPayment) {
+                        mActivity.showMessage(responseMessage)
+                        mActivity.gotoDashBoard()
+                    } else if (isFromPayment) {
+                        mActivity.showMessage(responseMessage)
+                        mActivity.addFragment(
+                            PaymentFragment(), false, true,
+                            animationType = AnimationType.fadeInfadeOut
+                        )
+                    } else if (isFromActivity) {
+                        mActivity.gotoDashBoard()
+                    }
 
-            val callUpgradeSubscription =
-                WebApiClient.getInstance(mActivity).webApi_without?.callUpdateSubscription(jsonObject)
-            callUpgradeSubscription?.enqueue(object : retrofit2.Callback<ApiResponse> {
-                override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                    Comman_Methods.isProgressHide()
-                }
+                    /*val isServiceStarted =
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            Utils.isJobServiceRunning(mActivity)
+                        } else {
+                            Utils.isMyServiceRunning(GpsService::class.java, mActivity)
+                        }
 
-                override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
-                    val statusCode: Int = response.code()
-                    if (statusCode == 200) {
-                        if (response.isSuccessful) {
-                            Comman_Methods.isProgressHide()
-                            response.body()?.let {
-                                if (it.status) {
-                                    if (it.responseMessage != "") {
-                                        if (isFromMember && isFromPayment) {
-                                            val memberData = familyMonitorResult
-                                            memberData.Package = it.responseMessage.toInt()
-                                            appDatabase.memberDao().updateMember(memberData)
-                                        } else {
-                                            val loginupdate: LoginObject = appDatabase.loginDao().getAll()
-                                            loginupdate.Package = it.responseMessage
-                                            loginupdate.isChildMissing = false
-                                            loginupdate.isFromIos = false
-                                            appDatabase.loginDao().updateLogin(loginupdate)
-                                        }
-                                    }
-                                    if (isFromActivity && isFromPayment) {
-                                        mActivity.gotoDashBoard()
-                                    } else if (isFromMember && isFromPayment) {
-                                        mActivity.showMessage(it.result)
-                                        /*mActivity.addFragment(
-                                        MemberListFragment(),
-                                        false,
-                                        true,
-                                        animationType = AnimationType.fadeInfadeOut
-                                    )*/
-                                        mActivity.gotoDashBoard()
-                                    } else if (isFromPayment) {
-                                        mActivity.showMessage(it.result)
-                                        mActivity.addFragment(
-                                            PaymentFragment(),
-                                            false,
-                                            true,
-                                            animationType = AnimationType.fadeInfadeOut
-                                        )
-                                    } else if (isFromActivity) {
-                                        mActivity.gotoDashBoard()
-                                    }
-
-                                    /*val isServiceStarted =
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                            Utils.isJobServiceRunning(mActivity)
-                                        } else {
-                                            Utils.isMyServiceRunning(GpsService::class.java, mActivity)
-                                        }
-
-                                    try {
-                                        if (isAppIsInBackground(mActivity)) {
-                                            LocalBroadcastManager.getInstance(mActivity)
-                                                .registerReceiver(
-                                                    mActivity.mMessageReceiver,
-                                                    IntentFilter("LiveMemberCount")
-                                                )
-                                            if (!isServiceStarted && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                                val jobScheduler =
-                                                    mActivity.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-                                                val componentName = ComponentName(
-                                                    mActivity.packageName,
-                                                    GpsJobService::class.java.name
-                                                )
-                                                val jobInfo =
-                                                    JobInfo.Builder(GPSSERVICEJOBID, componentName)
-                                                        .setMinimumLatency(1000)
-                                                        .setOverrideDeadline((241 * 60000).toLong())
-                                                        .setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE)
-                                                        .setPersisted(true).build()
-                                                val resultCode = jobScheduler.schedule(jobInfo)
-                                                if (resultCode == JobScheduler.RESULT_SUCCESS) {
-                                                    Log.d(
-                                                        GpsJobService::class.java.name,
-                                                        "job scheduled"
-                                                    )
-                                                } else {
-                                                    Log.d(
-                                                        GpsJobService::class.java.name,
-                                                        "job schedule failed"
-                                                    )
-                                                }
-                                            } else if (!isServiceStarted) {
-                                                mActivity.startService(
-                                                    Intent(
-                                                        mActivity,
-                                                        GpsService::class.java
-                                                    )
-                                                )
-                                            }
-                                        } else {
-                                            LocalBroadcastManager.getInstance(mActivity)
-                                                .registerReceiver(
-                                                    mActivity.mMessageReceiver,
-                                                    IntentFilter("LiveMemberCount")
-                                                )
-                                            if (!isServiceStarted && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                                val jobScheduler =
-                                                    mActivity.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-                                                val componentName = ComponentName(
-                                                    mActivity.packageName,
-                                                    GpsJobService::class.java.name
-                                                )
-                                                val jobInfo =
-                                                    JobInfo.Builder(GPSSERVICEJOBID, componentName)
-                                                        .setMinimumLatency(1000)
-                                                        .setOverrideDeadline((241 * 60000).toLong())
-                                                        .setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE)
-                                                        .setPersisted(true).build()
-                                                val resultCode = jobScheduler.schedule(jobInfo)
-                                                if (resultCode == JobScheduler.RESULT_SUCCESS) {
-                                                    Log.d(
-                                                        GpsJobService::class.java.name,
-                                                        "job scheduled"
-                                                    )
-                                                } else {
-                                                    Log.d(
-                                                        GpsJobService::class.java.name,
-                                                        "job schedule failed"
-                                                    )
-                                                }
-                                            } else if (!isServiceStarted) {
-                                                mActivity.startService(
-                                                    Intent(
-                                                        mActivity,
-                                                        GpsService::class.java
-                                                    )
-                                                )
-                                            }
-                                        }
-                                    } catch (e: Exception) {
-                                        e.printStackTrace()
-                                    }*/
+                    try {
+                        if (isAppIsInBackground(mActivity)) {
+                            LocalBroadcastManager.getInstance(mActivity)
+                                .registerReceiver(
+                                    mActivity.mMessageReceiver,
+                                    IntentFilter("LiveMemberCount")
+                                )
+                            if (!isServiceStarted && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                val jobScheduler =
+                                    mActivity.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+                                val componentName = ComponentName(
+                                    mActivity.packageName,
+                                    GpsJobService::class.java.name
+                                )
+                                val jobInfo =
+                                    JobInfo.Builder(GPSSERVICEJOBID, componentName)
+                                        .setMinimumLatency(1000)
+                                        .setOverrideDeadline((241 * 60000).toLong())
+                                        .setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE)
+                                        .setPersisted(true).build()
+                                val resultCode = jobScheduler.schedule(jobInfo)
+                                if (resultCode == JobScheduler.RESULT_SUCCESS) {
+                                    Log.d(
+                                        GpsJobService::class.java.name,
+                                        "job scheduled"
+                                    )
                                 } else {
-                                    mActivity.showMessage(it.message)
+                                    Log.d(
+                                        GpsJobService::class.java.name,
+                                        "job schedule failed"
+                                    )
                                 }
+                            } else if (!isServiceStarted) {
+                                mActivity.startService(
+                                    Intent(
+                                        mActivity,
+                                        GpsService::class.java
+                                    )
+                                )
+                            }
+                        } else {
+                            LocalBroadcastManager.getInstance(mActivity)
+                                .registerReceiver(
+                                    mActivity.mMessageReceiver,
+                                    IntentFilter("LiveMemberCount")
+                                )
+                            if (!isServiceStarted && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                val jobScheduler =
+                                    mActivity.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+                                val componentName = ComponentName(
+                                    mActivity.packageName,
+                                    GpsJobService::class.java.name
+                                )
+                                val jobInfo =
+                                    JobInfo.Builder(GPSSERVICEJOBID, componentName)
+                                        .setMinimumLatency(1000)
+                                        .setOverrideDeadline((241 * 60000).toLong())
+                                        .setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE)
+                                        .setPersisted(true).build()
+                                val resultCode = jobScheduler.schedule(jobInfo)
+                                if (resultCode == JobScheduler.RESULT_SUCCESS) {
+                                    Log.d(
+                                        GpsJobService::class.java.name,
+                                        "job scheduled"
+                                    )
+                                } else {
+                                    Log.d(
+                                        GpsJobService::class.java.name,
+                                        "job schedule failed"
+                                    )
+                                }
+                            } else if (!isServiceStarted) {
+                                mActivity.startService(
+                                    Intent(
+                                        mActivity,
+                                        GpsService::class.java
+                                    )
+                                )
                             }
                         }
-                    } else {
-                        Comman_Methods.isProgressHide()
-                        Utils.showSomeThingWrongMessage(mActivity)
-                    }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }*/
+                } else {
+                    mActivity.showMessage(message)
                 }
-            })
-        } else {
-            Utils.showNoInternetMessage(mActivity)
-        }
+            }
+        })
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -1016,6 +997,7 @@ class UpdatePayentFragment : HomeBaseFragment(), View.OnClickListener, EncryptTr
             val device_token = "".toRequestBody(MEDIA_TYPE_TEXT)
 
             val device_id = "1".toRequestBody(MEDIA_TYPE_TEXT)
+            val paymentType = "1".toRequestBody(MEDIA_TYPE_TEXT)
             val loginByApp = "2".toRequestBody(MEDIA_TYPE_TEXT)
             val imageBody: RequestBody
             val isSms: RequestBody = "false".toRequestBody(MEDIA_TYPE_TEXT)
@@ -1081,7 +1063,8 @@ class UpdatePayentFragment : HomeBaseFragment(), View.OnClickListener, EncryptTr
                     loginByApp,
                     referral_name,
                     promoCode,
-                    isChildMissing)
+                    isChildMissing,
+                    paymentType)
 
             callRegisrationApi?.enqueue(object : retrofit2.Callback<CommonValidationResponse> {
                 override fun onFailure(call: Call<CommonValidationResponse>, t: Throwable) {

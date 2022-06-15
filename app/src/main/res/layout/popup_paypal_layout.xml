@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingTop="@dimen/size50"
+    android:paddingBottom="@dimen/size50"
+    android:paddingEnd="@dimen/size20"
+    android:paddingStart="@dimen/size20"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/llCreditCard"
+        android:background="@drawable/credit_back"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvCreditCard"
+            android:text="@string/str_credit_card"
+            android:gravity="center"
+            android:drawableStart="@drawable/ic_credit_card"
+            android:drawablePadding="@dimen/size15"
+            android:textSize="@dimen/textSize20"
+            android:textColor="@color/caldroid_white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivPaypal"
+        android:layout_marginTop="@dimen/textSize20"
+        android:src="@drawable/ic_paypal_icon"
+        android:background="@drawable/paypal_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

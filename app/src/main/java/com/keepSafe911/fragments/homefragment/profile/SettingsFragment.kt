@@ -89,14 +89,16 @@ class SettingsFragment : HomeBaseFragment(), View.OnClickListener, CompoundButto
 
         tvAppVersion.text = BuildConfig.VERSION_NAME
 
+        switchTravelNotification.isChecked = appDatabase.loginDao().getAll().IsNotification ?: false
+
         //  sdv_profile_image.loadFrescoImage(mActivity, appDatabase.loginDao().getAll().profilePath ?: "", 1)
         if (appDatabase.loginDao().getAll().isAdmin) {
-            llSummary.visibility = View.VISIBLE
+//            llSummary.visibility = View.VISIBLE
             rlMessage.visibility = View.VISIBLE
 //            ivSummaryInfo.visibility = View.VISIBLE
-            rlTravelNotification.visibility = View.VISIBLE
+//            rlTravelNotification.visibility = View.VISIBLE
             switchMessage.isChecked = appDatabase.loginDao().getAll().IsSms
-            switchTravelNotification.isChecked = appDatabase.loginDao().getAll().IsNotification ?: false
+
 
             val frequencyData = appDatabase.loginDao().getAll().frequency ?: 60
             val strFreq = mActivity.resources.getString(R.string.str_seconds)
@@ -115,9 +117,9 @@ class SettingsFragment : HomeBaseFragment(), View.OnClickListener, CompoundButto
             constraintSet.connect(R.id.rlLanguage,ConstraintSet.TOP,R.id.tvTrackingTime,ConstraintSet.BOTTOM,10)
             constraintSet.applyTo(settingConstraint)
         } else {
-            llSummary.visibility = View.GONE
+//            llSummary.visibility = View.GONE
             rlMessage.visibility = View.GONE
-            rlTravelNotification.visibility = View.GONE
+//            rlTravelNotification.visibility = View.GONE
 //            ivSummaryInfo.visibility = View.GONE
         }
         tvTrackingTime.visibility = View.GONE

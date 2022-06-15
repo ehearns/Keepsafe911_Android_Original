@@ -28,6 +28,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -37,11 +38,14 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.easywaylocation.EasyWayLocation
 import com.example.easywaylocation.Listener
 import com.facebook.drawee.view.SimpleDraweeView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateInfo
@@ -59,6 +63,7 @@ import com.keepSafe911.fragments.donation.DonationFragment
 import com.keepSafe911.fragments.donation.DonationHistoryFragment
 import com.keepSafe911.fragments.donation.ThankYouFragment
 import com.keepSafe911.fragments.homefragment.DashBoardFragment
+import com.keepSafe911.fragments.homefragment.HomePayPalPaymentFragment
 import com.keepSafe911.fragments.homefragment.SubDashBoardFragment
 import com.keepSafe911.fragments.homefragment.boundary.AddGeofenceFragment
 import com.keepSafe911.fragments.homefragment.boundary.GeofenceFragment
@@ -88,12 +93,13 @@ import com.keepSafe911.gps.GpsJobService
 import com.keepSafe911.gps.GpsService
 import com.keepSafe911.gps.GpsTracker
 import com.keepSafe911.listner.CommonApiListener
+import com.keepSafe911.listner.PaymentOptionListener
 import com.keepSafe911.listner.PositiveButtonListener
 import com.keepSafe911.model.FamilyMonitorResult
-import com.keepSafe911.model.PlacesToVisitModel
 import com.keepSafe911.model.SubscriptionBean
 import com.keepSafe911.model.request.LoginRequest
 import com.keepSafe911.model.response.*
+import com.keepSafe911.model.response.paypal.SubscriptionResponse
 import com.keepSafe911.model.response.voicerecognition.ManageVoiceRecognitionModel
 import com.keepSafe911.model.roomobj.LoginObject
 import com.keepSafe911.offlineservice.CheckInternetAvaliability
@@ -106,8 +112,6 @@ import com.keepSafe911.utils.*
 import com.keepSafe911.utils.Utils.isMyServiceRunning
 import com.keepSafe911.utils.Utils.muteRecognizer
 import com.keepSafe911.webservices.WebApiClient
-import getScreenHeight
-import getScreenWidth
 import hideKeyboard
 import io.agora.rtc.Constants
 import isAppIsInBackground
@@ -130,7 +134,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -194,6 +197,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var selectedSubscription: SubscriptionTypeResult? = null
     private lateinit var clientCallDialog: Dialog
     private var toast: Toast? = null
+    private lateinit var payPalPaymentFragment: HomePayPalPaymentFragment
 
     private val mServiceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
@@ -394,18 +398,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     stopService(Intent(this@HomeActivity, GpsService::class.java))
                 }
             }
-            addFragment(
-                UpdateSubFragment.newInstance(
-                    true,
-                    false,
-                    false,
-                    false,
-                    FamilyMonitorResult(),
-                    ArrayList<SubscriptionTypeResult>(),
-                    false,
-                    false, true
-                ), false, true, animationType = AnimationType.fadeInfadeOut
-            )
+            moveToUpdateSubscriptionScreen()
+
         } else*/ if (loginData.isAdmin && loginData.SubscriptionStartDate != null) {
 
             val days = loginData.time_interval_days
@@ -499,26 +493,43 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    fun purchaseSubscription(): Boolean {
+    fun purchaseSubscription(previousSelected: Int = 0): Boolean {
         val loginData = appDatabase.loginDao().getAll()
         if (loginData != null) {
             if (loginData.isChildMissing == true) {
                 if (loginData.Package == "6") {
-                    addFragment(
-                        RemainPaymentMethodFragment.newInstance(false,
-                            SubscriptionBean(
-                                selectedSubscription?.id ?: 0,
-                                selectedSubscription?.days ?: 0,
-                                selectedSubscription?.totalCost ?: 0.0
-                            ), false, FamilyMonitorResult()
-                        ), true, true, AnimationType.fadeInfadeOut
+                    val subscriptionBean = SubscriptionBean(
+                        selectedSubscription?.id ?: 0,
+                        selectedSubscription?.days ?: 0,
+                        selectedSubscription?.totalCost ?: 0.0,
+                        selectedSubscription?.planId ?: ""
                     )
+                    val userFirstName = loginData.firstName ?: ""
+                    val userLastName = loginData.lastName ?: ""
+                    val userEmail = loginData.email ?: ""
+                    openPaymentOptions(userFirstName, userLastName,
+                        userEmail, subscriptionBean, object : PaymentOptionListener {
+                            override fun onCreditCardOption() {
+                                addFragment(
+                                    RemainPaymentMethodFragment.newInstance(
+                                        subscriptionBean = subscriptionBean
+                                    ), true, true, AnimationType.fadeInfadeOut
+                                )
+                            }
+
+                            override fun onPayPalOption(
+                                subscriptionId: String, firstName: String,
+                                lastName: String, email: String
+                            ) {
+                                callRemainSubscriptionApi(subscriptionId, subscriptionBean,
+                                    3, userFirstName = userFirstName,
+                                    userLastName = userLastName)
+                            }
+                        }, previousSelected)
                 } else {
                     addFragment(
-                        RemainSubscriptionFragment.newInstance(
-                            false, false,
-                            FamilyMonitorResult(), false, true
-                        ), true, true, AnimationType.fadeInfadeOut
+                        RemainSubscriptionFragment.newInstance(showBack = true),
+                        true, true, AnimationType.fadeInfadeOut
                     )
                 }
                 return true
@@ -528,6 +539,178 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else {
             return false
         }
+    }
+
+    fun callRemainSubscriptionApi(subscriptionId: String, subscriptionBean: SubscriptionBean,
+                                  paymentType: Int, familyMonitorResult: FamilyMonitorResult = FamilyMonitorResult(),
+                                  isFromMember: Boolean = false, userFirstName: String, userLastName: String) {
+        isSpeedAvailable()
+        val loginObject = appDatabase.loginDao().getAll()
+        val jsonObject = JsonObject()
+        jsonObject.addProperty("firstname", userFirstName)
+        jsonObject.addProperty("lastname", userLastName)
+        if (isFromMember) {
+            jsonObject.addProperty("userid", familyMonitorResult.iD)
+        } else {
+            jsonObject.addProperty("userid", loginObject.memberID)
+        }
+        jsonObject.addProperty("package", subscriptionBean.subScriptionCode)
+        jsonObject.addProperty("token", subscriptionId)
+        jsonObject.addProperty("PaymentType", paymentType)
+
+        Utils.remainSubscriptionApi(this@HomeActivity, jsonObject, object : CommonApiListener {
+            override fun familyUserList(
+                status: Boolean,
+                userList: ArrayList<FamilyMonitorResult>,
+                message: String
+            ) {
+                if (status) {
+                    if (userList.size > 0) {
+                        val subPackage =  userList[0].Package
+                        val payId = userList[0].payId ?: ""
+                        if (isFromMember) {
+                            val memberData = familyMonitorResult
+                            memberData.Package = subPackage
+                            memberData.paymentType = 3
+                            memberData.payId = payId
+                            memberData.isChildMissing = false
+                            appDatabase.memberDao().updateMember(memberData)
+                        } else {
+                            val loginupdate: LoginObject = appDatabase.loginDao().getAll()
+                            loginupdate.Package = subPackage.toString()
+                            loginupdate.paymentType = 3
+                            loginupdate.payId = payId
+                            loginupdate.isChildMissing = false
+                            loginupdate.isFromIos = false
+                            appDatabase.loginDao().updateLogin(loginupdate)
+                        }
+                    }
+                    gotoDashBoard()
+                } else {
+                    showMessage(message)
+                }
+            }
+        })
+    }
+
+    private lateinit var paypalBottomSheetDialog: BottomSheetDialog
+
+    fun openPaymentOptions(firstName: String, lastName: String, email: String, subscriptionBean: SubscriptionBean, paymentOptionListener: PaymentOptionListener, previousPosition: Int = 0) {
+        val view = LayoutInflater.from(this@HomeActivity)
+            .inflate(R.layout.popup_paypal_layout, window.decorView.rootView as ViewGroup, false)
+        if (this::paypalBottomSheetDialog.isInitialized) {
+            if (paypalBottomSheetDialog.isShowing) {
+                paypalBottomSheetDialog.dismiss()
+            }
+        }
+        paypalBottomSheetDialog = BottomSheetDialog(this@HomeActivity, R.style.appBottomSheetDialogTheme)
+        paypalBottomSheetDialog.setContentView(view)
+        val mBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(view.parent as View)
+        mBehavior.isHideable = false
+        paypalBottomSheetDialog.setOnShowListener {
+            mBehavior.peekHeight = view.height
+            try {
+                if (previousPosition >= 0){
+                    nav_view.menu.getItem(previousPosition).isChecked = true
+                }else{
+                    deCheckAllNavigationItem()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        val llCreditCard: LinearLayout? = paypalBottomSheetDialog.findViewById(R.id.llCreditCard)
+        val tvCreditCard: TextView? = paypalBottomSheetDialog.findViewById(R.id.tvCreditCard)
+        val ivPaypal: ImageView? = paypalBottomSheetDialog.findViewById(R.id.ivPaypal)
+        llCreditCard?.setOnClickListener {
+            paypalBottomSheetDialog.dismiss()
+            hideKeyboard()
+            Comman_Methods.avoidDoubleClicks(it)
+            paymentOptionListener.onCreditCardOption()
+        }
+        ivPaypal?.setOnClickListener {
+            paypalBottomSheetDialog.dismiss()
+            hideKeyboard()
+            Comman_Methods.avoidDoubleClicks(it)
+
+            Comman_Methods.isCustomTrackingPopUpShow(this@HomeActivity,
+                message = resources.getString(R.string.str_paypal_fee_warning),
+                positiveButtonText = resources.getString(R.string.str_ok),
+                negativeButtonText = resources.getString(R.string.cancel),
+                positiveButtonListener = object : PositiveButtonListener {
+                    override fun okClickListener() {
+                        Utils.callDifferentPaypalApi(this@HomeActivity, 3,
+                            planId = subscriptionBean.payPalPlanId,
+                            firstName = firstName, lastName = lastName, email = email,
+                            commonApiListener = object : CommonApiListener {
+                                override fun onSingleSubscriptionSuccessResult(updateTimeCard: SubscriptionResponse) {
+                                    val subscriptionLink = updateTimeCard.links ?: ArrayList()
+                                    val redirectLink = Utils.openLinkForPayment(subscriptionLink)
+                                    openPaypalPaymentScreen(redirectLink, updateTimeCard.id ?: "", paymentOptionListener)
+                                }
+                            })
+                    }
+                })
+        }
+        paypalBottomSheetDialog.show()
+    }
+
+    fun checkPaypalSubscription(subscriptionId: String, paymentOptionListener: PaymentOptionListener, openLink: Boolean = false, loader: Boolean = true) {
+        Utils.callDifferentPaypalApi(this@HomeActivity, 2, subscriptionId, commonApiListener = object : CommonApiListener {
+            override fun onSingleSubscriptionSuccessResult(updateTimeCard: SubscriptionResponse) {
+                when (updateTimeCard.status) {
+                    "APPROVAL_PENDING" -> {
+                        val subscriptionLink = updateTimeCard.links ?: java.util.ArrayList()
+                        val redirectLink = Utils.openLinkForPayment(subscriptionLink)
+                        if (openLink) {
+                            openPaypalPaymentScreen(
+                                redirectLink,
+                                updateTimeCard.id ?: "",
+                                paymentOptionListener
+                            )
+                        }
+                    }
+                    "APPROVED", "ACTIVE" -> {
+                        var firstName = ""
+                        var lastName = ""
+                        var email = ""
+                        updateTimeCard.subscriber?.let {
+                            email = it.emailAddress ?: ""
+                            it.name?.let { userData ->
+                                firstName = userData.givenName ?: ""
+                                lastName = userData.surname ?: ""
+                            }
+                        }
+                        paymentOptionListener.onPayPalOption(updateTimeCard.id ?: "", firstName, lastName, email)
+                    }
+                    "SUSPENDED", "CANCELLED", "EXPIRED" -> {
+                        paymentOptionListener.onPaymentExpired()
+                    }
+                }
+            }
+        }, isLoader = loader)
+    }
+
+    private fun openPaypalPaymentScreen(linkUrl: String, subscriptionIdData: String, paymentOptionListener: PaymentOptionListener) {
+        if (this@HomeActivity::payPalPaymentFragment.isInitialized) {
+            if (payPalPaymentFragment != null) {
+                if (payPalPaymentFragment.isAdded) {
+                    return
+                }
+            }
+        }
+        payPalPaymentFragment = HomePayPalPaymentFragment.newInstance(linkUrl)
+        payPalPaymentFragment.paymentOptionListener = object : PaymentOptionListener {
+            override fun onCreditCardOption() {}
+            override fun onPayPalOption(
+                subscriptionId: String, firstName: String,
+                lastName: String, email: String
+            ) {
+                checkPaypalSubscription(subscriptionIdData, paymentOptionListener)
+            }
+        }
+        payPalPaymentFragment.setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme)
+        payPalPaymentFragment.show(supportFragmentManager, "payPalPaymentFragment")
     }
 
     private fun requiredChanges(versionCheck: Boolean) {
@@ -551,7 +734,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
         }
-        checkUserActive(versionCheck)
+//        checkUserActive(versionCheck)
     }
 
     fun showLocationTrackingByAdmin(adminName: String) {
@@ -563,92 +746,93 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun checkDeviceSubscriptionApi(versionCheck: Boolean) {
-        val loginData = appDatabase.loginDao().getAll()
-        val isAdditionalMember = loginData.IsAdditionalMember ?: false
-        val userId = when {
-            loginData.isAdmin -> {
-                loginData.memberID
+        try {
+            val loginData = appDatabase.loginDao().getAll()
+            val isAdditionalMember = loginData.IsAdditionalMember ?: false
+            val userId = when {
+                loginData.isAdmin -> {
+                    loginData.memberID
+                }
+                isAdditionalMember -> {
+                    loginData.memberID
+                }
+                else -> {
+                    loginData.adminID
+                }
             }
-            isAdditionalMember -> {
-                loginData.memberID
-            }
-            else -> {
-                loginData.adminID
-            }
-        }
 
-        Utils.userDeviceSubscription(this@HomeActivity, userId ?: 0, object : CommonApiListener {
-            override fun deviceCheckResponse(
-                status: Boolean,
-                message: String,
-                responseMessage: String,
-                result: DeviceSubscriptionResult
-            ) {
-                if (result.subscriptionTookFrom == 1) {
-                    checkAllSubscription(versionCheck)
-                } else {
-                    if (result.status) {
-                        when (result.subscriptionTookFrom) {
-                            2 -> {
+            Utils.userDeviceSubscription(this@HomeActivity, userId ?: 0, object : CommonApiListener {
+                override fun deviceCheckResponse(
+                    status: Boolean,
+                    message: String,
+                    responseMessage: String,
+                    result: DeviceSubscriptionResult
+                ) {
+                    if (result.subscriptionTookFrom == 1) {
+                        checkAllSubscription(versionCheck)
+                    } else if (result.subscriptionTookFrom == 3) {
+                        checkPaypalSubscription(loginData.payId ?: "", object : PaymentOptionListener {
+                            override fun onCreditCardOption() {}
+
+                            override fun onPayPalOption(
+                                subscriptionId: String, firstName: String,
+                                lastName: String, email: String
+                            ) {
                                 requiredChanges(versionCheck)
                             }
-                        }
+
+                            override fun onPaymentExpired() {
+                                LocalBroadcastManager.getInstance(this@HomeActivity).registerReceiver(
+                                    mMessageReceiver, IntentFilter("LiveMemberCount")
+                                )
+                                moveToSubscriptionScreen(isRemain = true)
+                            }
+                        }, openLink = true, false)
                     } else {
-                        Comman_Methods.isCustomTrackingPopUpHide()
-                        when (result.subscriptionTookFrom) {
-                            0, 2 -> {
-                                if (loginData.isAdmin) {
-                                    LocalBroadcastManager.getInstance(this@HomeActivity).registerReceiver(
-                                        mMessageReceiver, IntentFilter("LiveMemberCount")
-                                    )
-                                    if (!checkMissingSubscription()) {
-                                        addFragment(
-                                            RemainSubscriptionFragment.newInstance(
-                                                result.subscriptionTookFrom == 0,
-                                                false, FamilyMonitorResult(), true
-                                            ),
-                                            false,
-                                            true,
-                                            animationType = AnimationType.fadeInfadeOut
+                        if (result.status) {
+                            when (result.subscriptionTookFrom) {
+                                2 -> {
+                                    requiredChanges(versionCheck)
+                                }
+                            }
+                        } else {
+                            Comman_Methods.isCustomTrackingPopUpHide()
+                            when (result.subscriptionTookFrom) {
+                                0, 2, 3 -> {
+                                    if (loginData.isAdmin) {
+                                        LocalBroadcastManager.getInstance(this@HomeActivity).registerReceiver(
+                                            mMessageReceiver, IntentFilter("LiveMemberCount")
                                         )
-                                    }
-                                } else {
-                                    val isServiceStarted =
-                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                            Utils.isJobServiceRunning(this@HomeActivity)
-                                        } else {
-                                            isMyServiceRunning(GpsService::class.java, this@HomeActivity)
-                                        }
-                                    LocalBroadcastManager.getInstance(this@HomeActivity).registerReceiver(
-                                        mMessageReceiver, IntentFilter("LiveMemberCount")
-                                    )
-                                    stopGpsServices(isServiceStarted)
-                                    if (!checkMissingSubscription()) {
-                                        addFragment(
-                                            UpdateSubFragment.newInstance(
-                                                true, false,
-                                                false, false,
-                                                FamilyMonitorResult(), ArrayList(),
-                                                false, false,
-                                                true
-                                            ),
-                                            false, true,
-                                            animationType = AnimationType.fadeInfadeOut
+                                        moveToSubscriptionScreen(result.subscriptionTookFrom == 0, true)
+                                    } else {
+                                        val isServiceStarted =
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                                Utils.isJobServiceRunning(this@HomeActivity)
+                                            } else {
+                                                isMyServiceRunning(GpsService::class.java, this@HomeActivity)
+                                            }
+                                        LocalBroadcastManager.getInstance(this@HomeActivity).registerReceiver(
+                                            mMessageReceiver, IntentFilter("LiveMemberCount")
                                         )
+                                        stopGpsServices(isServiceStarted)
+                                        moveToSubscriptionScreen()
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
-        }, false)
+            }, false)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun checkMemberSubscriptionApi(versionCheck: Boolean) {
         if (ConnectionUtil.isInternetAvailable(this@HomeActivity)) {
             isSpeedAvailable()
-            val subResponseCall = WebApiClient.getInstance(this).webApi_without?.checkMemberSubscription(appDatabase.loginDao().getAll().memberID)
+            val subResponseCall = WebApiClient.getInstance(this)
+                .webApi_without?.checkMemberSubscription(appDatabase.loginDao().getAll().memberID)
 
             subResponseCall?.enqueue(object : Callback<MemberSubscription> {
                 override fun onFailure(call: Call<MemberSubscription>, t: Throwable) {}
@@ -732,21 +916,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                     requiredChanges(versionCheck)
                                 } else {
                                     stopGpsServices(isServiceStarted)
-                                    if (!checkMissingSubscription()) {
-                                        Comman_Methods.isCustomTrackingPopUpHide()
-                                        addFragment(
-                                            UpdateSubFragment.newInstance(
-                                                true, false,
-                                                false, false,
-                                                FamilyMonitorResult(), ArrayList(),
-                                                false, false,
-                                                true
-                                            ),
-                                            false,
-                                            true,
-                                            animationType = AnimationType.fadeInfadeOut
-                                        )
-                                    }
+                                    Comman_Methods.isCustomTrackingPopUpHide()
+                                    moveToSubscriptionScreen()
                                 }
                             }
                         }
@@ -1257,7 +1428,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 gotoDashBoard()
             }
             R.id.nav_live_member -> {
-                if (!purchaseSubscription()) {
+                if (!purchaseSubscription(previousSelected)) {
                     if (ConnectionUtil.isInternetAvailable(this)) {
                         addFragment(
                             LiveMemberFragment(),
@@ -1271,7 +1442,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
             R.id.nav_news -> {
-                if (!purchaseSubscription()) {
+                if (!purchaseSubscription(previousSelected)) {
                     addFragment(
                         NeighbourFragment(),
                         true,
@@ -1289,7 +1460,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 )
             }
             R.id.nav_place_visit -> {
-                if (!purchaseSubscription()) {
+                if (!purchaseSubscription(previousSelected)) {
                     addFragment(
                         PlacesToVisitFragment(),
                         true,
@@ -1299,7 +1470,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
             R.id.nav_hibp -> {
-                if (!purchaseSubscription()) {
+                if (!purchaseSubscription(previousSelected)) {
                     addFragment(
                         SubDashBoardFragment.newInstance(PWNED),
                         true,
@@ -1319,25 +1490,19 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             }
             R.id.nav_member_list -> {
-                if (!purchaseSubscription()) {
+                if (!purchaseSubscription(previousSelected)) {
                     if (appDatabase.memberDao().countMember() >= FIXED_USER_COUNT) {
                         showMessage(resources.getString(R.string.member_limit))
                     } else {
                         addFragment(
-                            AddMemberFragment.newInstance(
-                                false,
-                                FamilyMonitorResult(),
-                                SubscriptionBean(),
-                                true,
-                                false,
-                                false
-                            ), true, true, animationType = AnimationType.fadeInfadeOut
+                            AddMemberFragment.newInstance(isFromList = true),
+                            true, true, animationType = AnimationType.fadeInfadeOut
                         )
                     }
                 }
             }
             R.id.nav_fencing -> {
-                if (!purchaseSubscription()) {
+                if (!purchaseSubscription(previousSelected)) {
                     addFragment(
                         GeofenceFragment(),
                         true,
@@ -1347,7 +1512,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
             R.id.nav_child -> {
-                if (!purchaseSubscription()) {
+                if (!purchaseSubscription(previousSelected)) {
                     if (loginData.isAdmin) {
                         if (loginData.isReport) {
                             addFragment(
@@ -1966,16 +2131,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
                     if (result != "active") {
                         stopGpsServices(isServiceStarted)
-                        if (!checkMissingSubscription()) {
-                            Comman_Methods.isCustomTrackingPopUpHide()
-                            addFragment(
-                                UpdateSubFragment.newInstance(
-                                    true, false,
-                                    false, false,
-                                    FamilyMonitorResult(), ArrayList(), false, false, true
-                                ), false, true, animationType = AnimationType.fadeInfadeOut
-                            )
-                        }
+                        Comman_Methods.isCustomTrackingPopUpHide()
+                        moveToSubscriptionScreen()
                     } else if (result == "active") {
                         /*try {
                         if (isAppIsInBackground(this@HomeActivity)) {
@@ -2038,20 +2195,35 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 } else {
                     stopGpsServices(isServiceStarted)
-                    if (!checkMissingSubscription()) {
-                        Comman_Methods.isCustomTrackingPopUpHide()
-                        addFragment(
-                            UpdateSubFragment.newInstance(
-                                true, false,
-                                false, false,
-                                FamilyMonitorResult(), ArrayList(), false, true, true
-                            ), false, true, animationType = AnimationType.fadeInfadeOut
-                        )
-                    }
+                    Comman_Methods.isCustomTrackingPopUpHide()
+                    moveToSubscriptionScreen(isCancelled = true)
 //                            }
                 }
             }
         })
+    }
+
+    private fun moveToSubscriptionScreen(showFreeTrial: Boolean = false, isRemain: Boolean = false, isCancelled: Boolean = false) {
+        if (!checkMissingSubscription()) {
+            if (isRemain) {
+                addFragment(
+                    RemainSubscriptionFragment.newInstance(
+                        showFreeTrial = showFreeTrial,
+                        showLogout = true
+                    ),
+                    false, true,
+                    animationType = AnimationType.fadeInfadeOut
+                )
+            } else {
+                addFragment(
+                    UpdateSubFragment.newInstance(
+                        isFromActivity = true,
+                        isCancelledSubscription = isCancelled,
+                        isFromCancelledAllData = true
+                    ), false, true, animationType = AnimationType.fadeInfadeOut
+                )
+            }
+        }
     }
 
     fun stopGpsServices(isServiceStarted: Boolean) {
@@ -2518,41 +2690,46 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     fun checkUserActive(versionCheck: Boolean = false){
-        val appDatabase = OldMe911Database.getDatabase(this)
-        val loginObject = appDatabase.loginDao().getAll()
+        try {
+            val appDatabase = OldMe911Database.getDatabase(this@HomeActivity)
+            val loginObject = appDatabase.loginDao().getAll()
 
-        val memberId = loginObject.memberID
-        if (ConnectionUtil.isInternetAvailable(this@HomeActivity)) {
-            isSpeedAvailable()
+            val memberId = loginObject.memberID
+            if (ConnectionUtil.isInternetAvailable(this@HomeActivity)) {
+                isSpeedAvailable()
 
-            val callIsUserActive = WebApiClient.getInstance(this).webApi_without?.callCheckActiveStatus(memberId)
+                val callIsUserActive = WebApiClient.getInstance(this)
+                    .webApi_without?.callCheckActiveStatus(memberId)
 
-            callIsUserActive?.enqueue(object : Callback<ApiResponse> {
-                override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                callIsUserActive?.enqueue(object : Callback<ApiResponse> {
+                    override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
 
-                }
+                    }
 
-                override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
-                    val statusCode: Int = response.code()
-                    if (statusCode == 200) {
-                        if (response.isSuccessful) {
-                            response.body()?.let {
-                                if (!it.status) {
-                                    alertActiveUser(it.result)
-                                } else {
-                                    if (versionCheck){
-                                        checkVersionCode()
+                    override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                        val statusCode: Int = response.code()
+                        if (statusCode == 200) {
+                            if (response.isSuccessful) {
+                                response.body()?.let {
+                                    if (!it.status) {
+                                        alertActiveUser(it.result)
+                                    } else {
+                                        if (versionCheck){
+                                            checkVersionCode()
+                                        }
                                     }
                                 }
                             }
+                        } else {
+                            Utils.showSomeThingWrongMessage(this@HomeActivity)
                         }
-                    } else {
-                        Utils.showSomeThingWrongMessage(this@HomeActivity)
                     }
-                }
-            })
-        } else {
-            Utils.showNoInternetMessage(this@HomeActivity)
+                })
+            } else {
+                Utils.showNoInternetMessage(this@HomeActivity)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

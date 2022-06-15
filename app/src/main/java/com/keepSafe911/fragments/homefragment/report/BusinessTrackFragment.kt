@@ -568,7 +568,7 @@ class BusinessTrackFragment : HomeBaseFragment(), View.OnClickListener {
                 p0.checkWorker.isEnabled = false
                 tempMemberList[p1].isSelected = true
             }
-            p0.checkWorker.setTextColor(ContextCompat.getColor(activity, R.color.caldroid_black))
+            p0.checkWorker.setTextColor(ContextCompat.getColor(activity, R.color.bgBlack))
             p0.checkWorker.setOnCheckedChangeListener(null)
             p0.checkWorker.setOnClickListener { v ->
                 val isSelected = (v as CheckBox).isChecked

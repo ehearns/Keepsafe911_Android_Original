@@ -264,6 +264,11 @@ class GeofenceFragment : HomeBaseFragment(), View.OnClickListener {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 geofenceAdapter.filter.filter(s)
+                if (s?.toString()?.isNotEmpty() == true) {
+                    etSearchChild.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_x_close, 0)
+                } else {
+                    etSearchChild.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -326,14 +331,24 @@ class GeofenceFragment : HomeBaseFragment(), View.OnClickListener {
 
 
             if (event.action == MotionEvent.ACTION_DOWN) {
-                if (event.rawX >= (etSearchChild.right - etSearchChild.compoundDrawables[DRAWABLE_RIGHT].bounds.width())) {
-                    if (etSearchChild.text.toString().trim().isNotEmpty()) {
-                        mActivity.hideKeyboard()
-                        etSearchChild.isFocusable = false
-                        etSearchChild.isFocusableInTouchMode = false
-                        etSearchChild.setText("")
+                if (etSearchChild.compoundDrawables != null) {
+                    if (etSearchChild.compoundDrawables[DRAWABLE_RIGHT] != null) {
+                        if (event.rawX >= (etSearchChild.right - etSearchChild.compoundDrawables[DRAWABLE_RIGHT].bounds.width())) {
+                            if (etSearchChild.text.toString().trim().isNotEmpty()) {
+                                mActivity.hideKeyboard()
+                                etSearchChild.isFocusable = false
+                                etSearchChild.isFocusableInTouchMode = false
+                                etSearchChild.setText("")
+                            }
+                            true
+                        } else {
+                            etSearchChild.isFocusable = true
+                            etSearchChild.isFocusableInTouchMode = true
+                        }
+                    } else {
+                        etSearchChild.isFocusable = true
+                        etSearchChild.isFocusableInTouchMode = true
                     }
-                    true
                 } else {
                     etSearchChild.isFocusable = true
                     etSearchChild.isFocusableInTouchMode = true

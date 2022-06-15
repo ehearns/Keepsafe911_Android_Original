@@ -4,7 +4,6 @@
         android:layout_width="match_parent"
         android:layout_marginStart="@dimen/size200"
         android:layout_marginEnd="@dimen/size200"
-        android:background="@color/caldroid_white"
         android:layout_height="wrap_content">
     <com.keepSafe911.model.ExoPlayerMapRecyclerView
             android:id="@+id/containerMapPopUp"

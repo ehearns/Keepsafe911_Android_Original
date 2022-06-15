@@ -168,8 +168,12 @@ class ForgotFragment : MainBaseFragment(), View.OnClickListener {
             R.id.btnForgotPassword -> {
                 mActivity.hideKeyboard()
                 if (etForgotMobile.text.toString().trim().isNotEmpty()) {
-                    Comman_Methods.avoidDoubleClicks(v)
-                    callForgotApi(countryCode + etForgotMobile.text.toString().trim())
+                    if (etForgotMobile.text.toString().trim().length != 10) {
+                        mActivity.showMessage(mActivity.resources.getString(R.string.phone_length))
+                    } else {
+                        Comman_Methods.avoidDoubleClicks(v)
+                        callForgotApi(countryCode + etForgotMobile.text.toString().trim())
+                    }
                 } else {
                     mActivity.showMessage(mActivity.resources.getString(R.string.blank_phone))
                 }

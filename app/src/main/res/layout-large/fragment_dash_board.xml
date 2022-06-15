@@ -90,7 +90,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:id="@+id/ivOldMe911"
+        android:id="@+id/ivKeepSafe911"
         android:scaleType="center"
         android:layout_gravity="center"
         android:src="@drawable/ic_oldme_call"

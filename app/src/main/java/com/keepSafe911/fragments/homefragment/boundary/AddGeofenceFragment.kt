@@ -35,6 +35,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
+import com.google.android.libraries.places.api.Places
 import com.keepSafe911.BuildConfig
 import com.kotlinpermissions.KotlinPermissions
 import com.keepSafe911.R
@@ -111,7 +112,7 @@ class AddGeofenceFragment : HomeBaseFragment(), Listener, OnMapReadyCallback, Go
         setHeader()
         mActivity.disableDrawer()
         gpstracker = GpsTracker(mActivity)
-
+        Places.initialize(mActivity, mActivity.resources.getString(R.string.firebase_live_key))
         mPlacesAdapter = PlacesAdapter(mActivity, R.layout.row_places)
         etGeoLocation.setAdapter(mPlacesAdapter)
         etGeoLocation.onItemClickListener = mAutocompleteClickListener
@@ -166,7 +167,7 @@ class AddGeofenceFragment : HomeBaseFragment(), Listener, OnMapReadyCallback, Go
             }
 
         })
-        sbGeoRadius.isEnabled = !etGeoLocation.text.trim().isEmpty()
+        sbGeoRadius.isEnabled = etGeoLocation.text.trim().isNotEmpty()
     }
 
     private fun setMeter(radius: Int) {
@@ -277,7 +278,7 @@ class AddGeofenceFragment : HomeBaseFragment(), Listener, OnMapReadyCallback, Go
                     )
                     gMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
                     gMap.setMaxZoomPreference(10f)
-                    if (!etGeoLocation.text.trim().isEmpty()) {
+                    if (etGeoLocation.text.trim().isNotEmpty()) {
                         marker?.showInfoWindow()
                         if (geoFenceResult.radius != 0) {
                             circle = gMap.addCircle(

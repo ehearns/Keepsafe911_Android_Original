@@ -14,7 +14,6 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.*
-import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
@@ -27,8 +26,6 @@ import com.facebook.drawee.view.SimpleDraweeView
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.JsonObject
 import com.kotlinpermissions.KotlinPermissions
-import com.like.LikeButton
-import com.like.OnLikeListener
 import com.keepSafe911.BuildConfig
 import com.keepSafe911.R
 import com.keepSafe911.fragments.commonfrag.HomeBaseFragment
@@ -38,7 +35,6 @@ import com.keepSafe911.listner.OnLoadMoreListener
 import com.keepSafe911.listner.PositiveButtonListener
 import com.keepSafe911.model.BaseViewHolder
 import com.keepSafe911.model.LikeCommentResult
-import com.keepSafe911.model.MyBounceInterpolator
 import com.keepSafe911.model.response.*
 import com.keepSafe911.model.roomobj.LoginObject
 import com.keepSafe911.room.OldMe911Database
@@ -49,22 +45,17 @@ import hideKeyboard
 import kotlinx.android.synthetic.main.fragment_neighbour_new.*
 import kotlinx.android.synthetic.main.raw_item_load.view.*
 import kotlinx.android.synthetic.main.raw_neighbour_image.view.*
-import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.lbHelpfulVideo
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvCategoryNameVideo
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostComment
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostCommentCount
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostDate
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostDescription
-import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostLike
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostLikeCount
-import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostLikeVideo
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostMilesVideo
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostOptionVideo
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostSeparator
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostShare
-import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostTimeDuration
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostTitle
-import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostTypeVideo
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvVideoNotSupported
 import kotlinx.android.synthetic.main.raw_neighbour_vedio_new.view.*
 import kotlinx.android.synthetic.main.toolbar_header.*
@@ -172,13 +163,13 @@ class NeighbourFragment : HomeBaseFragment(), View.OnClickListener, SwipeRefresh
         }
         callNeighborlyListApi(pageSizeLoad,true)
 
-        floatingActionButton.setOnClickListener(this)
+        ivAddNeighbour.setOnClickListener(this)
         srlNeighborNewList.setOnRefreshListener(this)
     }
 
     override fun onClick(v: View?) {
         when (v?.id){
-            R.id.floatingActionButton -> {
+            R.id.ivAddNeighbour -> {
                 mActivity.hideKeyboard()
                 avoidDoubleClicks(v)
                 if (rvNeighbourNewList!=null) {
@@ -516,7 +507,7 @@ class NeighbourFragment : HomeBaseFragment(), View.OnClickListener, SwipeRefresh
         override fun getItemViewType(position: Int): Int {
             return if (uploadList[position].iD==0){
                 TYPE_LOAD
-            }else {
+            } else {
                 TYPE_VIDEO
             }
         }
@@ -590,7 +581,7 @@ class NeighbourFragment : HomeBaseFragment(), View.OnClickListener, SwipeRefresh
                     color = R.color.color_purple
                 }
                 else -> {
-                    color = R.color.caldroid_black
+                    color = R.color.bgBlack
                 }
             }
 
@@ -608,6 +599,7 @@ class NeighbourFragment : HomeBaseFragment(), View.OnClickListener, SwipeRefresh
             if (distance < 0f){
                 distance = abs(distance)
             }
+            val decimalSymbols = DecimalFormatSymbols.getInstance(Locale.US)
 
             val wordSpan = SpannableString("\u25CF " + uploadList[position].categoryName)
             wordSpan.setSpan(
@@ -618,16 +610,21 @@ class NeighbourFragment : HomeBaseFragment(), View.OnClickListener, SwipeRefresh
             when(holder.itemViewType){
                 TYPE_VIDEO ->{
                     val nhholder: NeighbourHolder =  holder as NeighbourHolder
-
+                    nhholder.rlVideoParent.background = ContextCompat.getDrawable(mActivity, R.drawable.underline_shape_gray)
                     if (uploadList[position].userImage!=null) {
                         nhholder.sdvNewsUserVideo.loadFrescoImage(mActivity, uploadList[position].userImage ?: "", 1)
                     }
-                    nhholder.lbHelpful.isLiked = uploadList[position].isLiked ?: false
+                    if (uploadList[position].isLiked == true) {
+                        nhholder.tvPostLikeVideo.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_gray, 0, 0, 0)
+                    } else {
+                        nhholder.tvPostLikeVideo.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_outline, 0, 0, 0)
+                    }
                     nhholder.tvCategoryNameVideo.visibility = View.VISIBLE
                     nhholder.tvCategoryNameVideo.text = wordSpan
+                    nhholder.tvCategoryNameNoVideo.text = wordSpan
                     val userName = uploadList[position].addedBy ?: mActivity.resources.getString(R.string.str_neighbor)
                     val fileType = uploadList[position].fileType ?: 0
-                    nhholder.tvPostSeparator.text = "\u0009 $userName"
+                    nhholder.tvPostSeparator.text = userName
                     if (uploadList[position].createdBy == userId) {
                         nhholder.tvPostOption.visibility = View.VISIBLE
                     } else {
@@ -657,20 +654,23 @@ class NeighbourFragment : HomeBaseFragment(), View.OnClickListener, SwipeRefresh
                         if (fileType == 2){
                             nhholder.flPostFileVideo.visibility = View.GONE
                             nhholder.ivPlayVideo.visibility = View.GONE
+                            nhholder.rlNoMediaVideo.visibility = View.VISIBLE
                         }else{
                             nhholder.ivPlayVideo.visibility = View.VISIBLE
                             nhholder.flPostFileVideo.visibility = View.VISIBLE
+                            nhholder.rlNoMediaVideo.visibility = View.GONE
                         }
                         nhholder.ivPostAwareImageFileNew.visibility = View.GONE
                     }else{
                         nhholder.ivPlayVideo.visibility = View.GONE
+                        nhholder.rlNoMediaVideo.visibility = View.GONE
                         nhholder.flPostFileVideo.visibility = View.VISIBLE
                         nhholder.ivPostAwareImageFileNew.visibility = View.VISIBLE
                         Glide.with(context).load(uploadList[position].file ?: "").into(nhholder.ivPostAwareImageFileNew)
                     }
                     nhholder.tvPostTimeDuration.text = differenceTime
-                    val decimalSymbols = DecimalFormatSymbols.getInstance(Locale.US)
                     nhholder.tvPostMilesVideo.text = DecimalFormat("##.#", decimalSymbols).format(distance/1609) +" MI"
+                    nhholder.tvPostMilesNoVideo.text = DecimalFormat("##.#", decimalSymbols).format(distance/1609) +" MI"
                     var diagStartDate = ""
 
                     try {
@@ -684,44 +684,23 @@ class NeighbourFragment : HomeBaseFragment(), View.OnClickListener, SwipeRefresh
                     }
 
                     nhholder.tvPostDate.text = diagStartDate
-                    nhholder.tvPostLikeVideo.text = mActivity.resources.getString(R.string.str_helpful)
                     nhholder.tvPostTitle.text = uploadList[position].title ?: ""
                     nhholder.tvPostDescription.text = uploadList[position].feeds ?: ""
                     nhholder.tvPostLikeCount.text = uploadList[position].likeCount?.toString()
+                    nhholder.tvPostLikeCountNo.text = uploadList[position].likeCount?.toString()
                     nhholder.tvPostCommentCount.text = uploadList[position].commentCount?.toString()
+                    nhholder.tvPostCommentCountNo.text = uploadList[position].commentCount?.toString()
                     if (Comman_Methods.isValid(uploadList[position].file ?: "")){
                         nhholder.tvVideoNotSupported.visibility = View.GONE
                     }else {
                         nhholder.tvVideoNotSupported.visibility = View.VISIBLE
                     }
-
-                    nhholder.tvPostLike.setOnClickListener {
-                        mActivity.hideKeyboard()
+                    nhholder.tvPostLikeVideo.setOnClickListener {
                         avoidDoubleClicks(it)
-                        nhholder.tvPostLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like, 0, 0, 0)
-                        val myAnim = AnimationUtils.loadAnimation(context, R.anim.bounce)
-
-                        // Use bounce interpolator with amplitude 0.2 and frequency 20
-                        val interpolator = MyBounceInterpolator(0.2, 10.0)
-                        myAnim.interpolator = interpolator
-
-                        nhholder.tvPostLike.startAnimation(myAnim)
+                        isFromButton = true
+                        currentPositionLike = nhholder.bindingAdapterPosition
+                        notifyDataSetChanged()
                     }
-                    nhholder.lbHelpful.setOnLikeListener(object: OnLikeListener{
-                        override fun liked(p0: LikeButton?) {
-                            avoidDoubleClicks(p0!!)
-                            isFromButton = true
-                            currentPositionLike = nhholder.bindingAdapterPosition
-                            notifyDataSetChanged()
-                        }
-
-                        override fun unLiked(p0: LikeButton?) {
-                            avoidDoubleClicks(p0!!)
-                            isFromButton = true
-                            currentPositionLike = nhholder.bindingAdapterPosition
-                            notifyDataSetChanged()
-                        }
-                    })
                     nhholder.tvPostComment.setOnClickListener {
                         mActivity.hideKeyboard()
                         avoidDoubleClicks(it)
@@ -800,15 +779,21 @@ class NeighbourFragment : HomeBaseFragment(), View.OnClickListener, SwipeRefresh
                 TYPE_IMAGE -> {
                     val ivholder: ImageHolder = holder as ImageHolder
 
+                    ivholder.rlImageParent.background = ContextCompat.getDrawable(mActivity, R.drawable.underline_shape_gray)
                     if (uploadList[position].userImage!=null) {
                         ivholder.sdvNewsUserImage.loadFrescoImage(mActivity, uploadList[position].userImage ?: "", 1)
                     }
-                    ivholder.lbHelpful.isLiked = uploadList[position].isLiked ?: false
+                    if (uploadList[position].isLiked == true) {
+                        ivholder.tvPostLikeImage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_gray, 0, 0, 0)
+                    } else {
+                        ivholder.tvPostLikeImage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_outline, 0, 0, 0)
+                    }
                     ivholder.tvCategoryNameImage.visibility = View.VISIBLE
                     ivholder.tvCategoryNameImage.text = wordSpan
+                    ivholder.tvCategoryNameNoImage.text = wordSpan
                     val userName = uploadList[position].addedBy ?: mActivity.resources.getString(R.string.str_neighbor)
                     val fileType = uploadList[position].fileType ?: 0
-                    ivholder.tvPostSeparator.text = "\u0009 $userName"
+                    ivholder.tvPostSeparator.text = userName
                     if (uploadList[position].createdBy == userId) {
                         ivholder.tvPostOption.visibility = View.VISIBLE
                     } else {
@@ -845,10 +830,8 @@ class NeighbourFragment : HomeBaseFragment(), View.OnClickListener, SwipeRefresh
                         e.printStackTrace()
                     }
                     ivholder.tvPostTimeDuration.text = differenceTime
-                    ivholder.tvPostLikeImage.text = mActivity.resources.getString(R.string.str_helpful)
-//                    ivholder.tvPostViewed.text = "\u2022 " + DecimalFormat("##.#").format(distance/1609) +" MI"
-                    val decimalSymbols = DecimalFormatSymbols.getInstance(Locale.US)
                     ivholder.tvPostViewed.text = DecimalFormat("##.#", decimalSymbols).format(distance / 1609) + " MI"
+                    ivholder.tvPostMilesNoImage.text = DecimalFormat("##.#", decimalSymbols).format(distance / 1609) + " MI"
                     var diagStartDate = ""
 
                     try {
@@ -865,42 +848,23 @@ class NeighbourFragment : HomeBaseFragment(), View.OnClickListener, SwipeRefresh
                     ivholder.tvPostTitle.text = uploadList[position].title ?: ""
                     ivholder.tvPostDescription.text = uploadList[position].feeds ?: ""
                     ivholder.tvPostLikeCount.text = uploadList[position].likeCount?.toString()
+                    ivholder.tvPostLikeCountNoImage.text = uploadList[position].likeCount?.toString()
                     ivholder.tvPostCommentCount.text = uploadList[position].commentCount?.toString()
+                    ivholder.tvPostCommentCountNoImage.text = uploadList[position].commentCount?.toString()
                     if (fileType > 0) {
                         ivholder.flPostFile.visibility = View.GONE
+                        ivholder.rlNoMediaImage.visibility = View.VISIBLE
                     } else {
                         ivholder.flPostFile.visibility = View.VISIBLE
+                        ivholder.rlNoMediaImage.visibility = View.GONE
                         Glide.with(context).load(uploadList[position].file ?: "").into(ivholder.ivPostAwareImageFile)
                     }
-                    ivholder.tvPostLike.setOnClickListener {
-                        mActivity.hideKeyboard()
+                    ivholder.tvPostLikeImage.setOnClickListener {
                         avoidDoubleClicks(it)
-                        ivholder.tvPostLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like, 0, 0, 0)
-                        val myAnim = AnimationUtils.loadAnimation(context, R.anim.bounce)
-
-                        // Use bounce interpolator with amplitude 0.2 and frequency 20
-                        val interpolator = MyBounceInterpolator(0.2, 10.0)
-                        myAnim.interpolator = interpolator
-
-                        ivholder.tvPostLike.startAnimation(myAnim)
+                        isFromButton = true
+                        currentPositionLike = ivholder.bindingAdapterPosition
+                        notifyDataSetChanged()
                     }
-                    ivholder.lbHelpful.setOnLikeListener(object : OnLikeListener {
-                        override fun liked(p0: LikeButton?) {
-                            avoidDoubleClicks(p0!!)
-                            isFromButton = true
-                            currentPositionLike = ivholder.bindingAdapterPosition
-                            notifyDataSetChanged()
-
-                        }
-
-                        override fun unLiked(p0: LikeButton?) {
-                            avoidDoubleClicks(p0!!)
-                            isFromButton = true
-                            currentPositionLike = ivholder.bindingAdapterPosition
-                            notifyDataSetChanged()
-                        }
-
-                    })
                     ivholder.tvPostComment.setOnClickListener {
                         mActivity.hideKeyboard()
                         avoidDoubleClicks(it)
@@ -975,9 +939,9 @@ class NeighbourFragment : HomeBaseFragment(), View.OnClickListener, SwipeRefresh
             var timeDifference = ""
             var different = endDate.time - startDate.time
 
-            System.out.println("startDate : $startDate")
-            System.out.println("endDate : $endDate")
-            System.out.println("different : $different")
+            println("startDate : $startDate")
+            println("endDate : $endDate")
+            println("different : $different")
 
             val secondsInMilli = 1000L
             val minutesInMilli = secondsInMilli * 60
@@ -1000,6 +964,7 @@ class NeighbourFragment : HomeBaseFragment(), View.OnClickListener, SwipeRefresh
             val elapsedSeconds = different / secondsInMilli
 
             timeDifference = when {
+                elapsedMonths > 0L -> elapsedDays.toString()+ mActivity.resources.getString(R.string.str_month_ago)
                 elapsedDays > 0L -> elapsedDays.toString()+ mActivity.resources.getString(R.string.str_day_ago)
                 elapsedHours > 0L -> elapsedHours.toString()+ mActivity.resources.getString(R.string.str_hour_ago)
                 elapsedMinutes > 0L -> elapsedMinutes.toString() + mActivity.resources.getString(R.string.str_min_ago)
@@ -1117,7 +1082,7 @@ class NeighbourFragment : HomeBaseFragment(), View.OnClickListener, SwipeRefresh
 
             var sdvNewsUserImage: SimpleDraweeView = view.sdvNewsUserImage
             var tvPostSeparator: TextView = view.tvPostSeparator
-            var tvPostTimeDuration: TextView = view.tvPostTimeDuration
+            var tvPostTimeDuration: TextView = view.tvPostMapTimeDurationImage
             var tvPostViewed: TextView = view.tvPostViewed
             var tvPostDate: TextView = view.tvPostDate
             var tvPostOption: TextView = view.tvPostOption
@@ -1125,15 +1090,18 @@ class NeighbourFragment : HomeBaseFragment(), View.OnClickListener, SwipeRefresh
             var tvPostDescription: TextView = view.tvPostDescription
             var tvPostLikeCount: TextView = view.tvPostLikeCount
             var tvPostCommentCount: TextView = view.tvPostCommentCount
-            var tvPostLike: TextView = view.tvPostLike
             var tvPostComment: TextView = view.tvPostComment
             var tvPostShare: TextView = view.tvPostShare
-            var tvPostTypeImage: TextView = view.tvPostTypeImage
             var tvPostLikeImage: TextView = view.tvPostLikeImage
             var tvCategoryNameImage: TextView = view.tvCategoryNameImage
             var flPostFile: FrameLayout = view.flPostFileImage
             var ivPostAwareImageFile: ImageView = view.ivPostAwareImageFile
-            var lbHelpful: LikeButton = view.lbHelpfulImage
+            var rlImageParent: RelativeLayout = view.rlImageParent
+            var rlNoMediaImage: RelativeLayout = view.rlNoMediaImage
+            var tvCategoryNameNoImage: TextView = view.tvCategoryNameNoImage
+            var tvPostMilesNoImage: TextView = view.tvPostMilesNoImage
+            var tvPostLikeCountNoImage: TextView = view.tvPostLikeCountNoImage
+            var tvPostCommentCountNoImage: TextView = view.tvPostCommentCountNoImage
         }
         inner class NeighbourHolder(view: View): BaseViewHolder(view){
             override fun clear() {
@@ -1143,7 +1111,7 @@ class NeighbourFragment : HomeBaseFragment(), View.OnClickListener, SwipeRefresh
             var parent: View = view
             var sdvNewsUserVideo: SimpleDraweeView = view.sdvNewsUserVideoNew
             var tvPostSeparator: TextView = view.tvPostSeparator
-            var tvPostTimeDuration: TextView = view.tvPostTimeDuration
+            var tvPostTimeDuration: TextView = view.tvPostMapTimeDurationVideo
             var tvPostMilesVideo: TextView = view.tvPostMilesVideo
             var tvPostDate: TextView = view.tvPostDate
             var tvPostOption: TextView = view.tvPostOptionVideo
@@ -1151,17 +1119,20 @@ class NeighbourFragment : HomeBaseFragment(), View.OnClickListener, SwipeRefresh
             var tvPostDescription: TextView = view.tvPostDescription
             var tvPostLikeCount: TextView = view.tvPostLikeCount
             var tvPostCommentCount: TextView = view.tvPostCommentCount
-            var tvPostLike: TextView = view.tvPostLike
             var tvPostComment: TextView = view.tvPostComment
             var tvPostShare: TextView = view.tvPostShare
-            var tvPostTypeVideo: TextView = view.tvPostTypeVideo
             var tvPostLikeVideo: TextView = view.tvPostLikeVideo
             var tvCategoryNameVideo: TextView = view.tvCategoryNameVideo
             var tvVideoNotSupported: TextView = view.tvVideoNotSupported
             var ivPostAwareImageFileNew: ImageView = view.ivPostAwareImageFileNew
             var ivPlayVideo: ImageView = view.ivPlayVideoNew
             var flPostFileVideo: FrameLayout = view.flPostFileVideo
-            var lbHelpful: LikeButton = view.lbHelpfulVideo
+            var rlVideoParent: RelativeLayout = view.rlVideoParent
+            var rlNoMediaVideo: RelativeLayout = view.rlNoMediaVideo
+            var tvCategoryNameNoVideo: TextView = view.tvCategoryNameNoVideo
+            var tvPostMilesNoVideo: TextView = view.tvPostMilesNoVideo
+            var tvPostLikeCountNo: TextView = view.tvPostLikeCountNo
+            var tvPostCommentCountNo: TextView = view.tvPostCommentCountNo
             var progressBar: ProgressBar = view.progressBar
             init {
                 ivPlayVideo = view.ivPlayVideoNew

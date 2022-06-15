@@ -76,6 +76,9 @@ class ChangePasswordFragment : HomeBaseFragment(), View.OnClickListener {
             etCConfirmPassword.imeOptions = EditorInfo.IME_ACTION_DONE
         }
 
+        etNewPassword.filters = arrayOf(Utils.filterPassword)
+        etCConfirmPassword.filters = arrayOf(Utils.filterPassword)
+
         val changePasswordContent = mActivity.resources.getString(R.string.change_password).uppercase()
         val changeContent = mActivity.resources.getString(R.string.str_change).uppercase()
         val contentTitle = SpannableString(changePasswordContent)
@@ -151,7 +154,7 @@ class ChangePasswordFragment : HomeBaseFragment(), View.OnClickListener {
                 false
             }
             !isRequiredField(etCConfirmPassword.text.toString()) -> {
-                mActivity.showMessage(mActivity.resources.getString(R.string.blank_pass))
+                mActivity.showMessage(mActivity.resources.getString(R.string.blank_conf_pass))
                 false
             }
             !isPasswordMatch(etNewPassword.text.toString(), etCConfirmPassword.text.toString()) -> {

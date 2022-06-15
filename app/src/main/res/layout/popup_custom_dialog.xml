@@ -14,7 +14,7 @@
         android:paddingStart="@dimen/gape10"
         android:paddingTop="@dimen/size5"
         android:paddingBottom="@dimen/size5"
-        android:textColor="@color/caldroid_black"
+        android:textColor="@color/bgBlack"
         android:textSize="@dimen/textSize18"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

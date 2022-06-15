@@ -799,6 +799,7 @@ class PaymentMethodFragment : MainBaseFragment(), View.OnClickListener, EncryptT
 
             val device_token = "".toRequestBody(MEDIA_TYPE_TEXT)
             val device_id = "1".toRequestBody(MEDIA_TYPE_TEXT)
+            val paymentType = "1".toRequestBody(MEDIA_TYPE_TEXT)
             val loginByApp = "2".toRequestBody(MEDIA_TYPE_TEXT)
             val imageBody: RequestBody
             val isSms: RequestBody =
@@ -864,7 +865,8 @@ class PaymentMethodFragment : MainBaseFragment(), View.OnClickListener, EncryptT
                     loginByApp,
                     referral_name,
                     promoCode,
-                    isChildMissing)
+                    isChildMissing,
+                    paymentType)
 
 
             callRegisrationApi?.enqueue(object : retrofit2.Callback<CommonValidationResponse> {

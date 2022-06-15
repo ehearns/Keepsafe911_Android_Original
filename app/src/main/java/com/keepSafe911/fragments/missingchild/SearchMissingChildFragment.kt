@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.keepSafe911.BuildConfig
 import com.keepSafe911.R
@@ -37,6 +39,7 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -127,14 +130,24 @@ class SearchMissingChildFragment : HomeBaseFragment() {
 
 
             if (event.action == MotionEvent.ACTION_DOWN) {
-                if (event.rawX >= (etSearchChild.right - etSearchChild.compoundDrawables[DRAWABLE_RIGHT].bounds.width())) {
-                    if (etSearchChild.text.toString().trim().isNotEmpty()) {
-                        mActivity.hideKeyboard()
-                        etSearchChild.isFocusable = false
-                        etSearchChild.isFocusableInTouchMode = false
-                        etSearchChild.setText("")
+                if (etSearchChild.compoundDrawables != null) {
+                    if (etSearchChild.compoundDrawables[DRAWABLE_RIGHT] != null) {
+                        if (event.rawX >= (etSearchChild.right - etSearchChild.compoundDrawables[DRAWABLE_RIGHT].bounds.width())) {
+                            if (etSearchChild.text.toString().trim().isNotEmpty()) {
+                                mActivity.hideKeyboard()
+                                etSearchChild.isFocusable = false
+                                etSearchChild.isFocusableInTouchMode = false
+                                etSearchChild.setText("")
+                            }
+                            true
+                        } else {
+                            etSearchChild.isFocusable = true
+                            etSearchChild.isFocusableInTouchMode = true
+                        }
+                    } else {
+                        etSearchChild.isFocusable = true
+                        etSearchChild.isFocusableInTouchMode = true
                     }
-                    true
                 } else {
                     etSearchChild.isFocusable = true
                     etSearchChild.isFocusableInTouchMode = true
@@ -152,10 +165,12 @@ class SearchMissingChildFragment : HomeBaseFragment() {
                     if (!tvCancel.isEnabled) {
                         tvCancel.isEnabled = true
                     }
+                    etSearchChild.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_x_close, 0)
                 } else {
                     if (tvCancel.isEnabled) {
                         tvCancel.isEnabled = false
                     }
+                    etSearchChild.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
                 }
             }
 
@@ -260,8 +275,10 @@ class SearchMissingChildFragment : HomeBaseFragment() {
 
 //            val url = URLEncoder.encode(matchResultModel.imageName, "UTF-8")
 
+                    val cornerRadius = Comman_Methods.convertDpToPixels(10F, context)
                     val options = RequestOptions()
                         .centerCrop()
+                        .transform(CenterCrop(), RoundedCorners(cornerRadius.roundToInt()))
                         .placeholder(R.drawable.ic_person_placeholder)
                         .error(R.drawable.ic_person_placeholder)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)

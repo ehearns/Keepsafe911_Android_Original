@@ -56,6 +56,7 @@
     <string name="action_settings" tools:ignore="MissingTranslation">Settings</string>
     <string name="no_internet" tools:ignore="MissingTranslation">Please check your internet connection!</string>
     <string name="blank_pass" tools:ignore="MissingTranslation">Password can not be blank.</string>
+    <string name="blank_conf_pass" tools:ignore="MissingTranslation">Confirm Password can not be blank.</string>
     <string name="valid_pass" tools:ignore="MissingTranslation">Please enter valid password</string>
     <string name="pass_val" tools:ignore="MissingTranslation">Password must be 8 characters longer.</string>
     <string name="pass_common_val" tools:ignore="MissingTranslation">Password must contain special character, number and uppercase latter</string>
@@ -73,7 +74,7 @@
     <string name="blank_cvv" tools:ignore="MissingTranslation">CVV code can not be blank.</string>
 
 
-    <string name="match_pass" tools:ignore="MissingTranslation">Sorry! your password is not match.</string>
+    <string name="match_pass" tools:ignore="MissingTranslation">Sorry! your password is not match with confirm password.</string>
     <string name="bank_recoup" tools:ignore="MissingTranslation">Cash Back Program</string>
     <string name="benefit_hub" tools:ignore="MissingTranslation">Discount &amp; Rewards</string>
     <string name="old_new_password" tools:ignore="MissingTranslation">You can not use Current Password as New Password
@@ -390,6 +391,7 @@
     <string name="add_photo_video" tools:ignore="MissingTranslation">Add Photos/Videos</string>
     <string name="update_photo_video" tools:ignore="MissingTranslation">Update Photos/Videos</string>
     <string name="str_title" tools:ignore="MissingTranslation">Title</string>
+    <string name="str_details" tools:ignore="MissingTranslation">Details</string>
     <string name="neighbour_descript" tools:ignore="MissingTranslation">What happened in your neighborhood?</string>
     <string name="str_incident_loc" tools:ignore="MissingTranslation">Incident Location</string>
     <string name="incident_loc_hint" tools:ignore="MissingTranslation">* Your exact address will not be shown.</string>
@@ -429,10 +431,11 @@
     <string name="del_post" tools:ignore="MissingTranslation">Delete Post</string>
     <string name="del_post_conf" tools:ignore="MissingTranslation">Are you sure want to delete this Post?</string>
     <string name="str_just_now" tools:ignore="MissingTranslation">Just Now</string>
-    <string name="str_second_ago" tools:ignore="MissingTranslation">\u0009seconds ago</string>
-    <string name="str_min_ago" tools:ignore="MissingTranslation">\u0009minutes ago</string>
-    <string name="str_hour_ago" tools:ignore="MissingTranslation">\u0009hours ago</string>
-    <string name="str_day_ago" tools:ignore="MissingTranslation">\u0009days ago</string>
+    <string name="str_second_ago" tools:ignore="MissingTranslation">\u00A0seconds ago</string>
+    <string name="str_min_ago" tools:ignore="MissingTranslation">\u00A0minutes ago</string>
+    <string name="str_hour_ago" tools:ignore="MissingTranslation">\u00A0hours ago</string>
+    <string name="str_day_ago" tools:ignore="MissingTranslation">\u00A0days ago</string>
+    <string name="str_month_ago" tools:ignore="MissingTranslation">\u00A0months ago</string>
     <string name="str_neighborhood_alert" tools:ignore="MissingTranslation">News Alert</string>
     <string name="str_my_post" tools:ignore="MissingTranslation">My Post</string>
     <string name="str_save" tools:ignore="MissingTranslation">Save</string>
@@ -602,6 +605,7 @@
     <string name="str_decline" tools:ignore="MissingTranslation">Decline</string>
     <string name="update_from_itune" tools:ignore="MissingTranslation">Please update your subscription from iTunes.</string>
     <string name="sub_from_itune" tools:ignore="MissingTranslation">Please check if you took subscription from iTunes for this account.</string>
+    <string name="sub_from_paypal" tools:ignore="MissingTranslation">Please check if you took subscription from PayPal for this account.</string>
     <string name="str_alert" tools:ignore="MissingTranslation">Alert</string>
     <string name="str_my_subscription" tools:ignore="MissingTranslation">My Subscription</string>
     <string name="str_try_free_trial" tools:ignore="MissingTranslation">After %1$s days free trial</string>
@@ -694,4 +698,7 @@
     <string name="str_agree_accept" tools:ignore="MissingTranslation">I agree</string>
     <string name="blank_missing_child_name" tools:ignore="MissingTranslation">Please enter name for search missing child</string>
     <string name="your_phone_track" tools:ignore="MissingTranslation">Your phone is being tracked by %1$s.</string>
+    <string name="str_credit_card" tools:ignore="MissingTranslation">Credit Card</string>
+    <string name="str_paypal_subscription" tools:ignore="MissingTranslation">Paypal Subscription</string>
+    <string name="str_paypal_fee_warning" tools:ignore="MissingTranslation">Please be aware that paypal add their fees to the monthly or annual subscription charge.</string>
 </resources>

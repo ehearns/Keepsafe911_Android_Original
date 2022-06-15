@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingTop="@dimen/size5"
-    android:paddingBottom="@dimen/size5"
+    android:paddingTop="@dimen/padding2"
+    android:paddingBottom="@dimen/padding2"
     android:background="@color/caldroid_white"
     android:layout_height="wrap_content">
 
@@ -14,19 +14,10 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cvImageVideo"
-            app:cardCornerRadius="@dimen/gape10"
-            app:cardElevation="0.2dp"
-            android:layout_gravity="center"
+        <ImageView
+            android:id="@+id/ivMissingChildImage"
             android:layout_width="@dimen/size100"
-            app:cardBackgroundColor="@color/list_backcolor"
-            android:layout_height="@dimen/size100">
-            <ImageView
-                android:id="@+id/ivMissingChildImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </androidx.cardview.widget.CardView>
+            android:layout_height="@dimen/size100"/>
         <RelativeLayout
             android:paddingStart="@dimen/gape10"
             android:paddingEnd="@dimen/size1"

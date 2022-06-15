@@ -48,8 +48,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.JsonObject
 import com.google.maps.android.SphericalUtil
 import com.kotlinpermissions.KotlinPermissions
-import com.like.LikeButton
-import com.like.OnLikeListener
 import com.keepSafe911.BuildConfig
 import com.keepSafe911.R
 import com.keepSafe911.fragments.commonfrag.HomeBaseFragment
@@ -66,30 +64,35 @@ import kotlinx.android.synthetic.main.bottom_map_sheet.*
 import kotlinx.android.synthetic.main.fragment_neighbour_map.*
 import kotlinx.android.synthetic.main.raw_neighbour_image.view.*
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.*
+import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.progressBar
+import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.rlVideoParent
+import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvCategoryNameVideo
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostComment
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostCommentCount
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostDate
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostDescription
-import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostLike
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostLikeCount
+import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostMapTimeDurationVideo
+import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostMilesVideo
+import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostOptionVideo
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostSeparator
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostShare
-import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostTimeDuration
 import kotlinx.android.synthetic.main.raw_neighbour_vedio.view.tvPostTitle
+import kotlinx.android.synthetic.main.raw_neighbour_vedio_new.view.*
 import kotlinx.android.synthetic.main.toolbar_header.*
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.collections.ArrayList
-import kotlin.math.acos
-import kotlin.math.cos
-import kotlin.math.sin
+import kotlin.math.*
 
 
 private const val ARG_PARAM1 = "param1"
@@ -203,13 +206,15 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
         if ((mGoogleApiClient?.isConnecting == false) && (mGoogleApiClient?.isConnected == false)) {
             mGoogleApiClient?.connect()
         }
-        mvNeighbourMap.getMapAsync (this)
+        mvNeighbourMap.getMapAsync(this)
         sheetBehavior = BottomSheetBehavior.from(bottom_map_option)
         sheetBehavior?.isHideable = false
         sheetBehavior?.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(@NonNull bottomSheet: View, newState: Int) {
                 when (newState) {
-                    BottomSheetBehavior.STATE_HIDDEN -> { }
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+
+                    }
                     BottomSheetBehavior.STATE_EXPANDED -> {
                         tvNeighbourFilterText.text = mActivity.resources.getString(R.string.str_hide_filter)
                     }
@@ -329,6 +334,7 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
                 .permitAll().build()
         StrictMode.setThreadPolicy(policy)
         tvHeader.text = mActivity.resources.getString(R.string.neighbour_title)
+        tvHeader.setPadding(0, 0, 50, 0)
         Utils.setTextGradientColor(tvHeader)
         iv_back.visibility = View.VISIBLE
         iv_back.setOnClickListener {
@@ -352,8 +358,8 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
             }
             R.id.tv24Hours -> {
                 mActivity.hideKeyboard()
-                tv24Hours.setTextColor(ContextCompat.getColor(mActivity, R.color.Date_bg))
-                tv24Hours.background = ContextCompat.getDrawable(mActivity,R.drawable.green_border)
+                tv24Hours.setTextColor(ContextCompat.getColor(mActivity, R.color.caldroid_white))
+                tv24Hours.background = ContextCompat.getDrawable(mActivity,R.drawable.button_back_data)
 
                 tv7days.background = ContextCompat.getDrawable(mActivity,R.color.caldroid_white)
                 tv7days.setTextColor(oldColors)
@@ -368,8 +374,8 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
             }
             R.id.tv7days -> {
                 mActivity.hideKeyboard()
-                tv7days.setTextColor(ContextCompat.getColor(mActivity, R.color.Date_bg))
-                tv7days.background = ContextCompat.getDrawable(mActivity,R.drawable.green_border)
+                tv7days.setTextColor(ContextCompat.getColor(mActivity, R.color.caldroid_white))
+                tv7days.background = ContextCompat.getDrawable(mActivity,R.drawable.button_back_data)
 
                 tv24Hours.background = ContextCompat.getDrawable(mActivity,R.color.caldroid_white)
                 tv24Hours.setTextColor(oldColors)
@@ -384,8 +390,8 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
             }
             R.id.tv14Days -> {
                 mActivity.hideKeyboard()
-                tv14Days.setTextColor(ContextCompat.getColor(mActivity, R.color.Date_bg))
-                tv14Days.background = ContextCompat.getDrawable(mActivity,R.drawable.green_border)
+                tv14Days.setTextColor(ContextCompat.getColor(mActivity, R.color.caldroid_white))
+                tv14Days.background = ContextCompat.getDrawable(mActivity,R.drawable.button_back_data)
 
                 tv7days.background = ContextCompat.getDrawable(mActivity,R.color.caldroid_white)
                 tv7days.setTextColor(oldColors)
@@ -400,8 +406,8 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
             }
             R.id.tv30Days -> {
                 mActivity.hideKeyboard()
-                tv30Days.setTextColor(ContextCompat.getColor(mActivity, R.color.Date_bg))
-                tv30Days.background = ContextCompat.getDrawable(mActivity,R.drawable.green_border)
+                tv30Days.setTextColor(ContextCompat.getColor(mActivity, R.color.caldroid_white))
+                tv30Days.background = ContextCompat.getDrawable(mActivity,R.drawable.button_back_data)
 
                 tv7days.background = ContextCompat.getDrawable(mActivity,R.color.caldroid_white)
                 tv7days.setTextColor(oldColors)
@@ -585,7 +591,7 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
                         }
                         val dialogLayout = layoutInflater.inflate(R.layout.post_popup_layout, null)
                         containerMapPopUp = dialogLayout.findViewById<ExoPlayerMapRecyclerView>(R.id.containerMapPopUp)
-                        bottomSheetDialog = BottomSheetDialog(mActivity)
+                        bottomSheetDialog = BottomSheetDialog(mActivity, R.style.appBottomSheetDialogTheme)
                         bottomSheetDialog.setContentView(dialogLayout)
                         val mBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(dialogLayout.parent as View)
                         mBehavior.isHideable = false
@@ -930,7 +936,7 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
 
     inner class IncidentTypeAdapter(val context: Context,val incidentTypeList: ArrayList<IncidentType>): RecyclerView.Adapter<IncidentTypeAdapter.IncidentTypeHolder>(){
 
-        var currentPostion = -1
+        var currentPosition = -1
         var isFirst = true
         override fun onCreateViewHolder(p0: ViewGroup, p1: Int): IncidentTypeHolder {
             return IncidentTypeHolder(LayoutInflater.from(context).inflate(R.layout.raw_incident,p0,false))
@@ -941,6 +947,9 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
         }
 
         override fun onBindViewHolder(p0: IncidentTypeHolder, p1: Int) {
+            val textViewFivePadding = Comman_Methods.convertDpToPixels(5F, mActivity).roundToInt()
+            val textViewTenPadding = Comman_Methods.convertDpToPixels(10F, mActivity).roundToInt()
+            val textViewFifteenPadding = Comman_Methods.convertDpToPixels(15F, mActivity).roundToInt()
             p0.tvIncidentTitle.setOnClickListener {
                 if (incidentTypeList[p1].incidentID > 0) {
                     incidentTypeList[p1].incidentSelected = !incidentTypeList[p1].incidentSelected
@@ -966,19 +975,15 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
                 isFirst = true
             }
 
-            val scale = resources.displayMetrics.density
-            val dpAsPixels = (10*scale + 0.5f).toInt()
-            p0.tvIncidentTitle.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels)
-
             if (incidentTypeList[p1].incidentID == 0){
-                p0.tvIncidentTitle.background = ContextCompat.getDrawable(context,R.color.caldroid_white)
+                p0.tvIncidentTitle.background = ContextCompat.getDrawable(context, R.color.transparent)
                 p0.tvIncidentTitle.setTextColor(ContextCompat.getColor(context, R.color.Date_bg))
                 p0.tvIncidentTitle.text = incidentTypeList[p1].incidentText
                 param1 = mActivity.resources.getString(R.string.all)
                 setFilterText(param1,param2)
             }else {
                 if (!incidentTypeList[p1].incidentSelected) {
-                    p0.tvIncidentTitle.background = ContextCompat.getDrawable(context,R.drawable.green_border)
+                    p0.tvIncidentTitle.background = ContextCompat.getDrawable(context, R.color.transparent)
                     val wordSpan = SpannableString("\u25CF " + incidentTypeList[p1].incidentText)
                     wordSpan.setSpan(
                         ForegroundColorSpan(ContextCompat.getColor(mActivity, incidentTypeList[p1].incidentColor)),
@@ -992,7 +997,7 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
                     param1 = incidentTypeList[p1].incidentText
                     setFilterText(param1,param2)
                 } else {
-                    p0.tvIncidentTitle.background = ContextCompat.getDrawable(mActivity,R.drawable.neighbour_back)
+                    p0.tvIncidentTitle.background = ContextCompat.getDrawable(mActivity,R.drawable.button_back_trans)
                     val wordSpan = SpannableString("\u25CF " + incidentTypeList[p1].incidentText)
                     wordSpan.setSpan(
                         ForegroundColorSpan(ContextCompat.getColor(mActivity, incidentTypeList[p1].incidentColor)),
@@ -1005,6 +1010,12 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
                     )
                     p0.tvIncidentTitle.text = wordSpan
                 }
+            }
+            p0.tvIncidentTitle.setPadding(0, 0, 0, 0)
+            if (incidentTypeList[p1].incidentID == 0){
+                p0.tvIncidentTitle.setPadding(textViewFifteenPadding, textViewFivePadding, textViewFifteenPadding, textViewFivePadding)
+            } else {
+                p0.tvIncidentTitle.setPadding(textViewTenPadding, textViewFivePadding, textViewTenPadding, textViewFivePadding)
             }
         }
 
@@ -1156,23 +1167,41 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
                     color = R.color.color_purple
                 }
                 else -> {
-                    color = R.color.caldroid_black
+                    color = R.color.bgBlack
                 }
             }
+            val originLatLng = LatLng(gpstracker?.getLatitude() ?: 0.0,gpstracker?.getLongitude() ?: 0.0)
+            val destLatLng = LatLng(uploadList._lat ?: 0.0,uploadList._long ?: 0.0)
+
+            val locationA = Location("point A")
+            locationA.latitude = originLatLng.latitude
+            locationA.longitude = originLatLng.longitude
+            val locationB = Location("point B")
+            locationB.latitude = destLatLng.latitude
+            locationB.longitude = destLatLng.longitude
+
+            var distance = locationA.distanceTo(locationB)
+            if (distance < 0f){
+                distance = abs(distance)
+            }
+
+            val decimalSymbols = DecimalFormatSymbols.getInstance(Locale.US)
             when(holder.itemViewType){
                 TYPE_VIDEO ->{
                     val nhholder: NeighbourHolder =  holder as NeighbourHolder
-
                     if (uploadList.userImage!=null) {
                         nhholder.sdvNewsUserVideo.loadFrescoImage(mActivity, uploadList.userImage ?: "", 1)
                     }
-                    nhholder.lbHelpful.isLiked = (uploadList.isLiked ?: false)
-                    nhholder.rlVideoParent.background = ContextCompat.getDrawable(mActivity,R.color.caldroid_white)
-                    val userName = uploadList.addedBy ?: mActivity.resources.getString(R.string.str_neighbor)
+                    if (uploadList.isLiked == true) {
+                        nhholder.tvPostLikeVideo.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_gray, 0, 0, 0)
+                    } else {
+                        nhholder.tvPostLikeVideo.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_outline, 0, 0, 0)
+                    }
+                    val userName = uploadList.addedBy ?: ""
                     if (userName!="") {
-                        nhholder.tvPostSeparator.text = "\u0009 $userName"
+                        nhholder.tvPostSeparator.text = userName
                     }else{
-                        nhholder.tvPostSeparator.text = "\u0009 "+mActivity.resources.getString(R.string.str_neighbor)
+                        nhholder.tvPostSeparator.text = mActivity.resources.getString(R.string.str_neighbor)
                     }
                     var differenceTime = ""
                     val formatter = SimpleDateFormat(INPUT_CHECK_DATE_FORMAT)
@@ -1186,26 +1215,16 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
                     }catch (e: Exception){
                         e.printStackTrace()
                     }
-                    nhholder.tvPostTimeDuration.visibility = View.GONE
-                    nhholder.tvPostMapTimeDuration.visibility = View.VISIBLE
                     nhholder.tvPostMapTimeDuration.text = differenceTime
-                    nhholder.tvPostViewed.visibility = View.GONE
-                    nhholder.tvPostTypeVideo.visibility = View.VISIBLE
+                    nhholder.tvPostViewed.text = DecimalFormat("##.#", decimalSymbols).format(distance / 1609) + " MI"
+                    nhholder.tvPostMilesNoVideo.text = DecimalFormat("##.#", decimalSymbols).format(distance / 1609) + " MI"
                     val wordSpan = SpannableString("\u25CF "+uploadList.categoryName)
                     wordSpan.setSpan(
                         ForegroundColorSpan(ContextCompat.getColor(mActivity, color)),
                         0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
-                    nhholder.tvPostTypeVideo.text = wordSpan
-
-                    val tvCommentName = nhholder.tvPostMapTimeDuration.layoutParams as RelativeLayout.LayoutParams
-                    if (nhholder.tvPostTypeVideo.text!=""){
-                        tvCommentName.addRule(RelativeLayout.START_OF,R.id.flPostDateOptionVideo)
-                        nhholder.tvPostMapTimeDuration.layoutParams = tvCommentName
-                    }else{
-                        tvCommentName.addRule(RelativeLayout.ALIGN_PARENT_END)
-                        nhholder.tvPostMapTimeDuration.layoutParams = tvCommentName
-                    }
+                    nhholder.tvCategoryNameVideo.text = wordSpan
+                    nhholder.tvCategoryNameNoVideo.text = wordSpan
 
                     var diagStartDate = ""
 
@@ -1223,24 +1242,16 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
                     nhholder.tvPostDate.text = diagStartDate
                     nhholder.tvPostTitle.text = uploadList.title
                     nhholder.tvPostDescription.text = uploadList.feeds
-                    nhholder.tvPostLikeCount.visibility = View.GONE
-                    nhholder.tvPostCommentCount.visibility = View.GONE
-                    nhholder.tvPostLikeVideo.text = uploadList.likeCount.toString()
-                    nhholder.lbHelpful.setOnLikeListener(object: OnLikeListener {
-                        override fun liked(p0: LikeButton?) {
-                            avoidDoubleClicks(p0!!)
-                            isFromButton = true
-                            currentPositionLike = nhholder.bindingAdapterPosition
-                            notifyDataSetChanged()
-                        }
-
-                        override fun unLiked(p0: LikeButton?) {
-                            avoidDoubleClicks(p0!!)
-                            isFromButton = true
-                            currentPositionLike = nhholder.bindingAdapterPosition
-                            notifyDataSetChanged()
-                        }
-                    })
+                    nhholder.tvPostLikeCount.text = uploadList.likeCount?.toString()
+                    nhholder.tvPostLikeCountNo.text = uploadList.likeCount?.toString()
+                    nhholder.tvPostCommentCount.text = uploadList.commentCount?.toString()
+                    nhholder.tvPostCommentCountNo.text = uploadList.commentCount?.toString()
+                    nhholder.tvPostLikeVideo.setOnClickListener {
+                        avoidDoubleClicks(it)
+                        isFromButton = true
+                        currentPositionLike = nhholder.bindingAdapterPosition
+                        notifyDataSetChanged()
+                    }
                     nhholder.tvPostComment.setOnClickListener {
                         mActivity.hideKeyboard()
                         avoidDoubleClicks(it)
@@ -1308,14 +1319,17 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
                 TYPE_IMAGE ->{
                     val ivholder: ImageHolder =  holder as ImageHolder
                     ivholder.sdvNewsUserImage.loadFrescoImage(mActivity, uploadList.userImage ?: "", 1)
-                    ivholder.lbHelpful.isLiked = uploadList.isLiked ?: false
-                    ivholder.rlImageParent.background = ContextCompat.getDrawable(mActivity,R.color.caldroid_white)
+                    if (uploadList.isLiked == true) {
+                        ivholder.tvPostLikeImage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_gray, 0, 0, 0)
+                    } else {
+                        ivholder.tvPostLikeImage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like_outline, 0, 0, 0)
+                    }
                     val userName = uploadList.addedBy ?: mActivity.resources.getString(R.string.str_neighbor)
                     val fileType = uploadList.fileType ?: 0
                     if (userName!="") {
-                        ivholder.tvPostSeparator.text = "\u0009 $userName"
+                        ivholder.tvPostSeparator.text = userName
                     }else{
-                        ivholder.tvPostSeparator.text = "\u0009 "+mActivity.resources.getString(R.string.str_neighbor)
+                        ivholder.tvPostSeparator.text = mActivity.resources.getString(R.string.str_neighbor)
                     }
 //                    ivholder.tvPostSeparator.text = "\u25CF News"
                     var differenceTime = ""
@@ -1330,25 +1344,16 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
                     }catch (e: Exception){
                         e.printStackTrace()
                     }
-                    ivholder.tvPostTimeDuration.visibility = View.GONE
-                    ivholder.tvPostMapTimeDurationImage.visibility = View.VISIBLE
                     ivholder.tvPostMapTimeDurationImage.text = differenceTime
-                    ivholder.tvPostViewed.visibility = View.GONE
-                    ivholder.tvPostTypeImage.visibility = View.VISIBLE
+                    ivholder.tvPostViewed.text = DecimalFormat("##.#", decimalSymbols).format(distance / 1609) + " MI"
+                    ivholder.tvPostMilesNoImage.text = DecimalFormat("##.#", decimalSymbols).format(distance / 1609) + " MI"
                     val wordSpan = SpannableString("\u25CF "+uploadList.categoryName)
                     wordSpan.setSpan(
                         ForegroundColorSpan(ContextCompat.getColor(mActivity, color)),
                         0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
-                    ivholder.tvPostTypeImage.text = wordSpan
-                    val tvCommentName = ivholder.tvPostMapTimeDurationImage.layoutParams as RelativeLayout.LayoutParams
-                    if (ivholder.tvPostTypeImage.text!=""){
-                        tvCommentName.addRule(RelativeLayout.START_OF,R.id.flPostDateOptionImage)
-                        ivholder.tvPostMapTimeDurationImage.layoutParams = tvCommentName
-                    }else{
-                        tvCommentName.addRule(RelativeLayout.ALIGN_PARENT_END)
-                        ivholder.tvPostMapTimeDurationImage.layoutParams = tvCommentName
-                    }
+                    ivholder.tvCategoryNameImage.text = wordSpan
+                    ivholder.tvCategoryNameNoImage.text = wordSpan
 
                     /*if (p0.tvDeleteComment.visibility == View.VISIBLE){
                         tvCommentName.addRule(RelativeLayout.START_OF,R.id.tvDeleteComment)
@@ -1376,33 +1381,25 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
                     ivholder.tvPostDate.text = diagStartDate
                     ivholder.tvPostTitle.text = uploadList.title
                     ivholder.tvPostDescription.text = uploadList.feeds
-                    ivholder.tvPostLikeCount.visibility = View.GONE
-                    ivholder.tvPostCommentCount.visibility = View.GONE
-                    ivholder.tvPostLikeImage.text = uploadList.likeCount.toString()
+                    ivholder.tvPostLikeCount.text = uploadList.likeCount?.toString()
+                    ivholder.tvPostLikeCountNoImage.text = uploadList.likeCount?.toString()
+                    ivholder.tvPostCommentCount.text = uploadList.commentCount?.toString()
+                    ivholder.tvPostCommentCountNoImage.text = uploadList.commentCount?.toString()
 
                     Glide.with(context).load(uploadList.file).into(ivholder.ivPostAwareImageFile)
                     if (fileType > 0){
                         ivholder.flPostFileImage.visibility = View.GONE
+                        ivholder.rlNoMediaImage.visibility = View.VISIBLE
                     }else{
                         ivholder.flPostFileImage.visibility = View.VISIBLE
+                        ivholder.rlNoMediaImage.visibility = View.GONE
                     }
-                    ivholder.lbHelpful.setOnLikeListener(object: OnLikeListener {
-                        override fun liked(p0: LikeButton?) {
-                            avoidDoubleClicks(p0!!)
-                            isFromButton = true
-                            currentPositionLike = ivholder.bindingAdapterPosition
-                            notifyDataSetChanged()
-
-                        }
-
-                        override fun unLiked(p0: LikeButton?) {
-                            avoidDoubleClicks(p0!!)
-                            isFromButton = true
-                            currentPositionLike = ivholder.bindingAdapterPosition
-                            notifyDataSetChanged()
-                        }
-
-                    })
+                    ivholder.tvPostLikeImage.setOnClickListener {
+                        avoidDoubleClicks(it)
+                        isFromButton = true
+                        currentPositionLike = ivholder.bindingAdapterPosition
+                        notifyDataSetChanged()
+                    }
                     ivholder.tvPostComment.setOnClickListener {
                         mActivity.hideKeyboard()
                         avoidDoubleClicks(it)
@@ -1610,6 +1607,10 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
             val minutesInMilli = secondsInMilli * 60
             val hoursInMilli = minutesInMilli * 60
             val daysInMilli = hoursInMilli * 24
+            val monthInMilli = daysInMilli * 30
+
+            val elapsedMonths = different / monthInMilli
+            different %= monthInMilli
 
             val elapsedDays = different / daysInMilli
             different %= daysInMilli
@@ -1623,6 +1624,7 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
             val elapsedSeconds = different / secondsInMilli
 
             timeDifference = when {
+                elapsedMonths > 0L -> elapsedDays.toString()+ mActivity.resources.getString(R.string.str_month_ago)
                 elapsedDays > 0L -> elapsedDays.toString()+ mActivity.resources.getString(R.string.str_day_ago)
                 elapsedHours > 0L -> elapsedHours.toString()+ mActivity.resources.getString(R.string.str_hour_ago)
                 elapsedMinutes > 0L -> elapsedMinutes.toString() + mActivity.resources.getString(R.string.str_min_ago)
@@ -1676,24 +1678,26 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
             var sdvNewsUserImage: SimpleDraweeView = view.sdvNewsUserImage
             var flPostDateOption: FrameLayout = view.flPostDateOptionImage
             var tvPostSeparator: TextView = view.tvPostSeparator
-            var tvPostTimeDuration: TextView = view.tvPostTimeDuration
             var tvPostMapTimeDurationImage: TextView = view.tvPostMapTimeDurationImage
             var tvPostViewed: TextView = view.tvPostViewed
+            var tvCategoryNameImage: TextView = view.tvCategoryNameImage
             var tvPostDate: TextView = view.tvPostDate
             var tvPostOption: TextView = view.tvPostOption
             var tvPostTitle: TextView = view.tvPostTitle
             var tvPostDescription: TextView = view.tvPostDescription
             var tvPostLikeCount: TextView = view.tvPostLikeCount
             var tvPostCommentCount: TextView = view.tvPostCommentCount
-            var tvPostLike: TextView = view.tvPostLike
             var tvPostComment: TextView = view.tvPostComment
             var tvPostShare: TextView = view.tvPostShare
-            var tvPostTypeImage: TextView = view.tvPostTypeImage
             var tvPostLikeImage: TextView = view.tvPostLikeImage
             var ivPostAwareImageFile: ImageView = view.ivPostAwareImageFile
-            var lbHelpful: LikeButton = view.lbHelpfulImage
             var rlImageParent: RelativeLayout = view.rlImageParent
             var flPostFileImage: FrameLayout = view.flPostFileImage
+            var rlNoMediaImage: RelativeLayout = view.rlNoMediaImage
+            var tvCategoryNameNoImage: TextView = view.tvCategoryNameNoImage
+            var tvPostMilesNoImage: TextView = view.tvPostMilesNoImage
+            var tvPostLikeCountNoImage: TextView = view.tvPostLikeCountNoImage
+            var tvPostCommentCountNoImage: TextView = view.tvPostCommentCountNoImage
         }
         inner class NeighbourHolder(view: View): BaseViewHolder(view){
             override fun clear() {
@@ -1708,23 +1712,25 @@ class NeighbourMapFragment : HomeBaseFragment(), View.OnClickListener, OnMapRead
             var sdvNewsUserVideo: SimpleDraweeView = view.sdvNewsUserVideo
             var flPostDateOption: FrameLayout = view.flPostDateOptionVideo
             var tvPostSeparator: TextView = view.tvPostSeparator
-            var tvPostTimeDuration: TextView = view.tvPostTimeDuration
             var tvPostMapTimeDuration: TextView = view.tvPostMapTimeDurationVideo
             var tvPostViewed: TextView = view.tvPostMilesVideo
+            var tvCategoryNameVideo: TextView = view.tvCategoryNameVideo
             var tvPostDate: TextView = view.tvPostDate
             var tvPostOption: TextView = view.tvPostOptionVideo
             var tvPostTitle: TextView = view.tvPostTitle
             var tvPostDescription: TextView = view.tvPostDescription
             var tvPostLikeCount: TextView = view.tvPostLikeCount
             var tvPostCommentCount: TextView = view.tvPostCommentCount
-            var tvPostLike: TextView = view.tvPostLike
             var tvPostComment: TextView = view.tvPostComment
             var tvPostShare: TextView = view.tvPostShare
-            var tvPostTypeVideo: TextView = view.tvPostTypeVideo
-            var tvPostLikeVideo: TextView = view.tvPostLikeVideo
+            var tvPostLikeVideo: TextView = view.tvPostLikeVideoOld
             var ivPlayVideo: ImageView = view.ivPlayVideo
-            var lbHelpful: LikeButton = view.lbHelpfulVideo
             var rlVideoParent: RelativeLayout = view.rlVideoParent
+            var rlNoMediaVideo: RelativeLayout = view.rlNoMediaVideoOld
+            var tvCategoryNameNoVideo: TextView = view.tvCategoryNameNoVideoOld
+            var tvPostMilesNoVideo: TextView = view.tvPostMilesNoVideoOld
+            var tvPostLikeCountNo: TextView = view.tvPostLikeCountNoOld
+            var tvPostCommentCountNo: TextView = view.tvPostCommentCountNoOld
             var progressBar: ProgressBar= view.progressBar
             var flPostFileVideo: FrameLayout= view.flPostFileVideoOld
             init {

@@ -80,7 +80,9 @@ class LocationUpdatesService : Service(), IGeoListener {
         mLocationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
-                onNewLocation(locationResult.lastLocation)
+                locationResult.lastLocation?.let {
+                    onNewLocation(it)
+                }
             }
         }
         createLocationRequest()

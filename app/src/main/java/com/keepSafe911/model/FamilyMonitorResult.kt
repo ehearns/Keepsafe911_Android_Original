@@ -134,6 +134,21 @@ class FamilyMonitorResult() : Parcelable {
     @Expose
     var isChildMissing: Boolean? = false
 
+    @ColumnInfo(name = "PayeID")
+    @SerializedName("PayeID")
+    @Expose
+    var payId: String? = ""
+
+    @ColumnInfo(name = "ProductId")
+    @SerializedName("ProductId")
+    @Expose
+    var productId: String? = ""
+
+    @ColumnInfo(name = "PaymentType")
+    @SerializedName("PaymentType")
+    @Expose
+    var paymentType: Int? = 0
+
     constructor(parcel: Parcel) : this() {
         fmID = parcel.readInt()
         iD = parcel.readInt()
@@ -165,6 +180,9 @@ class FamilyMonitorResult() : Parcelable {
         PromocodeUrl = parcel.readString()
         Promocode = parcel.readString()
         isChildMissing = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
+        payId = parcel.readString()
+        productId = parcel.readString()
+        paymentType = parcel.readValue(Int::class.java.classLoader) as? Int
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -198,6 +216,9 @@ class FamilyMonitorResult() : Parcelable {
         parcel.writeString(PromocodeUrl)
         parcel.writeString(Promocode)
         parcel.writeValue(isChildMissing)
+        parcel.writeString(payId)
+        parcel.writeString(productId)
+        parcel.writeValue(paymentType)
     }
 
     override fun describeContents(): Int {
